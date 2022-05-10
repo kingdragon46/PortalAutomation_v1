@@ -13,6 +13,12 @@ class LoginPage(BasePage):
     LOGIN_BUTTON = (By.XPATH,"//*[@id='login']/div/div/div[2]/div[1]/div[2]/form/div[4]/div/div/div/button")
     FORGOT_PASSWORD = (By.XPATH,"//*[@id='login']/div/div/div[2]/div[1]/div[2]/form/div[5]")
 
+    '''Domain select'''
+    ENTER_DOMAIN = (By.XPATH, "//*[@id='login']/div/div/div[2]/div[1]/div/div[2]/div[2]/input")
+    CONTINUE = (By.XPATH, "//*[contains(text(), 'Continue')]")
+
+    # <<=========================================== Functions ==============================================================>>
+
     """constructor of the page class"""
     def __init__(self, driver):
         super().__init__(driver)
@@ -22,6 +28,9 @@ class LoginPage(BasePage):
 
     """this is used to login to website"""
     def do_login(self, username, password):
+        self.do_send_keys(self.ENTER_DOMAIN, TestData.DOMAIN)
+        self.do_click(self.CONTINUE)
+        sleep(10)
         self.do_send_keys(self.USERNAME, username)
         self.do_send_keys(self.PASSWORD, password)
         self.do_click(self.LOGIN_BUTTON)

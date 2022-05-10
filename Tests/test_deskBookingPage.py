@@ -38,7 +38,7 @@ class Test_Booking(BaseTest):
 
     """Non-Recurring"""
 
-    # @pytest.mark.skip(reason="no need of currently testing this")
+    @pytest.mark.skip(reason="no need of currently testing this")
     def test_simple_booking(self):
         bookinpage = deskBookingsPage(self.driver)
         
@@ -210,7 +210,7 @@ class Test_Booking(BaseTest):
         print("Create a booking for the desk by selecting a default date and time: Passed")
         # bookinpage.quit_driver()
 
-    #@pytest.mark.skip(reason="no need of currently testing this")
+    @pytest.mark.skip(reason="no need of currently testing this")
     def test_host_change_booking(self):
         bookinpage = deskBookingsPage(self.driver)
         # try:
@@ -274,7 +274,7 @@ class Test_Booking(BaseTest):
         sleep(5)
         print("Create a booking for the desk by changing the default host: Passed")
         
-    # @pytest.mark.skip(reason="no need of currently testing this")
+    @pytest.mark.skip(reason="no need of currently testing this")
     def test_datetime_change_booking(self):
         bookinpage = deskBookingsPage(self.driver)
         bookinpage.select_available_status()
@@ -2511,8 +2511,7 @@ class Test_Booking(BaseTest):
     ''''Find My Colleague'''
     @pytest.mark.skip(reason="no need of currently testing this")
     def find_my_colleague(self):
-        self.loginPage = LoginPage(self.driver)
-        # bookinpage = self.loginPage.do_login(TestData.USER_NAME_2, TestData.PASSWORD_2)
+        bookinpage = deskBookingsPage(self.driver)
         # sleep(15)
         # bookinpage.do_click(deskBookingsPage.BOOKING_NAV)
         # sleep(10)
@@ -2531,75 +2530,75 @@ class Test_Booking(BaseTest):
         # except Exception as e:
         #     print("network exception: ", e)
 
-        # # Get total desks value
-        # try:
-        #     total_desks = bookinpage.get_element_text(deskBookingsPage.TOTAL_DESKS_2ND_FLOOR)
-        #     print("total_desks: ", total_desks)
-        #     available_desks = bookinpage.get_element_text(deskBookingsPage.AVAILABLE_DESKS_2ND_FLOOR)
-        #     print("available_desks: ", available_desks)
-        # except Exception as e:
-        #     print("Desk count exception: ", e)
+        # Get total desks value
+        try:
+            total_desks = bookinpage.get_element_text(deskBookingsPage.TOTAL_DESKS_2ND_FLOOR)
+            print("total_desks: ", total_desks)
+            available_desks = bookinpage.get_element_text(deskBookingsPage.AVAILABLE_DESKS_2ND_FLOOR)
+            print("available_desks: ", available_desks)
+        except Exception as e:
+            print("Desk count exception: ", e)
 
-        # # Clicking on desk 201 modal
-        # bookinpage.do_click(deskBookingsPage.DESK_AVAIL)
+        # Clicking on desk 201 modal
+        bookinpage.do_click(deskBookingsPage.DESK_AVAIL)
 
 
-        # dval = bookinpage.get_desk_name()
-        # # setting desk value
-        # deskBookingsPage.DESK_NO = dval
-        # deskBookingsPage.DESK_201_CHECK_NAME = deskBookingsPage.DESK_201_CHECK_NAME.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE = deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_CHECK_DIV = deskBookingsPage.DESK_201_CHECK_DIV.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_MEETING_OPTIONS_BUTTONS_CHECK = deskBookingsPage.DESK_201_MEETING_OPTIONS_BUTTONS_CHECK.format(deskBookingsPage.DESK_NO)
+        dval = bookinpage.get_desk_name()
+        # setting desk value
+        deskBookingsPage.DESK_NO = dval
+        deskBookingsPage.DESK_201_CHECK_NAME = deskBookingsPage.DESK_201_CHECK_NAME.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE = deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_CHECK_DIV = deskBookingsPage.DESK_201_CHECK_DIV.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_MEETING_OPTIONS_BUTTONS_CHECK = deskBookingsPage.DESK_201_MEETING_OPTIONS_BUTTONS_CHECK.format(deskBookingsPage.DESK_NO)
         
-        # deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE = deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_RPAGE_CHECK_DIV = deskBookingsPage.DESK_201_RPAGE_CHECK_DIV.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_RPAGE_CHECK_BOOK_BUTTON = deskBookingsPage.DESK_201_RPAGE_CHECK_BOOK_BUTTON.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_RPAGE_STATUS_CHECK = deskBookingsPage.DESK_201_RPAGE_STATUS_CHECK.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_SCHEDULE_CHECK = deskBookingsPage.DESK_201_SCHEDULE_CHECK.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_BUTTON = deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_BUTTON.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_ALL_DOTS = deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE = deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_RPAGE_CHECK_DIV = deskBookingsPage.DESK_201_RPAGE_CHECK_DIV.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_RPAGE_CHECK_BOOK_BUTTON = deskBookingsPage.DESK_201_RPAGE_CHECK_BOOK_BUTTON.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_RPAGE_STATUS_CHECK = deskBookingsPage.DESK_201_RPAGE_STATUS_CHECK.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_SCHEDULE_CHECK = deskBookingsPage.DESK_201_SCHEDULE_CHECK.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_BUTTON = deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_BUTTON.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_ALL_DOTS = deskBookingsPage.DESK_201_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(deskBookingsPage.DESK_NO)
         
-        # deskBookingsPage.DESK_201_CHECK_RDIV = deskBookingsPage.DESK_201_CHECK_RDIV.format(deskBookingsPage.DESK_NO)
-        # deskBookingsPage.DESK_201_RDIV_CANCEL_BUTTON = deskBookingsPage.DESK_201_RDIV_CANCEL_BUTTON.format(deskBookingsPage.DESK_NO)
-        # val1 = ('xpath', "//p[text()='None']")
-        # if deskBookingsPage.DESK_201_CHECK_NAME == val1:
-        #     bookinpage.quit_driver()
+        deskBookingsPage.DESK_201_CHECK_RDIV = deskBookingsPage.DESK_201_CHECK_RDIV.format(deskBookingsPage.DESK_NO)
+        deskBookingsPage.DESK_201_RDIV_CANCEL_BUTTON = deskBookingsPage.DESK_201_RDIV_CANCEL_BUTTON.format(deskBookingsPage.DESK_NO)
+        val1 = ('xpath', "//p[text()='None']")
+        if deskBookingsPage.DESK_201_CHECK_NAME == val1:
+            bookinpage.quit_driver()
 
-        # # COVID_DECLARATION Check
-        # # bookinpage.update_health_status()
+        # COVID_DECLARATION Check
+        # bookinpage.update_health_status()
 
-        # # Clicking on booking button
+        # Clicking on booking button
+        sleep(5)
+        bookinpage.do_click(deskBookingsPage.BOOKING_CONFIRM_BUTTON)
+        sleep(5)
+        print("Booking should be created successfully: Passed")
+
+        print("Desk_no_confirm: ", deskBookingsPage.DESK_NO)
+
+        # Checking Booking
+        # At the find resource page, status of booking should be changed from available to booked
+        bookinpage.select_booked_status()
+        print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
+        # bookinpage.resource_page_booking_check()
+        sleep(3)
+
+        print("Xpath: ", deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE)
+        # Resource details page
+        bookinpage.do_click_by_xpath(deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE)
+        sleep(8)
+        # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
+        bookinpage.resource_details_page_check()
+        sleep(5)
+
+        # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
+        bookinpage.do_click(deskBookingsPage.BOOKING_NAV)
+        sleep(10)
+        bookinpage.check_my_booking()
         # sleep(5)
-        # bookinpage.do_click(deskBookingsPage.BOOKING_CONFIRM_BUTTON)
-        # sleep(5)
-        # print("Booking should be created successfully: Passed")
-
-        # print("Desk_no_confirm: ", deskBookingsPage.DESK_NO)
-
-        # # Checking Booking
-        # # At the find resource page, status of booking should be changed from available to booked
-        # bookinpage.select_booked_status()
-        # print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
-        # # bookinpage.resource_page_booking_check()
-        # sleep(3)
-
-        # print("Xpath: ", deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE)
-        # # Resource details page
-        # bookinpage.do_click_by_xpath(deskBookingsPage.DESK_201_AFTER_BOOKING_TITLE)
-        # sleep(8)
-        # # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
-        # bookinpage.resource_details_page_check()
-        # sleep(5)
-
-        # # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-        # bookinpage.do_click(deskBookingsPage.BOOKING_NAV)
-        # sleep(10)
-        # bookinpage.check_my_booking()
-        # # sleep(5)
-        # # Logging out
-        # bookinpage.do_logout()
-        # sleep(8)
+        # Logging out
+        bookinpage.do_logout()
+        sleep(8)
 
         # Logging again using attendee details
         bookinpage = self.loginPage.do_rlogin(
@@ -2716,6 +2715,3 @@ class Test_Booking(BaseTest):
     def test_send_email_report(self):
         send_email()
 
-        
-
-# unittest.main()

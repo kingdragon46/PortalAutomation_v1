@@ -136,6 +136,21 @@ class RoomBookingsPage(BasePage):
     TAG_DROPDOWN = (By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[3]/div[2]/div/div")
     TAG_SELECT = (By.XPATH, f"//*[@title='{TestData.TAG}']/preceding-sibling::*[1]")
 
+    # Find my colleague
+    FMC_SEARCH = (By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[3]/div[4]/span/input")
+    VIEW_ON_MAP = (By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[3]/div[4]/div/div/div/div/div[2]/div[2]/button")
+
+    # Amenities
+    EDIT_AMENITIES = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[2]/div[2]/div")
+    PRESENT_AMENITIES = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[5]/div/div")
+    ADD_AMENITIES = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/child::*[2]")
+    ADD_AMENITIES_SEARCH = (By.XPATH, "//*[text()='Search']")
+    AMENITY_SELECT = (By.XPATH, "//*[contains(text(), 'Dual Monitor')]")
+    AMENITIES_QUANTITY_INPUT = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/input")
+    AMENITIES_RIGHT_CHECK = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/div[2]/child::*")
+    AMENITIES_DONE = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[2]/div[2]/div")
+    AMENITIES_REMOVE = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/child::*[5]")
+
 
     # <===================================== Functions =======================================>
 

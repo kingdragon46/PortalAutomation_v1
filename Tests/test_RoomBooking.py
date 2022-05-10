@@ -21,10 +21,8 @@ logger = logging.getLogger(__name__)
 
 class Test_RoomBooking(BaseTest):
 
-    """Room Booking"""
-
-    @pytest.mark.skip(reason="no need of currently testing this")
-    def test_simple_booking(self):
+    """Setup"""
+    def setup_login(self):
         self.loginPage = LoginPage(self.driver)
         bookinpage = self.loginPage.do_rlogin(
                     TestData.USER_NAME, TestData.PASSWORD)
@@ -32,7 +30,7 @@ class Test_RoomBooking(BaseTest):
         bookinpage.do_click(RoomBookingsPage.BOOKING_NAV)
         sleep(5)
         print("Selecting Location")
-        bookinpage.select_location()
+        # bookinpage.select_location()
         print("Selecting Floor")
         bookinpage.select_floor()
         # Checking available resources
@@ -41,6 +39,27 @@ class Test_RoomBooking(BaseTest):
         bookinpage.select_resource_type()
         # Clicking on list view
         bookinpage.do_click(RoomBookingsPage.LIST_VIEW_BUTTON)
+
+    """Room Booking"""
+
+    @pytest.mark.skip(reason="no need of currently testing this")
+    def test_simple_booking(self):
+        # self.loginPage = LoginPage(self.driver)
+        # bookinpage = self.loginPage.do_rlogin(
+        #             TestData.USER_NAME, TestData.PASSWORD)
+        # sleep(10)
+        # bookinpage.do_click(RoomBookingsPage.BOOKING_NAV)
+        # sleep(5)
+        # print("Selecting Location")
+        # bookinpage.select_location()
+        # print("Selecting Floor")
+        # bookinpage.select_floor()
+        # # Checking available resources
+        # bookinpage.select_available_status()
+        # # Selecting resource type
+        # bookinpage.select_resource_type()
+        # # Clicking on list view
+        # bookinpage.do_click(RoomBookingsPage.LIST_VIEW_BUTTON)
 
         # Clicking on available room
         bookinpage.do_click(RoomBookingsPage.ROOM_AVAIL)
@@ -3567,7 +3586,90 @@ class Test_RoomBooking(BaseTest):
         print("Create a single booking and cancel it: Passed")
         # bookinpage.quit_driver()
 
+    '''Check and edit amenities'''
+    @pytest.mark.skip(reason="no need of currently testing this")
+    def test_amenities(self):
+        bookinpage = RoomBookingsPage(self.driver)
+        sleep(15)
+        bookinpage.do_click(RoomBookingsPage.BOOKING_NAV)
+        sleep(10)
+        print("Selecting Location")
+        bookinpage.select_location()
+        print("Selecting Floor")
+        bookinpage.select_floor()
+        # Checking available resources
+        bookinpage.select_available_status()
+        # Clicking on list view
+        bookinpage.do_click(RoomBookingsPage.LIST_VIEW_BUTTON)
+        bookinpage.select_resource_type()
+        # Network logs
+        try:
+            bookinpage.print_browser_logs()
+        except Exception as e:
+            print("network exception: ", e)
 
+        # Get total desks value
+        try:
+            total_desks = bookinpage.get_element_text(RoomBookingsPage.TOTAL_DESKS_2ND_FLOOR)
+            print("total_desks: ", total_desks)
+            available_desks = bookinpage.get_element_text(RoomBookingsPage.AVAILABLE_DESKS_2ND_FLOOR)
+            print("available_desks: ", available_desks)
+        except Exception as e:
+            print("Desk count exception: ", e)
+
+        # Clicking on desk 201 modal
+        bookinpage.do_click(RoomBookingsPage.ROOM_AVAIL)
+        sleep(5)
+
+        # Getting prevoius amenities data
+        amtext = bookinpage.get_element_text(RoomBookingsPage.PRESENT_AMENITIES)
+        print("Amenities: ", amtext)
+
+        # Edit amenities
+        bookinpage.do_click(RoomBookingsPage.EDIT_AMENITIES)
+        sleep(4)
+
+        print("Adding Amenity")
+        # Add amenities
+        bookinpage.do_click(RoomBookingsPage.ADD_AMENITIES)
+
+        # Search box
+        bookinpage.chain_selection_send_keys_click(RoomBookingsPage.ADD_AMENITIES_SEARCH, TestData.DUAL_MONITOR)
+        sleep(3)
+
+        # bookinpage.do_click(deskBookingsPage.AMENITY_SELECT)
+
+        # Adding quantity
+        bookinpage.do_send_keys(RoomBookingsPage.AMENITIES_QUANTITY_INPUT, TestData.AM_QUANTITY)
+
+        # Right check
+        bookinpage.action_chain_click(RoomBookingsPage.AMENITIES_RIGHT_CHECK)
+        sleep(3)
+
+        bookinpage.do_click(RoomBookingsPage.AMENITIES_DONE)
+        sleep(2)
+        print("Amenity added")
+
+        # Getting post amenities data
+        amtext2 = bookinpage.get_element_text(RoomBookingsPage.PRESENT_AMENITIES)
+        print("Amenities2: ", amtext2)
+
+        assert amtext != amtext2
+
+        # Removing Amenity
+        print("Removing Amenity")
+        # Edit amenities
+        bookinpage.do_click(deskBookingsPage.EDIT_AMENITIES)
+        sleep(4)
+
+        bookinpage.do_click(deskBookingsPage.AMENITIES_REMOVE)
+        sleep(4)
+
+        bookinpage.do_click(deskBookingsPage.AMENITIES_DONE)
+        print("Amenity Removed")
+
+        sleep(10)
+        bookinpage.quit_driver()
 
     '''Tags Testing'''
     # @pytest.mark.skip(reason="no need of currently testing this")
