@@ -1,14 +1,27 @@
 version: 2.1
-
+orbs:
+  browser-tools: circleci/browser-tools@1.1
 jobs:
    test:
     working_directory: ~/circleci-python
     docker:
+      # - image: "circleci/python:jessie-node-browsers"
       - image: "cimg/python:3.9-browsers"
     steps:
       - checkout
-      - run: pip install -r requirements.txt && pytest -v -s --html=report.html Tests/test_deskBookingPage.py --self-contained-html --capture=sys -rP -rF
-
+      - run: sudo chmod u+x install.sh && source install.sh
+      - run:
+          name: Download Selenium
+          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      - run:
+          name: Start Selenium
+          command: java -jar selenium-server-standalone-3.5.3.jar
+          background: true
+      # - run: find /usr/bin/google-chrome
+      # - run: wget https://chromedriver.storage.googleapis.com/102.0.5005.27/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+      # - run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb
+      - run: pip install -r requirements.txt
+      - run: pytest -v -s --html=report.html Tests/test_LoginPage.py --self-contained-html --capture=sys -rP -rF
 workflows:
   test:
     jobs:
