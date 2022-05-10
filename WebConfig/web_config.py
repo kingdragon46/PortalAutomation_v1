@@ -11,8 +11,8 @@ class TestData:
     CHROME_EXECUTABLE_PATH = "chromedriver.exe"
     FIREFOX_EXECUTABLE_PATH = "C:\WebDrivers\geckodriver-v0.30.0-win64\geckodriver"
 
-    # BASE_URL = "https://ndl.veris.in/login/NewLogin"
-    BASE_URL = "http://localhost:3000/login/domain"
+    BASE_URL = "https://ndl.veris.in/login/NewLogin"
+    # BASE_URL = "http://localhost:3000/login/domain"
     DOMAIN = "ndl"
     USER_NAME = "neeraj.dhiman@veris.in"
     PASSWORD = "Passw0rd@123"

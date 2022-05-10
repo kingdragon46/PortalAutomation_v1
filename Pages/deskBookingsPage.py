@@ -174,7 +174,19 @@ class deskBookingsPage(BasePage):
     AMENITIES_RIGHT_CHECK = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/div[2]/child::*")
     AMENITIES_DONE = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[2]/div[2]/div")
     AMENITIES_REMOVE = (By.XPATH, "//*[@id='resource-details-content']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/child::*[5]")
-    
+
+
+    # My Bookings Shortcuts
+    FIND_DESK_SHORTCUT = (By.XPATH, "//p[contains(text(), 'Find desk')]")
+    # FMC_SHORTCUT = (By.XPATH, "//p[contains(text(), 'Find my Colleague')]")
+    FMC_SHORTCUT = (By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div[2]/div[2]/div/div[3]/div/div/div[2]")
+    # FIND_MR_SHORTCUT = (By.XPATH, "//p[contains(text(), 'Find Meeting Room')]")
+    FIND_MR_SHORTCUT = (By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div[2]/div[2]/div/div[4]/div/div/div[2]")
+    # INVITE_VISITOR_SHORTCUT = (By.XPATH, "//p[contains(text(), 'Invite Visitors')]")
+    INVITE_VISITOR_SHORTCUT = (By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div[2]/div[2]/div/div[5]/div/div/div[2]")
+    # FILL_HD_SHORTCUT = (By.XPATH, "//p[contains(text(), 'Fill Health Declaration')]")
+    FILL_HD_SHORTCUT = (By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div[2]/div[2]/div/div[6]/div/div/div[2]")
+    FILL_HD_CLOSE_BUTTON = (By.XPATH, "//*[@id='modal-placeholder']/div/div[1]/div[2]/button")
 
     # <<=========================================================== Functions ======================================================>>
     

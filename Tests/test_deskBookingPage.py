@@ -2709,6 +2709,51 @@ class Test_Booking(BaseTest):
         sleep(10)
         bookinpage.quit_driver()
 
+    '''Check my bookings shortcuts'''
+    # @pytest.mark.skip(reason="no need of currently testing this")
+    def test_mybookings_shortcuts(self):
+        bookinpage = deskBookingsPage(self.driver)
+        bookinpage.do_click(deskBookingsPage.MY_BOOKING_NAV)
+        sleep(6)
+
+        # Find desk
+        bookinpage.do_click(deskBookingsPage.FIND_DESK_SHORTCUT)
+        sleep(5)
+        bookinpage.do_click(deskBookingsPage.MY_BOOKING_NAV)
+        print("Worked till FD")
+        sleep(7)
+
+        # Find My Colleague
+        bookinpage.do_click(deskBookingsPage.FMC_SHORTCUT)
+        sleep(5)
+        bookinpage.do_click(deskBookingsPage.MY_BOOKING_NAV)
+        print("Worked till FMC")
+        sleep(7)
+
+        # Find Meeting Room
+        bookinpage.do_click(deskBookingsPage.FIND_MR_SHORTCUT)
+        sleep(5)
+        bookinpage.do_click(deskBookingsPage.MY_BOOKING_NAV)
+        print("Worked till FMR")
+        sleep(7)
+
+        # Invite Visitors
+        bookinpage.do_click(deskBookingsPage.INVITE_VISITOR_SHORTCUT)
+        sleep(5)
+        bookinpage.do_click(deskBookingsPage.MY_BOOKING_NAV)
+        print("Worked till IV")
+        sleep(7)
+
+        # Fill Health Declaration
+        bookinpage.do_click(deskBookingsPage.FILL_HD_SHORTCUT)
+        sleep(5)
+        bookinpage.do_click(deskBookingsPage.FILL_HD_CLOSE_BUTTON)
+        print("Worked till FHD")
+        sleep(7)
+
+        bookinpage.quit_driver()
+
+
 
     '''Send report'''
     @pytest.mark.skip(reason="no need of currently testing this")

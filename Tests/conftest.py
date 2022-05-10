@@ -17,7 +17,7 @@ def init_driver(request):
     caps['goog:loggingPrefs'] = {'performance': 'ALL'}
     options = Options()
     options.add_argument('--incognito')
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--start-maximized')
     if request.param == "chrome":
         web_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options, desired_capabilities=caps)

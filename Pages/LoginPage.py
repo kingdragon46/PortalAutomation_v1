@@ -28,8 +28,8 @@ class LoginPage(BasePage):
 
     """this is used to login to website"""
     def do_login(self, username, password):
-        self.do_send_keys(self.ENTER_DOMAIN, TestData.DOMAIN)
-        self.do_click(self.CONTINUE)
+        # self.do_send_keys(self.ENTER_DOMAIN, TestData.DOMAIN)
+        # self.do_click(self.CONTINUE)
         sleep(10)
         self.do_send_keys(self.USERNAME, username)
         self.do_send_keys(self.PASSWORD, password)
