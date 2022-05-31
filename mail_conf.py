@@ -10,11 +10,15 @@ from email.mime.application import MIMEApplication
 ##############################################################
 from datetime import datetime
 
+import shutil
+import os
+
 # Define the HTML document
 html = '''
     <html>
         <body>
             <h1>Pytest report of test execution</h1>
+            <p><=========This is an automatically generated email – please do not reply. ================><p>
         </body>
     </html>
     '''
@@ -39,6 +43,8 @@ def attach_file_to_email(email_message, filename):
 # Set up the email addresses and password. Please replace below with your email address and password
 email_from = 'code.tester2021@gmail.com'
 app_password = 'awdtrwovjtbfkrgt'
+# email_to = ['vivek.anand@veris.in', 'shailendra.tiranga@veris.in', 'amogh.banta@veris.in']
+# email_to = ['vivek.anand@veris.in', 'shailendra.tiranga@veris.in']
 email_to = ['vivek.anand@veris.in']
 
 # Generate today's date to be included in the email Subject
@@ -50,12 +56,24 @@ email_message['From'] = email_from
 email_message['To'] = ', '.join(email_to)
 email_message['Subject'] = f'Report email - {date_str}'
 
+# Zipping screenshots
+def zip_file():
+    try:
+        os.makedirs(os.path.join("screenshot_archives", os.path.dirname("screenshots_zip")), exist_ok=True)
+        shutil.make_archive("./screenshot_archives/screenshots_zip", 'zip', "./screenshot")
+    except Exception as e:
+        print("e: ", e)
+
+
 # Attach the html doc defined earlier, as a MIMEText html content type to the MIME message
 email_message.attach(MIMEText(html, "html"))
 
 # Attach more (documents)
 ##############################################################
+zip_file()
 attach_file_to_email(email_message, 'report.html')
+attach_file_to_email(email_message, 'screenshot_archives/screenshots_zip.zip')
+# attach_file_to_email(email_message, 'report.xls')
 ##############################################################
 # Convert it as a string
 email_string = email_message.as_string()
@@ -66,3 +84,6 @@ def send_email():
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(email_from, app_password)
         server.sendmail(email_from, email_to, email_string)
+
+if __name__ == '__main__':
+    send_email()
