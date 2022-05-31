@@ -32,9 +32,9 @@ def init_driver(request):
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     if request.param == "chrome":
-        # web_driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()), options=options)
+       web_driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()), options=options)
  
-       web_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+#        web_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     if request.param == "firefox":
         web_driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
     request.cls.driver = web_driver
