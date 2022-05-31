@@ -248,7 +248,7 @@ class RoomBookingsPage(BasePage):
         try:
             self.action_chain_click(self.STATUS_DROPDOWN)
             sleep(2)
-            self.do_click(self.AVAILABLE_STATUS)
+            self.action_chain_click(self.AVAILABLE_STATUS)
             sleep(2)
             assert "Select Available status done"
         except Exception as e:
@@ -333,7 +333,7 @@ class RoomBookingsPage(BasePage):
         try:
             self.action_chain_click(self.STATUS_DROPDOWN)
             sleep(2)
-            self.do_click(self.BOOKED_STATUS)
+            self.action_chain_click(self.BOOKED_STATUS)
             sleep(2)
             assert "Select Booked status done"
         except Exception as e:
@@ -345,7 +345,7 @@ class RoomBookingsPage(BasePage):
         try:
             self.action_chain_click(self.STATUS_DROPDOWN)
             sleep(2)
-            self.do_click(self.ALL_STATUS)
+            self.action_chain_click(self.ALL_STATUS)
             sleep(2)
             assert "Select All status done"
         except Exception as e:
