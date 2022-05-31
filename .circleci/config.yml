@@ -1,0 +1,51 @@
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.1
+jobs:
+   test:
+    working_directory: ~/circleci-python
+    docker:
+      # - image: "circleci/python:jessie-node-browsers"
+      - image: "cimg/python:3.9-browsers"
+    parallelism: 4
+    steps:
+      - checkout
+      - run:
+            name: update
+            command: sudo apt update
+      - run: 
+            name: dependencies
+            command: sudo apt install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
+      - run:
+            name: browser install
+            command: sudo apt install --assume-yes chromium-browser && sudo apt install -y wget && sudo apt-get install -f
+      - run: 
+            name: chrome driver
+            command: sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb && sudo apt-get install -f && sudo wget https://chromedriver.storage.googleapis.com/102.0.5005.27/chromedriver_linux64.zip && sudo unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin/chromedriver && sudo chown root:root /usr/bin/chromedriver && sudo chmod +x /usr/bin/chromedriver
+      # - run: sudo chmod u+x install.sh && source install.sh
+      # - run:
+      #     name: Download Selenium
+      #     command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      # - run:
+      #     name: Start Selenium
+      #     command: java -jar selenium-server-standalone-3.5.3.jar
+      #     background: true
+      # - run: find /usr/bin/google-chrome
+      # - run: wget https://chromedriver.storage.googleapis.com/102.0.5005.27/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+      # - run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb
+      # - run: apt-get update && apt-get -y install curl gnupg unzip wget
+      # - run: sudo apt-get install -y python python-dev python3.9 python3.9-dev python3.9-distutils && curl -sL https://bootstrap.pypa.io/get-pip.py |  python3.9 && pip -V && apt-get update
+     
+      - run: pip install -r requirements.txt
+      # - run: pytest -v -s --html=report.html Tests/Test_Resource_Booking --self-contained-html --capture=sys -rP -rF
+
+      # This is not to be used in production
+      # - run: pytest -v -s --html=report.html -m pnr Tests/Test_Resource_Booking/test_RoomBooking.py --self-contained-html --capture=sys -rP -rF
+      - run: pytest -v -s -m pnr Tests/Test_Resource_Booking/test_RoomBooking.py
+      
+      # for email
+      - run: pytest -v -s Tests/test_send_email.py
+workflows:
+  test:
+    jobs:
+      - test

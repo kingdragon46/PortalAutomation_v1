@@ -4,6 +4,8 @@ attrs==21.4.0
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.11
+chromedriver-binary==102.0.5005.27.0
+chromedriver-binary-auto==0.1.1
 colorama==0.4.4
 configparser==5.2.0
 crayons==0.4.0
@@ -29,11 +31,14 @@ pytest-excel==1.4.2
 pytest-forked==1.4.0
 pytest-html==3.1.1
 pytest-metadata==1.11.0
+pytest-parallel==0.1.1
 pytest-xdist==2.5.0
+pytz==2022.1
 requests==2.27.1
 selenium==4.1.0
 sniffio==1.2.0
 sortedcontainers==2.4.0
+tblib==1.7.0
 toml==0.10.2
 trio==0.19.0
 trio-websocket==0.9.2

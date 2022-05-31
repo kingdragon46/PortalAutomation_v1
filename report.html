@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <style>body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  /* do not increase min-width as some may use split screens */
+  min-width: 800px;
+  color: #999;
+}
+
+h1 {
+  font-size: 24px;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+a {
+  color: #999;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+#environment td {
+  padding: 5px;
+  border: 1px solid #E6E6E6;
+}
+#environment tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed,
+.passed .col-result {
+  color: green;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: orange;
+}
+
+span.error,
+span.failed,
+span.xpassed,
+.error .col-result,
+.failed .col-result,
+.xpassed .col-result {
+  color: red;
+}
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+#results-table {
+  border: 1px solid #e6e6e6;
+  color: #999;
+  font-size: 12px;
+  width: 100%;
+}
+#results-table th,
+#results-table td {
+  padding: 5px;
+  border: 1px solid #E6E6E6;
+  text-align: left;
+}
+#results-table th {
+  font-weight: bold;
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+.log {
+  background-color: #e6e6e6;
+  border: 1px solid #e6e6e6;
+  color: black;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  height: 230px;
+  overflow-y: scroll;
+  padding: 5px;
+  white-space: pre-wrap;
+}
+.log:only-child {
+  height: inherit;
+}
+
+div.image {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin-left: 5px;
+  overflow: hidden;
+  width: 320px;
+}
+div.image img {
+  width: 320px;
+}
+
+div.video {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin-left: 5px;
+  overflow: hidden;
+  width: 320px;
+}
+div.video video {
+  overflow: hidden;
+  width: 320px;
+  height: 240px;
+}
+
+.collapsed {
+  display: none;
+}
+
+.expander::after {
+  content: " (show details)";
+  color: #BBB;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.collapser::after {
+  content: " (hide details)";
+  color: #BBB;
+  font-style: italic;
+  cursor: pointer;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+  cursor: pointer;
+}
+
+.sort-icon {
+  font-size: 0px;
+  float: left;
+  margin-right: 5px;
+  margin-top: 5px;
+  /*triangle*/
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+.inactive .sort-icon {
+  /*finish triangle*/
+  border-top: 8px solid #E6E6E6;
+}
+.asc.active .sort-icon {
+  /*finish triangle*/
+  border-bottom: 8px solid #999;
+}
+.desc.active .sort-icon {
+  /*finish triangle*/
+  border-top: 8px solid #999;
+}
+</style></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) { // eslint-disable-line no-redeclare
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function findAll(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sortColumn(elem) {
+    toggleSortStates(elem);
+    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    let key;
+    if (elem.classList.contains('result')) {
+        key = keyResult;
+    } else if (elem.classList.contains('links')) {
+        key = keyLink;
+    } else {
+        key = keyAlpha;
+    }
+    sortTable(elem, key(colIndex));
+}
+
+function showAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(showExtras);
+}
+
+function hideAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(hideExtras);
+}
+
+function showExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.remove('collapsed');
+    expandcollapse.classList.remove('expander');
+    expandcollapse.classList.add('collapser');
+}
+
+function hideExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.add('collapsed');
+    expandcollapse.classList.remove('collapser');
+    expandcollapse.classList.add('expander');
+}
+
+function showFilters() {
+    const filterItems = document.getElementsByClassName('filter');
+    for (let i = 0; i < filterItems.length; i++)
+        filterItems[i].hidden = false;
+}
+
+function addCollapse() {
+    // Add links for show/hide all
+    const resulttable = find('table#results-table');
+    const showhideall = document.createElement('p');
+    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
+                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    findAll('.col-result').forEach(function(elem) {
+        const collapsed = getQueryParameter('collapsed') || 'Passed';
+        const extras = elem.parentNode.nextElementSibling;
+        const expandcollapse = document.createElement('span');
+        if (extras.classList.contains('collapsed')) {
+            expandcollapse.classList.add('expander');
+        } else if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add('collapsed');
+            expandcollapse.classList.add('expander');
+        } else {
+            expandcollapse.classList.add('collapser');
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener('click', function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
+                showExtras(event.currentTarget);
+            } else {
+                hideExtras(event.currentTarget);
+            }
+        });
+    });
+}
+
+function getQueryParameter(name) {
+    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () { // eslint-disable-line no-unused-vars
+    resetSortHeaders();
+
+    addCollapse();
+
+    showFilters();
+
+    sortColumn(find('.initial-sort'));
+
+    findAll('.sortable').forEach(function(elem) {
+        elem.addEventListener('click',
+            function() {
+                sortColumn(elem);
+            }, false);
+    });
+}
+
+function sortTable(clicked, keyFunc) {
+    const rows = findAll('.results-table-row');
+    const reversed = !clicked.classList.contains('asc');
+    const sortedRows = sort(rows, keyFunc, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    const thead = document.getElementById('results-table-head');
+    document.getElementById('results-table').remove();
+    const parent = document.createElement('table');
+    parent.id = 'results-table';
+    parent.appendChild(thead);
+    sortedRows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName('BODY')[0].appendChild(parent);
+}
+
+function sort(items, keyFunc, reversed) {
+    const sortArray = items.map(function(item, i) {
+        return [keyFunc(item), i];
+    });
+
+    sortArray.sort(function(a, b) {
+        const keyA = a[0];
+        const keyB = b[0];
+
+        if (keyA == keyB) return 0;
+
+        if (reversed) {
+            return keyA < keyB ? 1 : -1;
+        } else {
+            return keyA > keyB ? 1 : -1;
+        }
+    });
+
+    return sortArray.map(function(item) {
+        const index = item[1];
+        return items[index];
+    });
+}
+
+function keyAlpha(colIndex) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
+    };
+}
+
+function keyLink(colIndex) {
+    return function(elem) {
+        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
+        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
+    };
+}
+
+function keyResult(colIndex) {
+    return function(elem) {
+        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+            'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
+    };
+}
+
+function resetSortHeaders() {
+    findAll('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    findAll('.sortable').forEach(function(elem) {
+        const icon = document.createElement('div');
+        icon.className = 'sort-icon';
+        icon.textContent = 'vvv';
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove('desc', 'active');
+        elem.classList.add('asc', 'inactive');
+    });
+}
+
+function toggleSortStates(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        resetSortHeaders();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function isAllRowsHidden(value) {
+    return value.hidden == false;
+}
+
+function filterTable(elem) { // eslint-disable-line no-unused-vars
+    const outcomeAtt = 'data-test-result';
+    const outcome = elem.getAttribute(outcomeAtt);
+    const classOutcome = outcome + ' results-table-row';
+    const outcomeRows = document.getElementsByClassName(classOutcome);
+
+    for(let i = 0; i < outcomeRows.length; i++){
+        outcomeRows[i].hidden = !elem.checked;
+    }
+
+    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
+    const allRowsHidden = rows.length == 0 ? true : false;
+    const notFoundMessage = document.getElementById('not-found-message');
+    notFoundMessage.hidden = !allRowsHidden;
+}
+</script>
+    <h1>report.html</h1>
+    <p>Report generated on 31-May-2022 at 06:51:34 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>Packages</td>
+        <td>{"pluggy": "1.0.0", "py": "1.11.0", "pytest": "6.2.5"}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.19041-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{"dependency": "0.5.1", "excel": "1.4.2", "forked": "1.4.0", "html": "3.1.1", "metadata": "1.11.0", "parallel": "0.1.1", "xdist": "2.5.0"}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.9.1</td></tr></table>
+    <h2>Summary</h2>
+    <p>5 tests ran in 1464.44 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">3 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable" col="duration">Duration</th>
+          <th class="sortable links" col="links">Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">Test_Resource_Booking/test_RoomBooking.py::Test_RoomBooking::test_cancelling_first_recurring_booking[chrome]</td>
+          <td class="col-duration">239.10</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;test_RoomBooking.Test_RoomBooking object at 0x000001CDDBBAAC70&gt;<br/><br/>    @pytest.mark.prsc<br/>    # @pytest.mark.skip(reason=&quot;no way of currently testing this&quot;)<br/>    def test_cancelling_first_recurring_booking(self):<br/>        bookinpage = RoomBookingsPage(self.driver)<br/>        sleep(3)<br/>        bookinpage.driver_get_url(TestData.RESOURCE_PAGE_URL)<br/>        sleep(3)<br/>        # bookinpage.driver_implicitly_wait(6)<br/>        bookinpage.start_selection()<br/>    <br/>        bookinpage.select_days_end()<br/>    <br/>        # Clicking on available room<br/>        bookinpage.select_available_resource()<br/>        # bookinpage.driver_implicitly_wait(4)<br/>    <br/>        # Getting and assigning room number to selectors<br/>        rval = bookinpage.get_room_name()<br/>        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)<br/>        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)<br/>        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)<br/>        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)<br/>        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)<br/>        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)<br/>    <br/>        &#x27;&#x27;&#x27;Booking Modal&#x27;&#x27;&#x27;<br/>    <br/>        # Attendee Details<br/>        # New Member<br/>        bookinpage.new_contact_guest(<br/>            TestData.NEW_CONTACT_1, TestData.NEW_CONTACT_1_EMAIL)<br/>        # bookinpage.new_contact_guest(TestData.NEW_CONTACT_2, TestData.NEW_CONTACT_2_EMAIL)<br/>        # Is drafted = False<br/>        bookinpage.host_selection(<br/>            RoomBookingsPage.ATTENDEE_DETAILS, TestData.CONTACT_1_IS_DRAFTED_FALSE)<br/>        # Is Member = True<br/>        bookinpage.host_selection(<br/>            RoomBookingsPage.ATTENDEE_DETAILS, TestData.CONTACT_1_IS_MEMBER)<br/>        # bookinpage.host_selection(RoomBookingsPage.ATTENDEE_DETAILS, TestData.CONTACT_2_IS_MEMBER)<br/>    <br/>        # Agenda<br/>        bookinpage.enter_agenda()<br/>    <br/>        # Selecting datetime<br/>        bookinpage.enter_datetime()<br/>    <br/>        # Repeating meeting<br/>        bookinpage.daily_repeat()<br/>    <br/>        last_date = bookinpage.get_element(RoomBookingsPage.LAST_DATE_VALIDITY).get_attribute(&quot;title&quot;)<br/>        last_date2 = bookinpage.change_date_format(last_date)<br/>        print(f&#x27;Last date: {last_date2}&#x27;)<br/>    <br/>        # Clicking on booking button<br/>        bookinpage.do_click(RoomBookingsPage.BOOKING_CONFIRM_BUTTON)<br/>        sleep(2)<br/>        cdate = TestData.current_datetime()<br/>        bookinpage.take_screenshot(f&quot;test_cancelling_first_recurring_booking/confirm_booking_{cdate}.png&quot;)<br/>        sleep(5)<br/>        print(&quot;Booking should be created successfully: Passed&quot;)<br/>    <br/>        bookinpage.select_all_status()<br/>        sleep(2)<br/>    <br/>        # Resource details page<br/>&gt;       bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)<br/><br/>Tests\Test_Resource_Booking\test_RoomBooking.py:1987: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>Pages\BasePage.py:38: in do_click_by_xpath<br/>    WebDriverWait(self.driver, self.time_delay).until(EC.element_to_be_clickable((By.XPATH, by_locator))).click()<br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\webelement.py:81: in click<br/>    self._execute(Command.CLICK_ELEMENT)<br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\webelement.py:710: in _execute<br/>    return self._parent.execute(command, params)<br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py:424: in execute<br/>    self.error_handler.check_response(response)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x000001CDDBCB1460&gt;<br/>response = {&#x27;status&#x27;: 400, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;element click intercepted&quot;,&quot;message&quot;:&quot;element click intercepted: Element ...\n\\tRtlGetAppContainerNamedObjectPath [0x77D57A7E+286]\\n\\tRtlGetAppContainerNamedObjectPath [0x77D57A4E+238]\\n&quot;}}&#x27;}<br/><br/>    def check_response(self, response: Dict[str, Any]) -&gt; None:<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if not status or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen: str = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, str):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if not status:<br/>                        status = value.get(&quot;status&quot;, ErrorCode.UNKNOWN_ERROR)<br/>                        message = value.get(&quot;value&quot;) or value.get(&quot;message&quot;)<br/>                        if not isinstance(message, str):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class: Type[WebDriverException]<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_SHADOW_ROOT:<br/>            exception_class = NoSuchShadowRootException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if not value:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, str):<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None  # type: ignore[assignment]<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        st_value = value.get(&#x27;stackTrace&#x27;) or value.get(&#x27;stacktrace&#x27;)<br/>        if st_value:<br/>            if isinstance(st_value, str):<br/>                stacktrace = st_value.split(&#x27;\n&#x27;)<br/>            else:<br/>                stacktrace = []<br/>                try:<br/>                    for frame in st_value:<br/>                        line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                        file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                        if line:<br/>                            file = &quot;%s:%s&quot; % (file, line)<br/>                        meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                        if &#x27;className&#x27; in frame:<br/>                            meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                        msg = &quot;    at %s (%s)&quot;<br/>                        msg = msg % (meth, file)<br/>                        stacktrace.append(msg)<br/>                except TypeError:<br/>                    pass<br/>        if exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)  # type: ignore[call-arg]  # mypy is not smart enough here<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element &lt;div title=&quot;...&quot; class=&quot;text-primary_link&quot;&gt;105&lt;/div&gt; is not clickable at point (588, 445). Other element would receive the click: &lt;div class=&quot;ant-row bg-black col-span-full md:col-span-3 md:rounded-l-lg rounded-t-lg text-coolGray-200&quot; style=&quot;row-gap: 0px;&quot;&gt;...&lt;/div&gt;</span><br/><span class="error">E         (Session info: chrome=102.0.5005.61)</span><br/><span class="error">E       Stacktrace:</span><br/><span class="error">E       Backtrace:</span><br/><span class="error">E       	Ordinal0 [0x00FBD953+2414931]</span><br/><span class="error">E       	Ordinal0 [0x00F4F5E1+1963489]</span><br/><span class="error">E       	Ordinal0 [0x00E3C6B8+837304]</span><br/><span class="error">E       	Ordinal0 [0x00E6FC27+1047591]</span><br/><span class="error">E       	Ordinal0 [0x00E6DC08+1039368]</span><br/><span class="error">E       	Ordinal0 [0x00E6B90B+1030411]</span><br/><span class="error">E       	Ordinal0 [0x00E6A659+1025625]</span><br/><span class="error">E       	Ordinal0 [0x00E60293+983699]</span><br/><span class="error">E       	Ordinal0 [0x00E8449C+1131676]</span><br/><span class="error">E       	Ordinal0 [0x00E5FC74+982132]</span><br/><span class="error">E       	Ordinal0 [0x00E846B4+1132212]</span><br/><span class="error">E       	Ordinal0 [0x00E94812+1198098]</span><br/><span class="error">E       	Ordinal0 [0x00E842B6+1131190]</span><br/><span class="error">E       	Ordinal0 [0x00E5E860+976992]</span><br/><span class="error">E       	Ordinal0 [0x00E5F756+980822]</span><br/><span class="error">E       	GetHandleVerifier [0x0122CC62+2510274]</span><br/><span class="error">E       	GetHandleVerifier [0x0121F760+2455744]</span><br/><span class="error">E       	GetHandleVerifier [0x0104EABA+551962]</span><br/><span class="error">E       	GetHandleVerifier [0x0104D916+547446]</span><br/><span class="error">E       	Ordinal0 [0x00F55F3B+1990459]</span><br/><span class="error">E       	Ordinal0 [0x00F5A898+2009240]</span><br/><span class="error">E       	Ordinal0 [0x00F5A985+2009477]</span><br/><span class="error">E       	Ordinal0 [0x00F63AD1+2046673]</span><br/><span class="error">E       	BaseThreadInitThunk [0x75C7FA29+25]</span><br/><span class="error">E       	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]</span><br/><span class="error">E       	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]</span><br/><br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\errorhandler.py:247: ElementClickInterceptedException<br/> ------------------------------Captured stdout call------------------------------ <br/>Selecting Location
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;fadb561f-5c8f-4486-bdee-cd4e6d291a36&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;f8865e08-0eb0-46e6-93b8-9c2d83d07b5f&quot;)&gt;
+Selecting Floor
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;c95e15ea-54ca-4c6a-8a52-0c8d22c386c0&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;42a1ff93-a140-488f-89cf-9ebea3653101&quot;)&gt;
+End date: (&#x27;xpath&#x27;, &quot;//*[@title=&#x27;2022-06-30&#x27;]&quot;)
+is_visible exception: Message: 
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E69500+1021184]
+	Ordinal0 [0x00E6979B+1021851]
+	Ordinal0 [0x00E96502+1205506]
+	Ordinal0 [0x00E844E4+1131748]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+0. visibility: None
+1. visibility: True
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;6466ec21-4ce3-4810-962b-a49b8641c2ff&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;eeabc7a4-3856-411b-affa-8e2481b8781d&quot;)&gt;
+Booking:  (//div[text()=&#x27;Available&#x27;]/parent::*/parent::*/following-sibling::*[4]/button)[1]
+rval:  105
+Last date: Jun 30 2022
+loc_time:  2022_05_31T06.47.20
+Booking should be created successfully: Passed
+select_all_status exception:  Message: element click intercepted: Element &lt;div class=&quot;ant-select-selector&quot;&gt;...&lt;/div&gt; is not clickable at point (233, 289). Other element would receive the click: &lt;div class=&quot; css-ackcql&quot; data-value=&quot;&quot;&gt;...&lt;/div&gt;
+  (Session info: chrome=102.0.5005.61)
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E6FC27+1047591]
+	Ordinal0 [0x00E6DC08+1039368]
+	Ordinal0 [0x00E6B90B+1030411]
+	Ordinal0 [0x00E6A659+1025625]
+	Ordinal0 [0x00E60293+983699]
+	Ordinal0 [0x00E8449C+1131676]
+	Ordinal0 [0x00E5FC74+982132]
+	Ordinal0 [0x00E846B4+1132212]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">Test_Resource_Booking/test_RoomBooking.py::Test_RoomBooking::test_cancelling_last_recurring_booking[chrome]</td>
+          <td class="col-duration">237.13</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;test_RoomBooking.Test_RoomBooking object at 0x000001CDDBE97B50&gt;<br/><br/>    @pytest.mark.prsc<br/>    # @pytest.mark.skip(reason=&quot;no way of currently testing this&quot;)<br/>    def test_cancelling_last_recurring_booking(self):<br/>        bookinpage = RoomBookingsPage(self.driver)<br/>        sleep(3)<br/>        bookinpage.driver_get_url(TestData.RESOURCE_PAGE_URL)<br/>        sleep(3)<br/>        # bookinpage.driver_implicitly_wait(6)<br/>        bookinpage.start_selection()<br/>    <br/>        bookinpage.select_days_end()<br/>    <br/>        # Clicking on available room<br/>        bookinpage.select_available_resource()<br/>        # bookinpage.driver_implicitly_wait(4)<br/>    <br/>        # Getting and assigning room number to selectors<br/>        rval = bookinpage.get_room_name()<br/>        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)<br/>        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)<br/>        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)<br/>        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)<br/>        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)<br/>        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)<br/>        RoomBookingsPage.ROOM_124_CHECK_DIV_LAST = RoomBookingsPage.ROOM_124_CHECK_DIV_LAST.format(rval)<br/>        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON_LAST = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON_LAST.format(rval)<br/>    <br/>        &#x27;&#x27;&#x27;Booking Modal&#x27;&#x27;&#x27;<br/>    <br/>        # Attendee Details<br/>        # New Member<br/>        bookinpage.new_contact_guest(<br/>            TestData.NEW_CONTACT_1, TestData.NEW_CONTACT_1_EMAIL)<br/>        # bookinpage.new_contact_guest(TestData.NEW_CONTACT_2, TestData.NEW_CONTACT_2_EMAIL)<br/>        # Is drafted = False<br/>        bookinpage.host_selection(<br/>            RoomBookingsPage.ATTENDEE_DETAILS, TestData.CONTACT_1_IS_DRAFTED_FALSE)<br/>        # Is Member = True<br/>        bookinpage.host_selection(<br/>            RoomBookingsPage.ATTENDEE_DETAILS, TestData.CONTACT_1_IS_MEMBER)<br/>        # bookinpage.host_selection(RoomBookingsPage.ATTENDEE_DETAILS, TestData.CONTACT_2_IS_MEMBER)<br/>    <br/>        # Agenda<br/>        bookinpage.enter_agenda()<br/>    <br/>        # Selecting datetime<br/>        bookinpage.enter_datetime()<br/>    <br/>        # Repeating meeting<br/>        bookinpage.daily_repeat()<br/>    <br/>        last_date = bookinpage.get_element(RoomBookingsPage.LAST_DATE_VALIDITY).get_attribute(&quot;title&quot;)<br/>        last_date2 = bookinpage.change_date_format(last_date)<br/>        print(f&#x27;Last date: {last_date2}&#x27;)<br/>    <br/>        # Clicking on booking button<br/>        bookinpage.do_click(RoomBookingsPage.BOOKING_CONFIRM_BUTTON)<br/>        sleep(2)<br/>        cdate = TestData.current_datetime()<br/>        bookinpage.take_screenshot(f&quot;test_cancelling_last_recurring_booking/confirm_booking_{cdate}.png&quot;)<br/>        sleep(2)<br/>        print(&quot;Booking should be created successfully: Passed&quot;)<br/>    <br/>        bookinpage.select_all_status()<br/>        sleep(2)<br/>    <br/>        # Resource details page<br/>&gt;       bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)<br/><br/>Tests\Test_Resource_Booking\test_RoomBooking.py:2085: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>Pages\BasePage.py:38: in do_click_by_xpath<br/>    WebDriverWait(self.driver, self.time_delay).until(EC.element_to_be_clickable((By.XPATH, by_locator))).click()<br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\webelement.py:81: in click<br/>    self._execute(Command.CLICK_ELEMENT)<br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\webelement.py:710: in _execute<br/>    return self._parent.execute(command, params)<br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py:424: in execute<br/>    self.error_handler.check_response(response)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x000001CDDBCB1460&gt;<br/>response = {&#x27;status&#x27;: 400, &#x27;value&#x27;: &#x27;{&quot;value&quot;:{&quot;error&quot;:&quot;element click intercepted&quot;,&quot;message&quot;:&quot;element click intercepted: Element ...\n\\tRtlGetAppContainerNamedObjectPath [0x77D57A7E+286]\\n\\tRtlGetAppContainerNamedObjectPath [0x77D57A4E+238]\\n&quot;}}&#x27;}<br/><br/>    def check_response(self, response: Dict[str, Any]) -&gt; None:<br/>        &quot;&quot;&quot;<br/>        Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>        :Args:<br/>         - response - The JSON response from the WebDriver server as a dictionary<br/>           object.<br/>    <br/>        :Raises: If the response contains an error message.<br/>        &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if not status or status == ErrorCode.SUCCESS:<br/>            return<br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen: str = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, str):<br/>                import json<br/>                try:<br/>                    value = json.loads(value_json)<br/>                    if len(value.keys()) == 1:<br/>                        value = value[&#x27;value&#x27;]<br/>                    status = value.get(&#x27;error&#x27;, None)<br/>                    if not status:<br/>                        status = value.get(&quot;status&quot;, ErrorCode.UNKNOWN_ERROR)<br/>                        message = value.get(&quot;value&quot;) or value.get(&quot;message&quot;)<br/>                        if not isinstance(message, str):<br/>                            value = message<br/>                            message = message.get(&#x27;message&#x27;)<br/>                    else:<br/>                        message = value.get(&#x27;message&#x27;, None)<br/>                except ValueError:<br/>                    pass<br/>    <br/>        exception_class: Type[WebDriverException]<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_SHADOW_ROOT:<br/>            exception_class = NoSuchShadowRootException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.ELEMENT_NOT_INTERACTABLE:<br/>            exception_class = ElementNotInteractableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = InvalidCookieDomainException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = UnableToSetCookieException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        elif status in ErrorCode.JAVASCRIPT_ERROR:<br/>            exception_class = JavascriptException<br/>        elif status in ErrorCode.SESSION_NOT_CREATED:<br/>            exception_class = SessionNotCreatedException<br/>        elif status in ErrorCode.INVALID_ARGUMENT:<br/>            exception_class = InvalidArgumentException<br/>        elif status in ErrorCode.NO_SUCH_COOKIE:<br/>            exception_class = NoSuchCookieException<br/>        elif status in ErrorCode.UNABLE_TO_CAPTURE_SCREEN:<br/>            exception_class = ScreenshotException<br/>        elif status in ErrorCode.ELEMENT_CLICK_INTERCEPTED:<br/>            exception_class = ElementClickInterceptedException<br/>        elif status in ErrorCode.INSECURE_CERTIFICATE:<br/>            exception_class = InsecureCertificateException<br/>        elif status in ErrorCode.INVALID_COORDINATES:<br/>            exception_class = InvalidCoordinatesException<br/>        elif status in ErrorCode.INVALID_SESSION_ID:<br/>            exception_class = InvalidSessionIdException<br/>        elif status in ErrorCode.UNKNOWN_METHOD:<br/>            exception_class = UnknownMethodException<br/>        else:<br/>            exception_class = WebDriverException<br/>        if not value:<br/>            value = response[&#x27;value&#x27;]<br/>        if isinstance(value, str):<br/>            raise exception_class(value)<br/>        if message == &quot;&quot; and &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None  # type: ignore[assignment]<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        st_value = value.get(&#x27;stackTrace&#x27;) or value.get(&#x27;stacktrace&#x27;)<br/>        if st_value:<br/>            if isinstance(st_value, str):<br/>                stacktrace = st_value.split(&#x27;\n&#x27;)<br/>            else:<br/>                stacktrace = []<br/>                try:<br/>                    for frame in st_value:<br/>                        line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                        file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                        if line:<br/>                            file = &quot;%s:%s&quot; % (file, line)<br/>                        meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                        if &#x27;className&#x27; in frame:<br/>                            meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                        msg = &quot;    at %s (%s)&quot;<br/>                        msg = msg % (meth, file)<br/>                        stacktrace.append(msg)<br/>                except TypeError:<br/>                    pass<br/>        if exception_class == UnexpectedAlertPresentException:<br/>            alert_text = None<br/>            if &#x27;data&#x27; in value:<br/>                alert_text = value[&#x27;data&#x27;].get(&#x27;text&#x27;)<br/>            elif &#x27;alert&#x27; in value:<br/>                alert_text = value[&#x27;alert&#x27;].get(&#x27;text&#x27;)<br/>            raise exception_class(message, screen, stacktrace, alert_text)  # type: ignore[call-arg]  # mypy is not smart enough here<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element &lt;div title=&quot;...&quot; class=&quot;text-primary_link&quot;&gt;105&lt;/div&gt; is not clickable at point (588, 445). Other element would receive the click: &lt;div class=&quot;ant-row bg-black col-span-full md:col-span-3 md:rounded-l-lg rounded-t-lg text-coolGray-200&quot; style=&quot;row-gap: 0px;&quot;&gt;...&lt;/div&gt;</span><br/><span class="error">E         (Session info: chrome=102.0.5005.61)</span><br/><span class="error">E       Stacktrace:</span><br/><span class="error">E       Backtrace:</span><br/><span class="error">E       	Ordinal0 [0x00FBD953+2414931]</span><br/><span class="error">E       	Ordinal0 [0x00F4F5E1+1963489]</span><br/><span class="error">E       	Ordinal0 [0x00E3C6B8+837304]</span><br/><span class="error">E       	Ordinal0 [0x00E6FC27+1047591]</span><br/><span class="error">E       	Ordinal0 [0x00E6DC08+1039368]</span><br/><span class="error">E       	Ordinal0 [0x00E6B90B+1030411]</span><br/><span class="error">E       	Ordinal0 [0x00E6A659+1025625]</span><br/><span class="error">E       	Ordinal0 [0x00E60293+983699]</span><br/><span class="error">E       	Ordinal0 [0x00E8449C+1131676]</span><br/><span class="error">E       	Ordinal0 [0x00E5FC74+982132]</span><br/><span class="error">E       	Ordinal0 [0x00E846B4+1132212]</span><br/><span class="error">E       	Ordinal0 [0x00E94812+1198098]</span><br/><span class="error">E       	Ordinal0 [0x00E842B6+1131190]</span><br/><span class="error">E       	Ordinal0 [0x00E5E860+976992]</span><br/><span class="error">E       	Ordinal0 [0x00E5F756+980822]</span><br/><span class="error">E       	GetHandleVerifier [0x0122CC62+2510274]</span><br/><span class="error">E       	GetHandleVerifier [0x0121F760+2455744]</span><br/><span class="error">E       	GetHandleVerifier [0x0104EABA+551962]</span><br/><span class="error">E       	GetHandleVerifier [0x0104D916+547446]</span><br/><span class="error">E       	Ordinal0 [0x00F55F3B+1990459]</span><br/><span class="error">E       	Ordinal0 [0x00F5A898+2009240]</span><br/><span class="error">E       	Ordinal0 [0x00F5A985+2009477]</span><br/><span class="error">E       	Ordinal0 [0x00F63AD1+2046673]</span><br/><span class="error">E       	BaseThreadInitThunk [0x75C7FA29+25]</span><br/><span class="error">E       	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]</span><br/><span class="error">E       	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]</span><br/><br/>..\..\Experiments\Page-object-model\venv\lib\site-packages\selenium\webdriver\remote\errorhandler.py:247: ElementClickInterceptedException<br/> ------------------------------Captured stdout call------------------------------ <br/>Selecting Location
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;1b227404-33b9-41c5-ae53-ff6369f5e26f&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;6088a2b7-7612-4df3-8f06-7e7a347aeb31&quot;)&gt;
+Selecting Floor
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;084c53bb-5f27-43cd-8bd8-58ac67d0fe8b&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;ef423e15-6456-4d21-87d3-da959c76e4d7&quot;)&gt;
+End date: (&#x27;xpath&#x27;, &quot;//*[@title=&#x27;2022-06-30&#x27;]&quot;)
+is_visible exception: Message: 
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E69500+1021184]
+	Ordinal0 [0x00E6979B+1021851]
+	Ordinal0 [0x00E96502+1205506]
+	Ordinal0 [0x00E844E4+1131748]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+0. visibility: None
+1. visibility: True
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;fad46641-cb5d-4491-afce-af5077962bd4&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;bf45e2fb-2b53-401a-b8d8-4b13a39dc31e&quot;)&gt;
+Booking:  (//div[text()=&#x27;Available&#x27;]/parent::*/parent::*/following-sibling::*[4]/button)[1]
+rval:  105
+Last date: Jun 30 2022
+loc_time:  2022_05_31T06.51.20
+Booking should be created successfully: Passed
+select_all_status exception:  Message: element click intercepted: Element &lt;div class=&quot;ant-select-selector&quot;&gt;...&lt;/div&gt; is not clickable at point (233, 289). Other element would receive the click: &lt;div class=&quot; css-ackcql&quot; data-value=&quot;&quot;&gt;...&lt;/div&gt;
+  (Session info: chrome=102.0.5005.61)
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E6FC27+1047591]
+	Ordinal0 [0x00E6DC08+1039368]
+	Ordinal0 [0x00E6B90B+1030411]
+	Ordinal0 [0x00E6A659+1025625]
+	Ordinal0 [0x00E60293+983699]
+	Ordinal0 [0x00E8449C+1131676]
+	Ordinal0 [0x00E5FC74+982132]
+	Ordinal0 [0x00E846B4+1132212]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+teardown
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">Test_Resource_Booking/test_RoomBooking.py::Test_RoomBooking::test_login_room_booking[chrome]</td>
+          <td class="col-duration">25.95</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> -----------------------------Captured stderr setup------------------------------ <br/>
+
+====== WebDriver manager ======
+Current google-chrome version is 102.0.5005
+Get LATEST chromedriver version for 102.0.5005 google-chrome
+Trying to download new driver from https://chromedriver.storage.googleapis.com/102.0.5005.61/chromedriver_win32.zip
+Driver has been saved in cache [C:\Users\Vivek\.wdm\drivers\chromedriver\win32\102.0.5005.61]
+<br/> -------------------------------Captured log setup------------------------------- <br/>INFO     WDM:logger.py:26 
+
+INFO     WDM:logger.py:26 ====== WebDriver manager ======
+INFO     WDM:logger.py:26 Current google-chrome version is 102.0.5005
+INFO     WDM:logger.py:26 Get LATEST chromedriver version for 102.0.5005 google-chrome
+INFO     WDM:logger.py:26 Trying to download new driver from https://chromedriver.storage.googleapis.com/102.0.5005.61/chromedriver_win32.zip
+INFO     WDM:logger.py:26 Driver has been saved in cache [C:\Users\Vivek\.wdm\drivers\chromedriver\win32\102.0.5005.61]<br/> ------------------------------Captured stdout call------------------------------ <br/>Start time:  1653958630.2365565
+loc_time:  2022_05_31T06.27.28
+cdate:  2022_05_31T06.27.28
+loc:  ./screenshot/test_simple_booking/confirm_booking_2022_05_31T06.27.28.png
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">Test_Resource_Booking/test_RoomBooking.py::Test_RoomBooking::test_overlapping_single_future_daily_recurring_booking_5_cancelled[chrome]</td>
+          <td class="col-duration">491.26</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Selecting Location
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;505f390b-14ea-4026-995e-cb1ad32ace0e&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;f9b18e8b-9589-4f88-9dcc-3f59e501e670&quot;)&gt;
+Selecting Floor
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;0028f80b-028f-4296-98bb-214d0e92ef01&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;d48da63d-71d4-462b-b621-8efb6e2564d6&quot;)&gt;
+End date: (&#x27;xpath&#x27;, &quot;//*[@title=&#x27;2022-06-30&#x27;]&quot;)
+is_visible exception: Message: 
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E69500+1021184]
+	Ordinal0 [0x00E6979B+1021851]
+	Ordinal0 [0x00E96502+1205506]
+	Ordinal0 [0x00E844E4+1131748]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+0. visibility: None
+1. visibility: True
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;e39a6ca4-d6d2-496a-bd3f-634720da40f2&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;661df540-6f9a-486e-b495-b946125fabaf&quot;)&gt;
+Booking:  (//div[text()=&#x27;Available&#x27;]/parent::*/parent::*/following-sibling::*[4]/button)[1]
+rval:  105
+Last date: Jun 30 2022
+loc_time:  2022_05_31T06.31.25
+Booking should be created successfully: Passed
+element present
+moved to element
+eltext:  [&#x27;Recurring Booking&#x27;, &#x27;Booking Id: 198863&#x27;, &#x27;Name: Neeraj Dhiman&#x27;, &#x27;Email: neeraj.dhiman@veris.in&#x27;, &#x27;Orignial Start: Jun 2, 2022 00:08&#x27;, &#x27;Orignial End: Jun 2, 2022 00:28&#x27;, &#x27;Cancel Booking&#x27;]
+At the resource details page, booking should be available: Passed
+i: 1 
+ xpath: (//p[text()=&#x27;105&#x27;]/parent::*/following-sibling::*[2]/div/button)[1]
+element present
+moved to element
+In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking: Passed
+in i=1
+element present
+moved to element
+vrs loadr:  True
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;26529d89-84ba-4253-8cb1-0bf2b48c4ca7&quot;)&gt;
+cancel_some_bookings exception:  Message: 
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E69500+1021184]
+	Ordinal0 [0x00E6979B+1021851]
+	Ordinal0 [0x00E96502+1205506]
+	Ordinal0 [0x00E844E4+1131748]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+loc_time:  2022_05_31T06.34.55
+Create a daily recurring booking for a month  by selecting a date and time such a way that Its overlapping from a future cancelled single booking: PASSED
+element present
+moved to element
+element present
+moved to element
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">Test_Resource_Booking/test_RoomBooking.py::Test_RoomBooking::test_overlapping_daily_future_daily_recurring_booking_5_cancelled[chrome]</td>
+          <td class="col-duration">465.38</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Selecting Location
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;8196147e-7d92-4bbb-928c-b67c64319ec0&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;01aac2e6-f8eb-4ad0-b2a3-4539117e463e&quot;)&gt;
+Selecting Floor
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;7eb8bbd1-9907-4b9b-b6e1-2722ad070697&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;b78abb9b-8fae-4be2-8aad-a13a2b3aa0ac&quot;)&gt;
+End date: (&#x27;xpath&#x27;, &quot;//*[@title=&#x27;2022-06-30&#x27;]&quot;)
+is_visible exception: Message: 
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E69500+1021184]
+	Ordinal0 [0x00E6979B+1021851]
+	Ordinal0 [0x00E96502+1205506]
+	Ordinal0 [0x00E844E4+1131748]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+0. visibility: None
+1. visibility: True
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;37b1c724-64ad-43a3-a215-9f6f50932b44&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;7042b413-b064-43ff-b3da-c6bbfca9e054&quot;)&gt;
+Booking:  (//div[text()=&#x27;Available&#x27;]/parent::*/parent::*/following-sibling::*[4]/button)[1]
+rval:  105
+Last date: Jun 30 2022
+loc_time:  2022_05_31T06.39.35
+Booking should be created successfully: Passed
+element present
+moved to element
+eltext:  [&#x27;Recurring Booking&#x27;, &#x27;Booking Id: 198863&#x27;, &#x27;Name: Neeraj Dhiman&#x27;, &#x27;Email: neeraj.dhiman@veris.in&#x27;, &#x27;Orignial Start: Jun 2, 2022 00:08&#x27;, &#x27;Orignial End: Jun 2, 2022 00:28&#x27;, &#x27;Cancel Booking&#x27;]
+At the resource details page, booking should be available: Passed
+i: 1 
+ xpath: (//p[text()=&#x27;105&#x27;]/parent::*/following-sibling::*[2]/div/button)[1]
+element present
+moved to element
+In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking: Passed
+in i=1
+element present
+moved to element
+vrs loadr:  True
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;c0e5f49c-4472-41bd-8a2c-071e96d37269&quot;)&gt;
+cancel_some_bookings exception:  Message: 
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00FBD953+2414931]
+	Ordinal0 [0x00F4F5E1+1963489]
+	Ordinal0 [0x00E3C6B8+837304]
+	Ordinal0 [0x00E69500+1021184]
+	Ordinal0 [0x00E6979B+1021851]
+	Ordinal0 [0x00E96502+1205506]
+	Ordinal0 [0x00E844E4+1131748]
+	Ordinal0 [0x00E94812+1198098]
+	Ordinal0 [0x00E842B6+1131190]
+	Ordinal0 [0x00E5E860+976992]
+	Ordinal0 [0x00E5F756+980822]
+	GetHandleVerifier [0x0122CC62+2510274]
+	GetHandleVerifier [0x0121F760+2455744]
+	GetHandleVerifier [0x0104EABA+551962]
+	GetHandleVerifier [0x0104D916+547446]
+	Ordinal0 [0x00F55F3B+1990459]
+	Ordinal0 [0x00F5A898+2009240]
+	Ordinal0 [0x00F5A985+2009477]
+	Ordinal0 [0x00F63AD1+2046673]
+	BaseThreadInitThunk [0x75C7FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77D57A7E+286]
+	RtlGetAppContainerNamedObjectPath [0x77D57A4E+238]
+
+loc_time:  2022_05_31T06.43.13
+Create a daily recurring booking for a month  by selecting a date and time such a way that Its overlapping from a future cancelled single booking: PASSED
+i:  0
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;2b5f9c1332c7adca9afaba589b46c644&quot;, element=&quot;8608fa63-9897-4bb1-b882-0c7cea580dc5&quot;)&gt;
+is_visible exception: find_element() takes from 1 to 3 positional arguments but 117 were given
+<br/></div></td></tr></tbody></table></body></html>
