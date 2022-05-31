@@ -12,7 +12,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from webdriver_manager.utils import ChromeType
 
 
-@pytest.fixture(params=["chrome"], scope='class')
+@pytest.fixture(params=["firefox"], scope='class')
 def init_driver(request):
     options = Options()
     options.set_capability("loggingPrefs", {'performance': 'ALL'})
