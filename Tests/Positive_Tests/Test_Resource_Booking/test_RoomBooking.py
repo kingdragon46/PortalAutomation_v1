@@ -37,6 +37,7 @@ class Test_RoomBooking(BaseTest):
     @pytest.mark.misc
     @pytest.mark.hostrltd
     @pytest.mark.custom
+    @pytest.mark.selected
     def test_login_room_booking(self):
         print("Start time: ", self.start_time)
         self.loginPage = LoginPage(self.driver)
@@ -47,6 +48,7 @@ class Test_RoomBooking(BaseTest):
     """Room Booking"""
 
     @pytest.mark.pnr
+    @pytest.mark.selected
     def test_simple_booking(self):
         try:
             # obj = self.test_login_room_booking()
@@ -142,6 +144,7 @@ class Test_RoomBooking(BaseTest):
             # sys.exit(3)
 
     @pytest.mark.pnr
+    @pytest.mark.selected
     # @pytest.mark.custom
     def test_datetime_change_booking(self):
         try:
@@ -224,6 +227,7 @@ class Test_RoomBooking(BaseTest):
 
     @pytest.mark.pnr
     @pytest.mark.custom
+    @pytest.mark.selected
     def test_overlapping_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -351,6 +355,7 @@ class Test_RoomBooking(BaseTest):
             # sys.exit(3)
 
     @pytest.mark.pnr
+    @pytest.mark.selected
     def test_already_cancelled_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -477,6 +482,7 @@ class Test_RoomBooking(BaseTest):
     '''Recurring Bookings Daily'''
 
     @pytest.mark.pr
+    @pytest.mark.selected
     def test_simple_daily_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -568,6 +574,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_simple_daily_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.pr
+    @pytest.mark.selected
     def test_datetime_change_daily_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -662,6 +669,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_datetime_change_daily_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.pr
+    @pytest.mark.selected
     def test_overlapping_daily_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -795,6 +803,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_daily_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.pr
+    @pytest.mark.selected
     def test_already_cancelled_daily_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -929,6 +938,7 @@ class Test_RoomBooking(BaseTest):
 
     '''Recurring bookings Weekly'''
     @pytest.mark.prw
+    @pytest.mark.selected
     def test_simple_weekly_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -1023,6 +1033,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_simple_weekly_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.prw
+    @pytest.mark.selected
     def test_datetime_change_weekly_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -1127,6 +1138,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_datetime_change_weekly_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.prw
+    @pytest.mark.selected
     def test_overlapping_weekly_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -1270,6 +1282,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_weekly_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.prw
+    @pytest.mark.selected
     def test_already_cancelled_weekly_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -1407,6 +1420,7 @@ class Test_RoomBooking(BaseTest):
     '''Recurring + Single'''
 
     @pytest.mark.prs
+    @pytest.mark.selected
     def test_overlapping_single_daily_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -1533,6 +1547,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_single_daily_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
   
     @pytest.mark.prs
+    @pytest.mark.selected
     def test_daily_recurring_overlapping_future_daily_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -1666,6 +1681,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_daily_recurring_single_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
         
     @pytest.mark.prs
+    @pytest.mark.selected
     def test_overlapping_future_cancelled_daily_recurring_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -1800,6 +1816,7 @@ class Test_RoomBooking(BaseTest):
     '''Recurring+single+Cancelled'''
 
     @pytest.mark.prsc
+    @pytest.mark.selected
     # @pytest.mark.skip(reason="no way of currently testing this")
     def test_overlapping_single_future_daily_recurring_booking_5_cancelled(self):
         try:
@@ -1942,6 +1959,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_single_future_daily_recurring_booking_5_cancelled/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
         
     @pytest.mark.prsc
+    @pytest.mark.selected
     # @pytest.mark.skip(reason="no way of currently testing this")
     def test_overlapping_daily_future_daily_recurring_booking_5_cancelled(self):
         try:
@@ -2091,6 +2109,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_daily_future_daily_recurring_booking_5_cancelled/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.prsc
+    @pytest.mark.selected
     # @pytest.mark.skip(reason="no way of currently testing this")
     def test_cancelling_first_recurring_booking(self):
         try:
@@ -2193,6 +2212,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_cancelling_first_recurring_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.prsc
+    @pytest.mark.selected
     # @pytest.mark.skip(reason="no way of currently testing this")
     def test_cancelling_last_recurring_booking(self):
         try:
@@ -2880,6 +2900,7 @@ class Test_RoomBooking(BaseTest):
     
     '''Cancel Booking'''
     @pytest.mark.pcnclb
+    @pytest.mark.selected
     def test_simple_daily_recurring_cancel_single_booking(self):
         count = 0
         try:
@@ -2991,6 +3012,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_simple_daily_recurring_cancel_single_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.pcnclb
+    @pytest.mark.selected
     def test_simple_daily_recurring_cancel_all_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -3084,6 +3106,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_simple_daily_recurring_cancel_all_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.pcnclb
+    @pytest.mark.selected
     def test_simple_weekly_recurring_cancel_single_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -3179,6 +3202,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_simple_weekly_recurring_cancel_single_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.pcnclb
+    @pytest.mark.selected
     def test_simple_weekly_recurring_cancel_all_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -3262,6 +3286,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_simple_weekly_recurring_cancel_all_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
     @pytest.mark.pcnclb
+    @pytest.mark.selected
     def test_simple_cancel_single_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -3334,6 +3359,7 @@ class Test_RoomBooking(BaseTest):
 
     '''Tags Testing'''
     @pytest.mark.misc
+    @pytest.mark.selected
     def test_tag_booking(self):
         try:
             bookinpage = RoomBookingsPage(self.driver)
@@ -3419,6 +3445,7 @@ class Test_RoomBooking(BaseTest):
 
     '''Test Pagination'''
     @pytest.mark.misc
+    @pytest.mark.selected
     def test_pagination(self):
         bookinpage = RoomBookingsPage(self.driver)
         sleep(3)
