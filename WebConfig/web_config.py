@@ -61,6 +61,8 @@ class TestData:
 
     AFTER_LOGIN_URL = f"https://{URL_DOMAIN}.veris.in/resource-manager"
 
+    BOOKING_LOGS_URL = f"https://{URL_DOMAIN}.veris.in/resource-manager/booking-logs"
+
 
     '''-----------------------------POSITIVE TESTING-----------------------------'''
 
@@ -143,6 +145,13 @@ class TestData:
     NEGATIVE_TIME_START_1 = Config.time_select(15)
     NEGATIVE_TIME_END_1 = Config.time_select(18)
     NEGATIVE_TIME_END_2 = Config.time_select(120)
+
+    """--------------------------------------- Booking Logs ----------------------------"""
+    BL_CAL_DATE = Config.repeat_till_date2(22)
+
+    '''Download Report'''
+    DR_START_DATE = 1
+    DR_END_DATE = 30
 
 
 print(f"{TestData.ROOM_START_DATE} ---------- {TestData.ROOM_END_DATE, 18}")

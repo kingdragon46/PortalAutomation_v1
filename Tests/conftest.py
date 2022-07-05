@@ -15,7 +15,7 @@ from webdriver_manager.utils import ChromeType
 @pytest.fixture(params=["chrome"], scope='class')
 def init_driver(request):
     options = Options()
-    options.set_capability("loggingPrefs", {'performance': 'ALL'})
+    options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-features=VizDisplayCompositor")
     options.add_argument("enable-automation")
@@ -34,10 +34,9 @@ def init_driver(request):
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     if request.param == "chrome":
-        web_driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()), options=options)
-        # web_driver = webdriver.Chrome(executable_path='/usr/bin/google-chrome', options=options)
+        # web_driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()), options=options)
  
-        # web_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        web_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     if request.param == "firefox":
         web_driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
     request.cls.driver = web_driver

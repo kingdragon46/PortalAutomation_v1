@@ -37,15 +37,23 @@ class WebConfigFunctions:
         print(now_asia.strftime(format))
         print(type(now_asia.strftime(format)))
 
-    def repeat_till_date2(dys):
+    def repeat_till_date2(dys=None):
         now = datetime.now()
-        future_time = now + timedelta(days=dys)
+        if dys is not None:
+            future_time = now + timedelta(days=dys)
+        else:
+            future_time = now
         bdate = future_time.strftime("%Y-%m-%d")
         print("repeat_till_date2: ", bdate)
         return bdate
 
     def cal_date_format(future_time):
         bdate = datetime.strptime(future_time, '%d %b %Y').strftime("%Y-%m-%d")
+        print("repeat_till_date2: ", bdate)
+        return bdate
+
+    def tr_date_format(future_time):
+        bdate = datetime.strptime(future_time, '%d %b %Y %H:%M').strftime("%b %d, %Y %H:%M")
         print("repeat_till_date2: ", bdate)
         return bdate
 

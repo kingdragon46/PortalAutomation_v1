@@ -35,12 +35,12 @@ class deskBookingsPage(BasePage):
     ALL_STATUS = (By.CSS_SELECTOR, "span[title='All']")
     LIST_VIEW_BUTTON = (
         By.XPATH, f"//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[1]/div[3]/div/div[2]/div/div[2]")
-    # DESK_201 = (By.XPATH, f"//*[@id='meeting-room-list']/div/div/div/div/div/div/table/tbody/tr[1]/td[6]/button")
+    # DESK = (By.XPATH, f"//*[@id='meeting-room-list']/div/div/div/div/div/div/table/tbody/tr[1]/td[6]/button")
     DESK_AVAIL = "(//*[text()='Available']/parent::*/parent::*/following-sibling::*[4]/button)"
     DESK_AVAIL_2 = (
         By.XPATH, "//*[text()='Available']/parent::*/parent::*/preceding-sibling::*/div/div")
     DESK_AVAIL_NAME = "(//div[text()='Available']/parent::*/parent::*/following-sibling::*[4]/button)"
-    DESK_201 = "//*[text()='{}']/parent::*/parent::*/following-sibling::*[5]/button"
+    DESK = "//*[text()='{}']/parent::*/parent::*/following-sibling::*[5]/button"
     DESK_205 = (
         By.XPATH, f"//*[@id='meeting-room-list']/div/div/div/div/div/div/table/tbody/tr[6]/td[6]/button")
     DESK_NUMBER = (By.XPATH, f"//*[@class='desk-title']")
@@ -54,7 +54,7 @@ class deskBookingsPage(BasePage):
     BS_DATE_DIV_CONTAINER = (By.XPATH, "//*[text()='Date & Time']/parent::*/child::*[4]/child::*/div")
     BS_DATE_DIV = (By.XPATH, "//input[@placeholder='Today']")
     BS_DSINGLE_DAY = (By.XPATH, "//*[@placeholder='Select date']")
-    BS_DMULTIPLE_DAYS = (By.XPATH, "//p[text()='Multiple Days']")
+    BS_DRecurringBookings_MULTIPLE_DAYS = (By.XPATH, "//p[text()='Multiple Days']")
     BS_DENDDATE = (By.XPATH, "//input[@placeholder='End date']")
     BS_DONE = (By.XPATH, "//button/span[text()='Done']")
     TDATA_ENDDATE = (By.XPATH, f"//*[@title='{TestData.BS_CAL_ENDDATE}']")
@@ -69,57 +69,57 @@ class deskBookingsPage(BasePage):
         By.XPATH, f"//*[@id='1-floor']/div/div[3]/div[2]/p")
 
     # Booking Modal
-    MODAL_CLOSE = (By.CSS_SELECTOR, "*[title='Close']")
-    BOOKING_CONFIRM_BUTTON = (
+    BookResource_Modal_MODAL_CLOSE = (By.CSS_SELECTOR, "*[title='Close']")
+    BookResource_Modal_BOOKING_CONFIRM_BUTTON = (
         By.XPATH, "//span[text()='Confirm Booking']/..")
-    HOST_DROPDOWN = (
+    BookResource_Modal_HOST_DROPDOWN = (
         By.CSS_SELECTOR, "*[title='Edit Details']")
-    HOST_INPUT = (
+    BookResource_Modal_HOST_INPUT = (
         By.XPATH, "//*[@id='meeting-room-desk-booking-modal']/div/div/div/div/div[2]/div[1]/div[1]/div/div[4]/div/div/div")
-    HOST_SELECT = (
+    BookResource_HOST_SELECT = (
         By.XPATH, f"//*[contains(text(), '{TestData.HOST2_FULLNAME}')]")
 
-    DATE_INPUT = (
+    BookResource_DATE_INPUT = (
         By.XPATH, "//input[@placeholder='Select date']")
-    DATE_CALENDER_BODY = (
+    BookResource_DATE_CALENDER_BODY = (
         By.XPATH, "/html/body/div[9]/div/div/div/div/div[1]/div[2]")
-    DATE_SELECT_2nd = (
+    BookResource_DATE_SELECT_2nd = (
         By.XPATH, "/html/body/div[6]/div/div/div/div/div[1]/div[2]/table/tbody/tr[1]/td[7]/div")
-    TIME_SELECT_START = (
+    BookResource_TIME_SELECT_START = (
         By.XPATH, "(//*[@placeholder='Select time'])[1]")
-    TIME_SELECT_END = (
+    BookResource_TIME_SELECT_END = (
         By.XPATH, "(//*[@placeholder='Select time'])[2]")
-    MULTIPLE_DAYS_SINGLE_BOOKING = (
+    BookResource_RecurringBookings_MULTIPLE_DAYS_SINGLE_BOOKING = (
         By.XPATH, "//*[contains(text(), 'Multiple Days')]")
-    MULTIPLE_DAYS_SB_START = (
+    BookResource_RecurringBookings_MULTIPLE_DAYS_SB_START = (
         By.XPATH, "//input[@placeholder='Start date']")
-    MULTIPLE_DAYS_SB_END = (
+    BookResource_RecurringBookings_MULTIPLE_DAYS_SB_END = (
         By.XPATH, "//input[@placeholder='End date']")
-    TIME_SELECT_ERROR = (By.XPATH, "//p[@class='text-xs text-red-400']")
+    BookResource_TIME_SELECT_ERROR = (By.XPATH, "//p[@class='text-xs text-red-400']")
     # Booking confirmation
-    DESK_201_AFTER_BOOKING_DIV = (
+    BookResource_DESK_AFTER_BOOKING_DIV = (
         By.XPATH, f"//*[@id='meeting-room-list']/div/div/div/div/div/div/table/tbody/tr/td[1]/div")
-    # DESK_201_AFTER_BOOKING_TITLE = (By.XPATH, f"//*[text()='{DESK_NO}']/parent::*/parent::*")
-    DESK_201_AFTER_BOOKING_TITLE = "//*[text()='{}']/parent::*/parent::*"
+    # BookResource_DESK_AFTER_BOOKING_TITLE = (By.XPATH, f"//*[text()='{DESK_NO}']/parent::*/parent::*")
+    BookResource_DESK_AFTER_BOOKING_TITLE = "//*[text()='{}']/parent::*/parent::*"
 
     # Resource Details
-    RD_CALENDER_INPUT = (
+    ResourceDetails_RD_CALENDER_INPUT = (
         By.XPATH, f"//*[@id='resource-details-content']/div[1]/div[1]/div/div/div[5]/div/div/div[2]/div[1]/div/div[2]/div/div/input")
-    SCHEDULE_LISTING = (
+    ResourceDetails_SCHEDULE_LISTING = (
         By.XPATH, f"//*[@id='resource-details-content']/div[1]/div[1]/div/div/div[5]/div/div/div[3]/div/div/div[2]")
-    I_BUTTON = (By.XPATH, f"//*[@class='rbc-event-content']/span")
-    I_INFO = (By.XPATH, f"//*[@class='ant-popover-content']")
-    I_INFO2 = (By.XPATH, f"/html/body/div[7]/div/div/div")
-    RD_TIME_CHECK = (By.CLASS_NAME, "rbc-event-label")
+    ResourceDetails_I_BUTTON = (By.XPATH, f"//*[@class='rbc-event-content']/span")
+    ResourceDetails_I_INFO = (By.XPATH, f"//*[@class='ant-popover-content']")
+    ResourceDetails_I_INFO2 = (By.XPATH, f"/html/body/div[7]/div/div/div")
+    ResourceDetails_RD_TIME_CHECK = (By.CLASS_NAME, "rbc-event-label")
     BOOK_THIS_SPACE = (
         By.XPATH, f"//*[@id='resource-details-content']/div[1]/div[1]/div/div/div[5]/div/div/div[4]/div/button")
-    BOOKING_HOSTNAME = (
+    ResourceDetails_BOOKING_HOSTNAME = (
         By.XPATH, f"/html/body/div[7]/div/div/div/div[2]/div[2]/div[1]/div[1]")
-    BOOKING_HOSTEMAIL = (
+    ResourceDetails_BOOKING_HOSTEMAIL = (
         By.XPATH, f"/html/body/div[7]/div/div/div/div[2]/div[2]/div[1]/div[2]")
-    BOOKING_START = (
+    ResourceDetails_BOOKING_START = (
         By.XPATH, f"/html/body/div[7]/div/div/div/div[2]/div[2]/div[1]/div[3]")
-    BOOKING_END = (
+    ResourceDetails_BOOKING_END = (
         By.XPATH, f"/html/body/div[7]/div/div/div/div[2]/div[2]/div[1]/div[4]")
 
     # Resource page confirmation
@@ -129,25 +129,25 @@ class deskBookingsPage(BasePage):
         By.XPATH, f"//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[1]/div[2]/div/div/div/div[2]/div[1]/div/div/input")
     BDATE_CALENDER_DONE = (
         By.XPATH, f"//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[1]/div[2]/div/div/div/button")
-    DESK_201_RPAGE_CHECK_DIV = "//*[@title='{}']/parent::*/parent::div"
-    DESK_201_RPAGE_CHECK_BOOK_BUTTON = "//div[@title='{}']/parent::*/parent::*/following-sibling::*[5]/button"
-    DESK_201_RPAGE_STATUS_CHECK = "//*[@title='{}']/parent::*/parent::td/following-sibling::*[1]/div/div"
+    DESK_RPAGE_CHECK_DIV = "//*[@title='{}']/parent::*/parent::div"
+    DESK_RPAGE_CHECK_BOOK_BUTTON = "//div[@title='{}']/parent::*/parent::*/following-sibling::*[5]/button"
+    DESK_RPAGE_STATUS_CHECK = "//*[@title='{}']/parent::*/parent::td/following-sibling::*[1]/div/div"
 
     # My Bookings
-    C_TEXT = "//*[contains(text(), '{}')]"
+    MyBookings_C_TEXT = "//*[contains(text(), '{}')]"
     MY_BOOKING_NAV = (By.XPATH, f"//*[@id='sub-nav']/div[2]")
-    # DESK_201_CHECK_NAME = (By.XPATH, "//p[text()='{}']".format(DESK_NO))
-    DESK_201_CHECK_NAME = "//p[text()='{}']"
-    # DESK_201_CHECK_NAME = (By.XPATH, C_TEXT)
-    DESK_201_CHECK_DIV = "//p[text()='{}']/parent::*/parent::div"
-    DESK_201_SCHEDULE_CHECK = "//p[text()='{}']/parent::*/following-sibling::*[1]"
-    DESK_201_MEETING_OPTIONS_BUTTONS_CHECK = "//p[text()='{}']/parent::*/following-sibling::*[2]"
-    DESK_201_MEETING_OPTIONS_CANCEL_BUTTON = "//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[2]"
-    # DESK_201_MEETING_OPTIONS_CANCEL_ALL_DOTS = "(//p[text()='{}']/parent::*/parent::*/preceding-sibling::*/child::*[2]/child::*/child::*/*[@class='MuiSvgIcon-root'])"
-    DESK_201_MEETING_OPTIONS_CANCEL_ALL_DOTS = "//p[text()='{}']/parent::*/parent::*/preceding-sibling::*/child::*[2]/child::*/child::*/*[last()]"
-    DESK_201_MEETING_OPTIONS_CANCEL_ALL_BUTTON = (By.XPATH, "//*[text()='Cancel All']")
-    DESK_201_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = "(//p[text()='{}']/parent::*/following-sibling::*[2]/div/button)"
-    MAIN_CARDS_CONTAINER = (By.XPATH, f"//*[@id='mainBookingCardsContainer']")
+    # DESK_CHECK_NAME = (By.XPATH, "//p[text()='{}']".format(DESK_NO))
+    MyBookings_DESK_CHECK_NAME = "//p[text()='{}']"
+    # DESK_CHECK_NAME = (By.XPATH, MyBookings_C_TEXT)
+    MyBookings_MyBookings_DESK_CHECK_DIV = "//p[text()='{}']/parent::*/parent::div"
+    MyBookings_DESK_SCHEDULE_CHECK = "//p[text()='{}']/parent::*/following-sibling::*[1]"
+    MyBookings_DESK_MEETING_OPTIONS_BUTTONS_CHECK = "//p[text()='{}']/parent::*/following-sibling::*[2]"
+    MyBookings_DESK_MEETING_OPTIONS_CANCEL_BUTTON = "//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[2]"
+    # MyBookings_DESK_MEETING_OPTIONS_CANCEL_BUTTON = "(//p[text()='{}']/parent::*/parent::*/preceding-sibling::*/child::*[2]/child::*/child::*/*[@class='MuiSvgIcon-root'])"
+    MyBookings_DESK_MEETING_OPTIONS_CANCEL_BUTTON = "//p[text()='{}']/parent::*/parent::*/preceding-sibling::*/child::*[2]/child::*/child::*/*[last()]"
+    MyBookings_DESK_MEETING_OPTIONS_CANCEL_ALL_BUTTON = (By.XPATH, "//*[text()='Cancel All']")
+    MyBookings_DESK_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = "(//p[text()='{}']/parent::*/following-sibling::*[2]/div/button)"
+    MyBookings_MAIN_CARDS_CONTAINER = (By.XPATH, f"//*[@id='mainBookingCardsContainer']")
 
     # Booking Successfull message
     BK_SUCCESS = (By.XPATH, f"/html/body/div[5]/div/div/div/div/div/span[2]")
@@ -178,32 +178,32 @@ class deskBookingsPage(BasePage):
         By.XPATH, f"//*[contains(text(), 'Confirm Declaration')]")
 
     # Recurring booking
-    DESK_201_CHECK_RDIV = "//p[text()='{}']/parent::*/following-sibling::*/div[2]/div/p/span[contains(text(),'every day')]"
-    DESK_201_RDIV_CANCEL_BUTTON = "//p[text()='{}']/parent::*/following-sibling::*/div[2]/div/p/span[contains(text(),'every day')]/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/button[2]"
-    REPEAT_DIV = (
+    RecurringBookings_DESK_CHECK_RDIV = "//p[text()='{}']/parent::*/following-sibling::*/div[2]/div/p/span[contains(text(),'every day')]"
+    RecurringBookings_DESK_RDIV_CANCEL_BUTTON = "//p[text()='{}']/parent::*/following-sibling::*/div[2]/div/p/span[contains(text(),'every day')]/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/button[2]"
+    RecurringBookings_REPEAT_DIV = (
         By.CLASS_NAME, "css-1d8n9bt")
-    REPEAT_DAILY = (By.XPATH, f"//*[contains(text(), 'Daily')]")
-    REPEAT_WEEKLY = (By.XPATH, f"//*[contains(text(), 'Weekly')]")
-    REPEAT_WEEKLY_DEFAULT_DAY = (By.XPATH, f"//*[contains(text(), 'Wed')]")
-    REPEAT_WEEKLY_DAY = (By.XPATH, f"//*[contains(text(), 'Wed')]")
-    # REPEAT_TILL_DATE = (By.XPATH, f"//*[@id='meeting-room-desk-booking-modal']/div/div/div/div/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[4]/div/div[2]/div/div")
-    REPEAT_TILL_DATE = (
+    RecurringBookings_REPEAT_DAILY = (By.XPATH, f"//*[contains(text(), 'Daily')]")
+    RecurringBookings_REPEAT_WEEKLY = (By.XPATH, f"//*[contains(text(), 'Weekly')]")
+    RecurringBookings_REPEAT_WEEKLY_DEFAULT_DAY = (By.XPATH, f"//*[contains(text(), 'Wed')]")
+    RecurringBookings_REPEAT_WEEKLY_DAY = (By.XPATH, f"//*[contains(text(), 'Wed')]")
+    # RecurringBookings_REPEAT_TILL_DATE = (By.XPATH, f"//*[@id='meeting-room-desk-booking-modal']/div/div/div/div/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[4]/div/div[2]/div/div")
+    RecurringBookings_REPEAT_TILL_DATE = (
         By.XPATH, f"//*[contains(text(), 'Ending (on Date)')]/following-sibling::*/child::*/child::*/input")
-    MULTIPLE_DAYS = (By.XPATH, f"//*[contains(text(), 'Multiple Days')]")
-    MULTIPLE_DAYS_START_DATE = (
+    RecurringBookings_MULTIPLE_DAYS = (By.XPATH, f"//*[contains(text(), 'Multiple Days')]")
+    RecurringBookings_MULTIPLE_DAYS_START_DATE = (
         By.XPATH, f"//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[1]/div[2]/div/div/div/div[2]/div/div[1]/input")
-    MULTIPLE_DAYS_END_DATE = (
+    RecurringBookings_MULTIPLE_DAYS_END_DATE = (
         By.XPATH, f"//*[@id='meeting-room']/div[2]/div/div[4]/div/div[1]/div/div[1]/div[2]/div/div/div/div[2]/div/div[3]/input")
 
-    # Extend Booking
-    PRE_EXTEND_TIME = "//p[text()='{}']/parent::*/following-sibling::*[1]/div/div"
-    CHECKIN_BOOKING = "//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[1]"
-    EXTEND_BOOKING = "//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[2]"
-    EXTEND_15_MINS = (By.CSS_SELECTOR, "p[text()='15 minutes']")
-    EXTEND_30_MINS = (By.CSS_SELECTOR, "p[text()='30 minutes']")
-    EXTEND_45_MINS = (By.CSS_SELECTOR, "p[text()='45 minutes']")
-    EXTEND_60_MINS = (By.CSS_SELECTOR, "p[text()='60 minutes']")
-    EXTEND_BOOKING_TEXT_CONFIRM = "//p[text()='{}']/parent::*/parent::*/following-sibling::div[2]/div"
+    # MyBookings_EXTEND Booking
+    MyBookings_PRE_MyBookings_EXTEND_TIME = "//p[text()='{}']/parent::*/following-sibling::*[1]/div/div"
+    MyBookings_CHECKIN_BOOKING = "//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[1]"
+    MyBookings_EXTEND_BOOKING = "//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[2]"
+    MyBookings_EXTEND_15_MINS = (By.CSS_SELECTOR, "p[text()='15 minutes']")
+    MyBookings_EXTEND_30_MINS = (By.CSS_SELECTOR, "p[text()='30 minutes']")
+    MyBookings_EXTEND_45_MINS = (By.CSS_SELECTOR, "p[text()='45 minutes']")
+    MyBookings_EXTEND_60_MINS = (By.CSS_SELECTOR, "p[text()='60 minutes']")
+    MyBookings_EXTEND_BOOKING_TEXT_CONFIRM = "//p[text()='{}']/parent::*/parent::*/following-sibling::div[2]/div"
 
     # Calender date selector
     MONTH_SELECTOR = (
@@ -297,7 +297,7 @@ class deskBookingsPage(BasePage):
     def select_days_end(self):
         try:
             self.action_chain_click(self.BS_DATE_DIV)
-            self.action_chain_click(self.BS_DMULTIPLE_DAYS)
+            self.action_chain_click(self.BS_DRecurringBookings_MULTIPLE_DAYS)
             self.action_chain_click(self.BS_DENDDATE)
             print(f"End date: {self.TDATA_ENDDATE}")
             for i in range(2):
@@ -400,17 +400,17 @@ class deskBookingsPage(BasePage):
 
     def resource_details_page_check(self):
         try:
-            self.scroll_to_element(self.SCHEDULE_LISTING)
+            self.scroll_to_element(self.ResourceDetails_SCHEDULE_LISTING)
             sleep(2)
             try:
-                self.action_chain_click(self.I_BUTTON)
+                self.action_chain_click(self.ResourceDetails_I_BUTTON)
                 sleep(3)
                 eltext = self.get_element_text(self.I_INFO).split('\n')
                 print("eltext: ", eltext)
                 sleep(3)
                 print("At the resource details page, booking should be available: Passed")
             except Exception as e:
-                print(f"I_button exce: {e}\n{traceback.format_exc()}")
+                print(f"ResourceDetails_I_BUTTON exce: {e}\n{traceback.format_exc()}")
                 self.take_screenshot(f"deskBooking/select_days_end_1/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
             self.do_send_keys(self.BODY, Keys.PAGE_UP)
         except Exception as e:
@@ -420,10 +420,10 @@ class deskBookingsPage(BasePage):
     def selecting_date(self, btype=None):
         try:
             if btype is None:
-                self.date_selection_chain(self.DATE_INPUT, TestData.BOOKING_DATE, 2)
+                self.date_selection_chain(self.BookResource_DATE_INPUT, TestData.BOOKING_DATE, 2)
             else:
-                self.date_selection_chain(self.DATE_INPUT, TestData.WEEKLY_REPEAT_DATE1, 2)
-            dcheck = self.get_element_text(self.DATE_INPUT)
+                self.date_selection_chain(self.BookResource_DATE_INPUT, TestData.WEEKLY_RecurringBookings_REPEAT_DATE1, 2)
+            dcheck = self.get_element_text(self.BookResource_DATE_INPUT)
             print("dcheck: ", dcheck)
         except Exception as e:
             print(f"selecting_date exception: {e}\n{traceback.format_exc()}")
@@ -432,8 +432,8 @@ class deskBookingsPage(BasePage):
     def select_time(self):
         sleep(2)
         try:
-            self.time_selection(self.TIME_SELECT_START, TestData.TIME_START)
-            self.time_selection(self.TIME_SELECT_END, TestData.TIME_END)
+            self.time_selection(self.BookResource_TIME_SELECT_START, TestData.TIME_START)
+            self.time_selection(self.BookResource_TIME_SELECT_END, TestData.TIME_END)
         except Exception as e:
             print(f"select_time exception: {e}\n{traceback.format_exc()}")
             self.take_screenshot(f"deskBooking/select_time/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
@@ -442,15 +442,15 @@ class deskBookingsPage(BasePage):
         try:
             self.action_chain_click(self.MY_BOOKING_NAV)
             sleep(3)
-            self.scroll_to_element_to_mid_by_xpath(self.DESK_201_CHECK_DIV)
+            self.scroll_to_element_to_mid_by_xpath(self.MyBookings_DESK_CHECK_DIV)
             sleep(3)
             # Meeting Options
             meeting_options = self.get_element_text_by_xpath(
-                self.DESK_201_MEETING_OPTIONS_BUTTONS_CHECK).split('\n')
+                self.DESK_MEETING_OPTIONS_BUTTONS_CHECK).split('\n')
             std_meeting_options = ['Check in', '', 'Cancel Booking']
             assert meeting_options == std_meeting_options
             print("In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking: Passed")
-            self.do_click_by_xpath(self.DESK_201_CHECK_DIV)
+            self.do_click_by_xpath(self.MyBookings_DESK_CHECK_DIV)
             sleep(3)
         except Exception as e:
             print(f"check_my_deskbooking exception: {e}\n{traceback.format_exc()}")
@@ -459,7 +459,7 @@ class deskBookingsPage(BasePage):
     def resource_page_booking_check(self):
         try:
             rpage_status = self.get_element_text_by_xpath(
-                self.DESK_201_RPAGE_STATUS_CHECK)
+                self.DESK_RPAGE_STATUS_CHECK)
             assert rpage_status == "Booked"
             print("rpage_status passed as: ", rpage_status)
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
@@ -470,7 +470,7 @@ class deskBookingsPage(BasePage):
     def resource_details_date_select(self):
         try:
             self.date_selection_chain(
-                    self.RD_CALENDER_INPUT, TestData.BOOKING_DATE, 2)
+                    self.ResourceDetails_RD_CALENDER_INPUT, TestData.BOOKING_DATE, 2)
         except Exception as e:
             print(f"resource_details_date_select exception: {e}\n{traceback.format_exc()}")
             self.take_screenshot(f"deskBooking/resource_details_date_select/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
@@ -496,12 +496,12 @@ class deskBookingsPage(BasePage):
         try:
             self.action_chain_click(self.DATE_CALENDER_RPAGE)
             sleep(2)
-            self.action_chain_click(self.MULTIPLE_DAYS)
+            self.action_chain_click(self.RecurringBookings_MULTIPLE_DAYS)
             sleep(2)
-            # self.mdate_selection_chain(self.MULTIPLE_DAYS_START_DATE, TestData.BOOKING_DATE1, 8)
-            self.action_chain_click(self.MULTIPLE_DAYS_END_DATE)
+            # self.mdate_selection_chain(self.RecurringBookings_MULTIPLE_DAYS_START_DATE, TestData.BOOKING_DATE1, 8)
+            self.action_chain_click(self.RecurringBookings_MULTIPLE_DAYS_END_DATE)
             print("Clicked on multiple days end_date")
-            # dcheck = self.get_element_text(self.MULTIPLE_DAYS_START_DATE)
+            # dcheck = self.get_element_text(self.RecurringBookings_MULTIPLE_DAYS_START_DATE)
             sleep(2)
             vcheck = self.is_enabled(self.MONTH_SELECTOR)
             print("vcheck: ", vcheck)
@@ -512,8 +512,8 @@ class deskBookingsPage(BasePage):
             self.action_chain_click(self.CDATE_SELECT)
             sleep(2)
             self.action_chain_click(self.CDATE_OK_BTN)
-            # self.mdate_selection_chain(self.MULTIPLE_DAYS_END_DATE, TestData.REPEAT_TILL_DATE2, 8)
-            # dcheck = self.get_element_text(self.MULTIPLE_DAYS_END_DATE)
+            # self.mdate_selection_chain(self.RecurringBookings_MULTIPLE_DAYS_END_DATE, TestData.REPEAT_TILL_DATE2, 8)
+            # dcheck = self.get_element_text(self.RecurringBookings_MULTIPLE_DAYS_END_DATE)
             # assert dcheck == TestData.BOOKING_DATE
             sleep(2)
             self.action_chain_click(self.BDATE_CALENDER_DONE)
@@ -526,17 +526,17 @@ class deskBookingsPage(BasePage):
     def overlapping_error_check(self):
         # Selecting time
         try:
-            self.time_selection(self.TIME_SELECT_START,
+            self.time_selection(self.BookResource_TIME_SELECT_START,
                                 TestData.TIME_OVERLAPPING_START)
-            self.time_selection(self.TIME_SELECT_END,
+            self.time_selection(self.BookResource_TIME_SELECT_END,
                                 TestData.TIME_OVERLAPPING_END)
             print("Selecting datetime done")
-            start_check = self.get_element_text(self.TIME_SELECT_START)
+            start_check = self.get_element_text(self.BookResource_TIME_SELECT_START)
             print("startcheck: ", start_check)
-            end_check = self.get_element_text(self.TIME_SELECT_END)
+            end_check = self.get_element_text(self.BookResource_TIME_SELECT_END)
             print("endcheck: ", end_check)
             sleep(1)
-            self.action_chain_click(deskBookingsPage.BOOKING_CONFIRM_BUTTON)
+            self.action_chain_click(deskBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
             sleep(1)
 
             enabled_check = self.is_visible(self.BK_OVERLAPPING_ERROR_MSG)
@@ -552,56 +552,56 @@ class deskBookingsPage(BasePage):
             print(f"overlapping_error_check: {e}\n{traceback.format_exc()}")
             self.take_screenshot(f"deskBooking/overlapping_error_check/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    def daily_repeat(self):
+    def daily_RecurringBookings_REPEAT(self):
         try:
-            self.action_chain_click(self.REPEAT_DIV)
+            self.action_chain_click(self.RecurringBookings_REPEAT_DIV)
             sleep(2)
-            self.action_chain_click(self.REPEAT_DAILY)
+            self.action_chain_click(self.RecurringBookings_REPEAT_DAILY)
             sleep(2)
             self.date_selection_chain(
-                self.REPEAT_TILL_DATE, TestData.REPEAT_TILL_DATE[:12], 2)
+                self.RecurringBookings_REPEAT_TILL_DATE, TestData.RecurringBookings_REPEAT_TILL_DATE[:12], 2)
         except Exception as e:
-            print(f"daily_repeat exception: {e}\n{traceback.format_exc()}")
-            self.take_screenshot(f"deskBooking/daily_repeat/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
+            print(f"daily_RecurringBookings_REPEAT exception: {e}\n{traceback.format_exc()}")
+            self.take_screenshot(f"deskBooking/daily_RecurringBookings_REPEAT/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    def weekly_repeat(self):
+    def weekly_RecurringBookings_REPEAT(self):
         try:
-            self.action_chain_click(self.REPEAT_DIV)
+            self.action_chain_click(self.RecurringBookings_REPEAT_DIV)
             sleep(2)
-            self.action_chain_click(self.REPEAT_WEEKLY)
+            self.action_chain_click(self.RecurringBookings_REPEAT_WEEKLY)
             sleep(2)
-            # self.action_chain_click(self.REPEAT_WEEKLY_DEFAULT_DAY)
+            # self.action_chain_click(self.RecurringBookings_REPEAT_WEEKLY_DEFAULT_DAY)
             # sleep(2)
-            # self.action_chain_click(self.REPEAT_WEEKLY_DAY)
+            # self.action_chain_click(self.RecurringBookings_REPEAT_WEEKLY_DAY)
             # sleep(2)
             self.date_selection_chain(
-                self.REPEAT_TILL_DATE, TestData.WEEKLY_REPEAT_TILL_DATE, 2)
+                self.RecurringBookings_REPEAT_TILL_DATE, TestData.WEEKLY_RecurringBookings_REPEAT_TILL_DATE, 2)
         except Exception as e:
-            print(f"weekly_repeat exception: {e}\n{traceback.format_exc()}")
-            self.take_screenshot(f"deskBooking/weekly_repeat/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
+            print(f"weekly_RecurringBookings_REPEAT exception: {e}\n{traceback.format_exc()}")
+            self.take_screenshot(f"deskBooking/weekly_RecurringBookings_REPEAT/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    def extend_booking(self, etime):
+    def MyBookings_EXTEND_booking(self, etime):
         try:
-            pre_extend_time = self.get_element_text_by_xpath(
-                self.PRE_EXTEND_TIME)
-            print("pre_extend_time: ", pre_extend_time)
-            self.do_click_by_xpath(self.CHECKIN_BOOKING)
+            MyBookings_PRE_MyBookings_EXTEND_TIME = self.get_element_text_by_xpath(
+                self.MyBookings_PRE_MyBookings_EXTEND_TIME)
+            print("MyBookings_PRE_MyBookings_EXTEND_TIME: ", MyBookings_PRE_MyBookings_EXTEND_TIME)
+            self.do_click_by_xpath(self.MyBookings_CHECKIN_BOOKING)
             sleep(12)
-            self.do_click_by_xpath(self.EXTEND_BOOKING)
+            self.do_click_by_xpath(self.MyBookings_EXTEND_BOOKING)
             sleep(5)
             self.action_chain_click(etime)
             sleep(12)
-            textend_confirm = self.get_element_text_by_xpath(
-                self.EXTEND_BOOKING_TEXT_CONFIRM)
-            print("text: ", textend_confirm)
-            assert textend_confirm == "In Use, Booking Extended"
-            post_extend_time = self.get_element_text_by_xpath(
-                self.PRE_EXTEND_TIME)
-            print("post_extend_time: ", post_extend_time)
-            assert pre_extend_time != post_extend_time
+            tMyBookings_EXTEND_confirm = self.get_element_text_by_xpath(
+                self.MyBookings_EXTEND_BOOKING_TEXT_CONFIRM)
+            print("text: ", tMyBookings_EXTEND_confirm)
+            assert tMyBookings_EXTEND_confirm == "In Use, Booking MyBookings_EXTENDed"
+            post_MyBookings_EXTEND_time = self.get_element_text_by_xpath(
+                self.MyBookings_PRE_MyBookings_EXTEND_TIME)
+            print("post_MyBookings_EXTEND_time: ", post_MyBookings_EXTEND_time)
+            assert MyBookings_PRE_MyBookings_EXTEND_TIME != post_MyBookings_EXTEND_time
         except Exception as e:
-            print(f"extend_booking exception: {e}\n{traceback.format_exc()}")
-            self.take_screenshot(f"deskBooking/extend_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
+            print(f"MyBookings_EXTEND_booking exception: {e}\n{traceback.format_exc()}")
+            self.take_screenshot(f"deskBooking/MyBookings_EXTEND_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
     def do_logout(self):
         try:
@@ -654,7 +654,7 @@ class deskBookingsPage(BasePage):
                 sleep(2)
                 self.action_chain_click(self.BOOK_SPACE_NAV)
                 sleep(2)
-                self.action_chain_click(self.DESK_201)
+                self.action_chain_click(self.DESK)
             else:
                 pass
         except Exception as e:

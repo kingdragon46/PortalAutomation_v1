@@ -10,23 +10,27 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from time import sleep
+from selenium.common import exceptions
 
 """This is the parent of all pages"""
 """It contains all the generic methods and utilities for all pages"""
+
 
 class BasePage:
     time_delay = 100
     # web_drive_cls = WebDriverWait(self.driver, time_delay)
 
-    def __init__(self,driver):
+    def __init__(self, driver):
         self.driver = driver
 
     def do_click(self, by_locator):
-        WebDriverWait(self.driver, self.time_delay).until(EC.element_to_be_clickable(by_locator)).click()
+        WebDriverWait(self.driver, self.time_delay).until(
+            EC.element_to_be_clickable(by_locator)).click()
 
     def is_alert(self):
         try:
-            WebDriverWait(self.driver, self.time_delay).until(EC.alert_is_present())
+            WebDriverWait(self.driver, self.time_delay).until(
+                EC.alert_is_present())
         except Exception as e:
             print(f"is_alert exception: {e}")
 
@@ -35,47 +39,57 @@ class BasePage:
         self.driver.execute_script("arguments[0].click();", btn)
 
     def do_click_by_xpath(self, by_locator):
-        WebDriverWait(self.driver, self.time_delay).until(EC.element_to_be_clickable((By.XPATH, by_locator))).click()
+        WebDriverWait(self.driver, self.time_delay).until(
+            EC.element_to_be_clickable((By.XPATH, by_locator))).click()
 
     def do_click_by_index(self, by_locator, index):
-        elem = WebDriverWait(self.driver, self.time_delay).until(EC.presence_of_all_elements_located((By.XPATH, by_locator)))
+        elem = WebDriverWait(self.driver, self.time_delay).until(
+            EC.presence_of_all_elements_located((By.XPATH, by_locator)))
         elem[index].click()
 
     def do_send_keys(self, by_locator, keys):
-        WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator)).send_keys(keys)
+        WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator)).send_keys(keys)
 
     def get_element_text(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
         return element.text
 
     def get_element_text_by_xpath(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located((By.XPATH, by_locator)))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located((By.XPATH, by_locator)))
         return element.text
 
     def is_enabled(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
         return bool(element)
 
     def is_enabled_by_index(self, by_locator, index):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_all_elements_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_all_elements_located(by_locator))
         return bool(element[index])
 
     def is_invisible(self, by_locator):
         try:
-            element = WebDriverWait(self.driver, 40).until(EC.invisibility_of_element_located(by_locator))
+            element = WebDriverWait(self.driver, 40).until(
+                EC.invisibility_of_element_located(by_locator))
             return bool(element)
         except Exception as e:
             print(f"is_invisible exception: {e}")
 
     def is_visible(self, by_locator):
         try:
-            element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(by_locator))
+            element = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(by_locator))
             return bool(element)
         except Exception as e:
             print(f"is_visible exception: {e}")
 
     def is_clickable(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.element_to_be_clickable(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.element_to_be_clickable(by_locator))
         return bool(element)
 
     def get_title(self, title):
@@ -83,20 +97,24 @@ class BasePage:
         return self.driver.title
 
     def get_element(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
         return element
 
     def get_elements(self, by_locator):
-        elements = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_all_elements_located(by_locator))
+        elements = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_all_elements_located(by_locator))
         return elements
 
     def get_present_element(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.presence_of_all_elements_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.presence_of_all_elements_located(by_locator))
         return element.text
-    
+
     def host_selection(self, by_locator, elkeys, ex=None):
         try:
-            element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located(by_locator))
             actions = ActionChains(self.driver)
             actions.move_to_element(element)
             actions.click()
@@ -104,7 +122,8 @@ class BasePage:
             sleep(2)
             actions.perform()
             sleep(4)
-            select_host = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+            select_host = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located(by_locator))
             actions.move_to_element(select_host)
             if ex is not None:
                 for i in range(0, ex):
@@ -114,10 +133,11 @@ class BasePage:
             sleep(2)
         except Exception as e:
             print("host_selection: ", e)
-    
+
     def chain_selection_send_keys_click(self, by_locator, elkeys):
         try:
-            element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located(by_locator))
             actions = ActionChains(self.driver)
             actions.move_to_element(element)
             actions.click()
@@ -131,7 +151,8 @@ class BasePage:
             print("host_selection: ", e)
 
     def date_selection_chain(self, by_locator, dkeys, bstrokes=2):
-        bdate = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+        bdate = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
         actions = ActionChains(self.driver)
         actions.move_to_element(bdate)
         actions.click()
@@ -145,16 +166,19 @@ class BasePage:
         sleep(3)
 
     def action_chain_scroll_to_top(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
         actions = ActionChains(self.driver)
         actions.move_to_element(element)
         actions.click()
         sleep(2)
-        actions.key_down(Keys.CONTROL).send_keys(Keys.HOME).key_up(Keys.CONTROL)
+        actions.key_down(Keys.CONTROL).send_keys(
+            Keys.HOME).key_up(Keys.CONTROL)
         actions.perform()
-        
+
     def time_selection(self, bstart, bstart_input, bstrokes=1):
-        start_time = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(bstart))
+        start_time = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(bstart))
         actions = ActionChains(self.driver)
         actions.move_to_element(start_time)
         actions.click()
@@ -169,7 +193,8 @@ class BasePage:
         sleep(2)
 
     def action_chain_click(self, by_locator):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
         print("Element: ", element)
         actions = ActionChains(self.driver)
         actions.move_to_element(element)
@@ -179,7 +204,8 @@ class BasePage:
         sleep(1)
 
     def action_chain_sendkeys_1(self, by_locator, elkeys):
-        element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
         print("Element: ", element)
         actions = ActionChains(self.driver)
         actions.move_to_element(element)
@@ -191,9 +217,11 @@ class BasePage:
     def scroll_to_element(self, by_locator):
         a = None
         try:
-            element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located(by_locator))
             print("element present")
-            self.driver.execute_script("coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
+            self.driver.execute_script(
+                "coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
             print("moved to element")
             a = 1
             pass
@@ -201,8 +229,10 @@ class BasePage:
             print("1st failed")
         if a == None:
             try:
-                element = WebDriverWait(self.driver, self.time_delay).until(EC.presence_of_element_located(by_locator))
-                self.driver.execute_script("coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
+                element = WebDriverWait(self.driver, self.time_delay).until(
+                    EC.presence_of_element_located(by_locator))
+                self.driver.execute_script(
+                    "coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
                 pass
             except:
                 print("2nd failed")
@@ -210,9 +240,11 @@ class BasePage:
     def scroll_to_element_by_xpath(self, by_locator):
         a = None
         try:
-            element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located((By.XPATH, by_locator)))
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located((By.XPATH, by_locator)))
             print("element present")
-            self.driver.execute_script("coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
+            self.driver.execute_script(
+                "coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
             print("moved to element")
             a = 1
             pass
@@ -220,8 +252,10 @@ class BasePage:
             print("1st failed")
         if a == None:
             try:
-                element = WebDriverWait(self.driver, self.time_delay).until(EC.presence_of_element_located((By.XPATH, by_locator)))
-                self.driver.execute_script("coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
+                element = WebDriverWait(self.driver, self.time_delay).until(
+                    EC.presence_of_element_located((By.XPATH, by_locator)))
+                self.driver.execute_script(
+                    "coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element)
                 pass
             except:
                 print("2nd failed")
@@ -229,9 +263,11 @@ class BasePage:
     def scroll_to_element_to_mid(self, by_locator):
         a = None
         try:
-            element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located(by_locator))
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located(by_locator))
             print("element present")
-            self.driver.execute_script("var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
+            self.driver.execute_script(
+                "var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
             print("moved to element")
             a = 1
             pass
@@ -239,8 +275,10 @@ class BasePage:
             print("1st failed")
         if a == None:
             try:
-                element = WebDriverWait(self.driver, self.time_delay).until(EC.presence_of_element_located(by_locator))
-                self.driver.execute_script("var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
+                element = WebDriverWait(self.driver, self.time_delay).until(
+                    EC.presence_of_element_located(by_locator))
+                self.driver.execute_script(
+                    "var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
                 pass
             except:
                 print("2nd failed")
@@ -248,9 +286,11 @@ class BasePage:
     def scroll_to_element_to_mid_by_xpath(self, by_locator):
         a = None
         try:
-            element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_element_located((By.XPATH, by_locator)))
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located((By.XPATH, by_locator)))
             print("element present")
-            self.driver.execute_script("var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
+            self.driver.execute_script(
+                "var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
             print("moved to element")
             a = 1
             pass
@@ -258,8 +298,10 @@ class BasePage:
             print("1st failed")
         if a == None:
             try:
-                element = WebDriverWait(self.driver, self.time_delay).until(EC.presence_of_element_located((By.XPATH, by_locator)))
-                self.driver.execute_script("var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
+                element = WebDriverWait(self.driver, self.time_delay).until(
+                    EC.presence_of_element_located((By.XPATH, by_locator)))
+                self.driver.execute_script(
+                    "var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);var elementTop = arguments[0].getBoundingClientRect().top;window.scrollBy(0, elementTop-(viewPortHeight/2));", element)
                 pass
             except:
                 print("2nd failed")
@@ -267,9 +309,11 @@ class BasePage:
     def scroll_to_element_by_index(self, by_locator, index):
         a = None
         try:
-            element = WebDriverWait(self.driver, self.time_delay).until(EC.visibility_of_all_elements_located((By.XPATH, by_locator)))
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_all_elements_located((By.XPATH, by_locator)))
             print("element present", element)
-            self.driver.execute_script("coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element[index])
+            self.driver.execute_script(
+                "coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element[index])
             print("moved to element")
             a = 1
             pass
@@ -277,8 +321,10 @@ class BasePage:
             print("1st failed")
         if a == None:
             try:
-                element = WebDriverWait(self.driver, self.time_delay).until(EC.presence_of_all_elements_located((By.XPATH, by_locator)))
-                self.driver.execute_script("coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element[index])
+                element = WebDriverWait(self.driver, self.time_delay).until(
+                    EC.presence_of_all_elements_located((By.XPATH, by_locator)))
+                self.driver.execute_script(
+                    "coordinates = arguments[0].getBoundingClientRect();scrollTo(coordinates.x,coordinates.y);", element[index])
                 pass
             except:
                 print("2nd failed")
@@ -320,12 +366,13 @@ class BasePage:
         self.driver.get(url)
 
     def driver_current_url(self):
-       return self.driver.current_url
+        return self.driver.current_url
 
     def take_screenshot(self, name):
         # sleep()
         try:
-            os.makedirs(os.path.join("screenshot", os.path.dirname(name)), exist_ok=True)
+            os.makedirs(os.path.join(
+                "screenshot", os.path.dirname(name)), exist_ok=True)
             # self.driver.get_screenshot_as_file(os.path.join("screenshot", name))
             self.driver.save_screenshot(os.path.join("screenshot", name))
         except Exception as e:
@@ -334,16 +381,48 @@ class BasePage:
     def current_url(self):
         return self.driver.current_url
 
-def process_browser_logs_for_network_events(logs):
-    print("in process_browser")
-    for entry in logs:
-        print("in process_browser for loop")
-        log = json.loads(entry["message"])["message"]
+    # Browser logs test
 
-        url = "https://ndl.veris.in/api/v4/organization/56/resources/analytics/?date_from=2022-04-07T10:52:20.249Z&date_to=2022-04-07T16:52:20.250Z&resource_id=6871"
-        if (
-            url in log["params"]["headers"]["url"]
-            # or "Network.request" in log["method"]
-            # or "Network.webSocket" in log["method"]
-        ):
-            yield log
+    def b_log(self):
+        return self.driver.get_log('browser')
+
+    def d_log(self):
+        return self.driver.get_log('driver')
+
+    def c_log(self):
+        return self.driver.get_log('client')
+
+    def s_log(self):
+        return self.driver.get_log('Network.getResponseBody')
+
+    def p_log(self):
+        return self.driver.get_log('performance')
+
+    def execute_log(self):
+        return self.driver.execute_script("return window.performance.getEntries();")
+
+    def execute_script(self, script):
+        return self.driver.execute_script(script)
+
+    def execute_cdp_script(self, events):
+        return self.driver.execute_cdp_cmd('Network.getResponseBody', {'requestId': 19604.256})
+
+    def process_log(self, log):
+        log = json.loads(log["message"])["message"]
+        if ("Network.responseReceived" == log["method"] and "params" in log.keys() and "veris.in" in log["params"]["response"]["url"]):
+            try:
+                body = self.driver.execute_cdp_cmd('Network.getResponseBody', {'requestId': log["params"]["requestId"]})
+                # log['body'] = body
+                if body == 'null':
+                    pass
+                else:
+                    return body
+            except exceptions.WebDriverException:
+                print('response.body is null')
+
+
+def write_to_file(logs):
+    with open("logs.json", "a", encoding="utf-8") as f:
+        f.write("************************************************")
+        f.write(json.dumps(logs)+",")
+        f.write("{}]")

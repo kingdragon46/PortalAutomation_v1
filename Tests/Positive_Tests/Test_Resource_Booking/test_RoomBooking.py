@@ -1,3 +1,4 @@
+import json
 from time import time, sleep
 import sys
 
@@ -26,6 +27,10 @@ class Test_RoomBooking(BaseTest):
 
     start_time = time()
 
+    def process_browser_log_entry(self,entry):
+        response = json.loads(entry['message'])['message']
+        return response
+
     # Login
     @pytest.mark.pnr
     @pytest.mark.prsc
@@ -38,16 +43,18 @@ class Test_RoomBooking(BaseTest):
     @pytest.mark.hostrltd
     @pytest.mark.custom
     @pytest.mark.selected
+    @pytest.mark.login
     def test_login_room_booking(self):
         print("Start time: ", self.start_time)
         self.loginPage = LoginPage(self.driver)
         bookinpage = self.loginPage.do_rlogin(
                     TestData.USER_NAME, TestData.PASSWORD)
-        return bookinpage
+        sleep(3)
 
     """Room Booking"""
 
     @pytest.mark.pnr
+    @pytest.mark.login
     @pytest.mark.selected
     def test_simple_booking(self):
         try:
@@ -61,17 +68,25 @@ class Test_RoomBooking(BaseTest):
             bookinpage.start_selection()
             # Clicking on available room
 
+            # Getting logs
+            p_log = bookinpage.p_log()
+            responses = [bookinpage.process_log(log) for log in p_log]
+            with open("b_logs_9.json", "a", encoding="utf-8") as f:
+                f.write("{")
+                f.write(json.dumps(responses)+",")
+                f.write("}")
+
             bookinpage.select_available_resource()
             # bookinpage.driver_implicitly_wait(4)
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -109,7 +124,7 @@ class Test_RoomBooking(BaseTest):
             sleep(5)
             bookinpage.take_screenshot(f"RoomBooking/test_simple_booking/{TestData.CDATE[:10]}/ppo{TestData.CDATE[11:]}.png")
             # print("Booking should be created successfully: Passed")
-            print("Room_no_confirm: ", RoomBookingsPage.ROOM_124)
+            print("Room_no_confirm: ", RoomBookingsPage.ROOM)
             # loader visibilty check
             # loader1 = bookinpage.is_visible(RoomBookingsPage.VRS_LOADER)
             # print("loader1: ", loader1)
@@ -123,7 +138,7 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -133,7 +148,7 @@ class Test_RoomBooking(BaseTest):
             print("Create a booking for the desk by selecting a default date and time: Passed")
             # Cancelling Booking
             print("Cancelling booking")
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             sleep(1)
             loader2 = bookinpage.is_visible(RoomBookingsPage.VRS_LOADER)
             print("loader2: ", loader2)
@@ -159,12 +174,12 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
             # Attendee Details
@@ -205,7 +220,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.select_all_status()
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             sleep(3)
 
             bookinpage.date_selection_chain(
@@ -218,7 +233,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.check_my_booking()
             print("Create a booking for the desk by selecting a default date and time: Passed")
             # Cancelling Booking
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             sleep(2)
         except Exception as e:
             bookinpage.take_screenshot(f"RoomBooking/test_datetime_change_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
@@ -242,16 +257,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -291,7 +306,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.resource_page_booking_check()
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -306,7 +321,7 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -345,9 +360,9 @@ class Test_RoomBooking(BaseTest):
 
             # Cancelling Booking
             # bookinpage.do_click(RoomBookingsPage.MY_BOOKING_NAV)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_CHECK_DIV)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_CHECK_DIV)
 
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             sleep(2)
         except Exception as e:
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
@@ -369,16 +384,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -422,14 +437,14 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             bookinpage.resource_details_page_check()
 
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
             bookinpage.do_click(RoomBookingsPage.BOOKING_NAV)
             bookinpage.check_my_booking()
             bookinpage.do_click_by_xpath(
-                RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+                RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Create a booking for the desk by selecting a default date and time: Passed")
             sleep(5)
             bookinpage.scroll_to_element(RoomBookingsPage.BOOK_SPACE_NAV)
@@ -442,7 +457,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.select_available_status()
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -468,9 +483,9 @@ class Test_RoomBooking(BaseTest):
             # Cancelling Booking
             bookinpage.action_chain_click(RoomBookingsPage.MY_BOOKING_NAV)
             sleep(2)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_CHECK_DIV)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_CHECK_DIV)
             sleep(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Create a booking of room by selecting the time of already cancelled booking: Passed")
             sleep(2)
         except Exception as e:
@@ -496,16 +511,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             """Booking Modal"""
 
@@ -553,7 +568,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.resource_page_booking_check()
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             sleep(2)
             bookinpage.resource_details_page_check()
 
@@ -562,11 +577,11 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             bookinpage.check_my_booking()
             # Cancelling Booking
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
             print("Create a daily recurring booking for the desk by selecting a default date and time: Passed")
         except Exception as e:
@@ -588,16 +603,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -645,7 +660,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.select_booked_status()
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
@@ -656,13 +671,13 @@ class Test_RoomBooking(BaseTest):
             bookinpage.do_click(RoomBookingsPage.BOOKING_NAV)
             bookinpage.check_my_booking()
             # Cancelling Booking
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_CHECK_RDIV, 0)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_CHECK_RDIV, 0)
             sleep(2)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_CHECK_RDIV, 0)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_CHECK_RDIV, 0)
             sleep(3)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             print("Create a daily recurring booking for the desk by selecting a default date and time: Passed")
         except Exception as e:
             print(f"Exception test_datetime_change_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -683,16 +698,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -732,7 +747,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -749,7 +764,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -792,11 +807,11 @@ class Test_RoomBooking(BaseTest):
             # Cancelling Booking
             # bookinpage.do_click(RoomBookingsPage.MY_BOOKING_NAV)
             # bookinpage.driver_implicitly_wait(3)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             # bookinpage.driver_implicitly_wait(2)
             # Cancelling Booking
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -817,16 +832,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -872,7 +887,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             sleep(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -883,7 +898,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(5)
             bookinpage.check_my_booking()
             bookinpage.do_click_by_xpath(
-                RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+                RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Create a booking for the desk by selecting a default date and time: Passed")
             sleep(10)
 
@@ -896,7 +911,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -925,11 +940,11 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             bookinpage.check_my_booking()
             # Cancelling Booking
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(1)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_already_cancelled_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -954,16 +969,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1010,7 +1025,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(5)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             sleep(3)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -1023,10 +1038,10 @@ class Test_RoomBooking(BaseTest):
             print("Create a daily recurring booking for the desk by selecting a default date and time: Passed")
 
             # Cancelling Booking
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_simple_weekly_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1049,16 +1064,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1111,9 +1126,9 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(5)
 
             # Resource details page
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(4)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
@@ -1128,10 +1143,10 @@ class Test_RoomBooking(BaseTest):
             print("Create a daily recurring booking for the desk by selecting a default date and time: Passed") 
 
             # Cancelling Booking
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_datetime_change_weekly_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1154,16 +1169,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1211,7 +1226,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -1228,7 +1243,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -1272,9 +1287,9 @@ class Test_RoomBooking(BaseTest):
             # Cancelling Booking
             bookinpage.action_chain_click(RoomBookingsPage.MY_BOOKING_NAV)
             sleep(3)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             # bookinpage.driver_implicitly_wait(3)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Create a booking of room by selecting the time of already cancelled booking: Passed")
             sleep(2)
         except Exception as e:
@@ -1298,16 +1313,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1355,7 +1370,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -1366,7 +1381,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(5)
             bookinpage.check_my_booking()
             bookinpage.do_click_by_xpath(
-                RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+                RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Create a booking for the desk by selecting a default date and time: Passed")
             sleep(5)
 
@@ -1379,7 +1394,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -1407,10 +1422,10 @@ class Test_RoomBooking(BaseTest):
             bookinpage.do_click(RoomBookingsPage.MY_BOOKING_NAV)
             # bookinpage.driver_implicitly_wait(4)
             # Cancelling Booking
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_already_cancelled_weekly_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1434,16 +1449,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1480,7 +1495,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(2)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
@@ -1499,7 +1514,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -1538,9 +1553,9 @@ class Test_RoomBooking(BaseTest):
 
             bookinpage.driver_get_url(TestData.MY_BOOKING_URL)
             sleep(3)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             sleep(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_single_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1563,16 +1578,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1614,7 +1629,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -1631,7 +1646,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -1670,11 +1685,11 @@ class Test_RoomBooking(BaseTest):
 
             bookinpage.driver_get_url(TestData.MY_BOOKING_URL)
             sleep(3)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_daily_recurring_single_booking: {e}\n{traceback.format_exc()}")
@@ -1699,16 +1714,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1744,7 +1759,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.select_all_status()
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
@@ -1758,7 +1773,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(5)
             bookinpage.check_my_booking()
             bookinpage.do_click_by_xpath(
-                RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+                RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Create a booking for the desk by selecting a default date and time and cancel it: Passed")
             sleep(20)
 
@@ -1767,7 +1782,7 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -1801,11 +1816,11 @@ class Test_RoomBooking(BaseTest):
 
             bookinpage.do_click(RoomBookingsPage.MY_BOOKING_NAV)
             # bookinpage.driver_implicitly_wait(3)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_future_cancelled_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1835,17 +1850,17 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -1889,7 +1904,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
@@ -1915,7 +1930,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -1944,15 +1959,15 @@ class Test_RoomBooking(BaseTest):
             bookinpage.driver_get_url(TestData.MY_BOOKING_URL)
             sleep(2)
             # bookinpage.driver_implicitly_wait(3)
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             # bookinpage.driver_implicitly_wait(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             sleep(20)
-            bookinpage.scroll_to_element_to_mid_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_to_mid_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(3)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_single_future_daily_recurring_booking_5_cancelled: {e}\n{traceback.format_exc()}")
@@ -1977,16 +1992,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -2029,7 +2044,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.select_all_status()
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
 
             bookinpage.date_selection_chain(
@@ -2054,7 +2069,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Clicking on room 124 booking modal
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -2091,13 +2106,13 @@ class Test_RoomBooking(BaseTest):
                 print("i: ", i)
                 bookinpage.action_chain_sendkeys_1(
                 RoomBookingsPage.MAIN_CARDS_CONTAINER, Keys.HOME)
-                vcheck = bookinpage.is_visible(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+                vcheck = bookinpage.is_visible(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
                 if vcheck == True:
-                    bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+                    bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
                     sleep(2)
-                    bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+                    bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
                     sleep(2)
-                    bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+                    bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
                     sleep(4)
                 else:
                     break
@@ -2128,16 +2143,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -2181,7 +2196,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
@@ -2201,11 +2216,11 @@ class Test_RoomBooking(BaseTest):
 
             bookinpage.cancel_booking()
             print("Create a daily recurring booking for 10 days and cancel the starting day of booking : To make a verify that other future meetings are not getting cancelled: Passed")
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             # bookinpage.driver_implicitly_wait(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_cancelling_first_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -2231,18 +2246,18 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV_LAST = RoomBookingsPage.ROOM_124_CHECK_DIV_LAST.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON_LAST = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON_LAST.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV_LAST = RoomBookingsPage.ROOM_CHECK_DIV_LAST.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON_LAST = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON_LAST.format(rval)
 
             '''Booking Modal'''
 
@@ -2286,7 +2301,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.driver_implicitly_wait(8)
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
@@ -2307,11 +2322,11 @@ class Test_RoomBooking(BaseTest):
 
             bookinpage.cancel_last_booking()
             print("Create a daily recurring booking for 10 days and cancel the last day of booking : To make a verify that other future meetings are not getting cancelled: Passed")
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             # bookinpage.driver_implicitly_wait(2)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_cancelling_last_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -2337,16 +2352,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
         RoomBookingsPage.prEXTEND_TIME = RoomBookingsPage.prEXTEND_TIME.format(rval)
         RoomBookingsPage.CHECKIN_BOOKING = RoomBookingsPage.CHECKIN_BOOKING.format(rval)
         RoomBookingsPage.EXTEND_BOOKING = RoomBookingsPage.EXTEND_BOOKING.format(rval)
@@ -2390,7 +2405,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -2425,16 +2440,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
         RoomBookingsPage.prEXTEND_TIME = RoomBookingsPage.prEXTEND_TIME.format(rval)
         RoomBookingsPage.CHECKIN_BOOKING = RoomBookingsPage.CHECKIN_BOOKING.format(rval)
         RoomBookingsPage.EXTEND_BOOKING = RoomBookingsPage.EXTEND_BOOKING.format(rval)
@@ -2475,7 +2490,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -2510,16 +2525,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
         RoomBookingsPage.prEXTEND_TIME = RoomBookingsPage.prEXTEND_TIME.format(rval)
         RoomBookingsPage.CHECKIN_BOOKING = RoomBookingsPage.CHECKIN_BOOKING.format(rval)
         RoomBookingsPage.EXTEND_BOOKING = RoomBookingsPage.EXTEND_BOOKING.format(rval)
@@ -2563,7 +2578,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -2580,7 +2595,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Clicking on room 124 booking modal
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
         '''Booking Modal'''
 
@@ -2618,7 +2633,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -2667,16 +2682,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
         RoomBookingsPage.prEXTEND_TIME = RoomBookingsPage.prEXTEND_TIME.format(rval)
         RoomBookingsPage.CHECKIN_BOOKING = RoomBookingsPage.CHECKIN_BOOKING.format(rval)
         RoomBookingsPage.EXTEND_BOOKING = RoomBookingsPage.EXTEND_BOOKING.format(rval)
@@ -2720,7 +2735,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -2737,7 +2752,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Clicking on room 124 booking modal
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
         '''Booking Modal'''
 
@@ -2775,7 +2790,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -2790,15 +2805,15 @@ class Test_RoomBooking(BaseTest):
 
         # Cancelling Booking
         # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-        bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_CHECK_RDIV)
+        bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_CHECK_RDIV)
         sleep(2)
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_CHECK_RDIV)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_CHECK_RDIV)
         sleep(3)
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON)
         sleep(8)
 
         # Extend booking
-        bookinpage.scroll_to_element(RoomBookingsPage.ROOM_124_CHECK_DIV)
+        bookinpage.scroll_to_element(RoomBookingsPage.ROOM_CHECK_DIV)
         bookinpage.extend_booking(RoomBookingsPage.EXTEND_30_MINS)
         print("Start meeting and then extend the booking for the next 30 minute make sure there is a cancelled recurring  existing booking  is available : Passed")
         sleep(2)
@@ -2820,16 +2835,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
         RoomBookingsPage.prEXTEND_TIME = RoomBookingsPage.prEXTEND_TIME.format(rval)
         RoomBookingsPage.CHECKIN_BOOKING = RoomBookingsPage.CHECKIN_BOOKING.format(rval)
         RoomBookingsPage.EXTEND_BOOKING = RoomBookingsPage.EXTEND_BOOKING.format(rval)
@@ -2877,7 +2892,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -2920,19 +2935,19 @@ class Test_RoomBooking(BaseTest):
             # Getting and assigning room number to selectors
             # rval = "124"
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             
-            # bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124)
+            # bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM)
 
             '''Booking Modal'''
 
@@ -2978,7 +2993,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.resource_page_booking_check()
 
             # # Resource details page
-            # bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            # bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.resource_details_page_check()
 
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
@@ -2994,18 +3009,18 @@ class Test_RoomBooking(BaseTest):
 
             # Cancelling Booking
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
 
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
             sleep(20)
             bookinpage.action_chain_scroll_to_top(RoomBookingsPage.MAIN_CARDS_CONTAINER)
             print("Create a daily recurring booking for a month and delete any single instance: Passed")
 
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_simple_daily_recurring_cancel_single_booking: {e}\n{traceback.format_exc()}")
@@ -3029,16 +3044,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -3081,7 +3096,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             bookinpage.resource_details_page_check()
 
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
@@ -3094,11 +3109,11 @@ class Test_RoomBooking(BaseTest):
 
             # Cancelling Booking
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_CHECK_RDIV, 0)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_CHECK_RDIV, 0)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_CHECK_RDIV, 0)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_CHECK_RDIV, 0)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             print("Create a daily recurring booking for a month and delete all booking: Passed")
             sleep(2)
         except Exception as e:
@@ -3122,16 +3137,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -3172,7 +3187,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.resource_page_booking_check()
 
             # # Resource details page
-            # bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            # bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             # bookinpage.resource_details_page_check()
 
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
@@ -3185,17 +3200,17 @@ class Test_RoomBooking(BaseTest):
 
             # Cancelling Booking
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
 
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON, 2)
             sleep(20)
             bookinpage.action_chain_scroll_to_top(RoomBookingsPage.MAIN_CARDS_CONTAINER)
             print("Create a daily recurring booking for a month and delete any single instance: Passed")
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
             sleep(2)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_simple_weekly_recurring_cancel_single_booking: {e}\n{traceback.format_exc()}")
@@ -3218,14 +3233,14 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
 
             '''Booking Modal'''
 
@@ -3275,10 +3290,10 @@ class Test_RoomBooking(BaseTest):
 
             # Cancelling Booking
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
-            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
+            bookinpage.scroll_to_element_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
+            bookinpage.do_click_by_index(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             print("Create a daily recurring booking for a month and delete all booking: Passed")
             sleep(2)
         except Exception as e:
@@ -3300,12 +3315,12 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -3347,8 +3362,8 @@ class Test_RoomBooking(BaseTest):
 
             # Cancelling Booking
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
-            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Create a single booking and cancel it: Passed")
             sleep(2)
         except Exception as e:
@@ -3377,16 +3392,16 @@ class Test_RoomBooking(BaseTest):
 
             # Getting and assigning room number to selectors
             rval = bookinpage.get_room_name()
-            RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-            RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-            RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+            RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+            RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+            RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
             '''Booking Modal'''
 
@@ -3428,7 +3443,7 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
 
             # Resource details page
-            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+            bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
             sleep(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.resource_details_page_check()
@@ -3509,16 +3524,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
         '''Booking Modal'''
 
@@ -3564,7 +3579,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -3595,7 +3610,7 @@ class Test_RoomBooking(BaseTest):
         # trying to cancel the booking
         try:
             bookinpage.do_click_by_xpath(
-            RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON)
+            RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON)
             print("Cancelling meeting succesfull")
         except Exception as e:
             print("exception in cancelling: ", e)
@@ -3628,16 +3643,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
         '''Booking Modal'''
 
@@ -3683,7 +3698,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -3712,16 +3727,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
         '''Booking Modal'''
 
@@ -3770,7 +3785,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
@@ -3799,16 +3814,16 @@ class Test_RoomBooking(BaseTest):
 
         # Getting and assigning room number to selectors
         rval = bookinpage.get_room_name()
-        RoomBookingsPage.ROOM_124 = RoomBookingsPage.ROOM_124.format(rval)
-        RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_DIV = RoomBookingsPage.ROOM_124_CHECK_DIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_124_RPAGE_STATUS_CHECK.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_CHECK_RDIV = RoomBookingsPage.ROOM_124_CHECK_RDIV.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
-        RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_RDIV_CANCEL_BUTTON.format(rval)
-        RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_124_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM = RoomBookingsPage.ROOM.format(rval)
+        RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE = RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE.format(rval)
+        RoomBookingsPage.ROOM_CHECK_DIV = RoomBookingsPage.ROOM_CHECK_DIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK = RoomBookingsPage.ROOM_MEETING_OPTIONS_BUTTONS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK = RoomBookingsPage.ROOM_RPAGE_STATUS_CHECK.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_CHECK_RDIV = RoomBookingsPage.ROOM_CHECK_RDIV.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS.format(rval)
+        RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON = RoomBookingsPage.ROOM_RDIV_CANCEL_BUTTON.format(rval)
+        RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = RoomBookingsPage.ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON.format(rval)
 
 
         '''Booking Modal'''
@@ -3858,7 +3873,7 @@ class Test_RoomBooking(BaseTest):
         sleep(3)
 
         # Resource details page
-        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_124_AFTER_BOOKING_TITLE)
+        bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
         sleep(8)
         # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
         bookinpage.resource_details_page_check()
