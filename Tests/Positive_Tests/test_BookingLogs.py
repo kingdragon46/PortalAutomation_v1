@@ -161,7 +161,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
         except Exception as e:
             print(f"Exception test_simple_booking: {e}")
-            bookinpage.take_screenshot(f"RoomBooking/test_simple_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
+            bookinpage.take_screenshot(f"BookingLogs/test_simple_booking/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
 
 
     # @pytest.mark.login
@@ -279,31 +279,35 @@ class Test_RoomBooking(BaseTest):
 
     @pytest.mark.login
     def test_download_report(self):
-        bookinpage = BookingLogsPage(self.driver)
-        sleep(3)
-        bookinpage.driver_get_url(TestData.BOOKING_LOGS_URL)
-        sleep(8)
+        try:
+            bookinpage = BookingLogsPage(self.driver)
+            sleep(3)
+            bookinpage.driver_get_url(TestData.BOOKING_LOGS_URL)
+            sleep(8)
 
-        bookinpage.test_selector_click()
-        print('Starting selection')
-        bookinpage.resource_selection(2)
+            bookinpage.test_selector_click()
+            print('Starting selection')
+            bookinpage.resource_selection(2)
 
-        bookinpage.verify_booking_status_filter(3)
+            bookinpage.verify_booking_status_filter(3)
 
-        print("BookingLog_Data Matrix verification: Passed")
+            print("BookingLog_Data Matrix verification: Passed")
 
-        bookinpage.date_selection(2)
-        sleep(5)
-        bookinpage.download_report()
-        sleep(10)
-        # # Getting data-key
-        # ele = bookinpage.get_element(BookingLogsPage.BookingLog_DATA_TABLE_ROW_1)
-        # key = ele.get_attribute("data-row-key")
-        # print("data-key: ", key)
+            bookinpage.date_selection(2)
+            sleep(5)
+            bookinpage.download_report()
+            sleep(10)
+            # # Getting data-key
+            # ele = bookinpage.get_element(BookingLogsPage.BookingLog_DATA_TABLE_ROW_1)
+            # key = ele.get_attribute("data-row-key")
+            # print("data-key: ", key)
 
-        # # Selecting tr element
-        # BookingLogsPage.BL_BD_TR_I_BUTTON = BookingLogsPage.BL_BD_TR_I_BUTTON.format(key)
-        # bookinpage.action_chain_click((By.XPATH, BookingLogsPage.BL_BD_TR_I_BUTTON))
-        # sleep(2)
-        # bookinpage.booking_details_data_verification()
-        # sleep(5)
+            # # Selecting tr element
+            # BookingLogsPage.BL_BD_TR_I_BUTTON = BookingLogsPage.BL_BD_TR_I_BUTTON.format(key)
+            # bookinpage.action_chain_click((By.XPATH, BookingLogsPage.BL_BD_TR_I_BUTTON))
+            # sleep(2)
+            # bookinpage.booking_details_data_verification()
+            # sleep(5)
+        except Exception as e:
+            print(f"Exception test_download_report: {e}")
+            bookinpage.take_screenshot(f"BookingLogs/test_download_report/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
