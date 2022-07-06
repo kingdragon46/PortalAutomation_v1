@@ -86,9 +86,9 @@ class BookingLogsPage(RoomBookingsPage):
     ### Select Venue
     DownloadReport_VenueDropdown = (By.XPATH, "//div[@class='vrs-label'][text()='Select Venue']/following-sibling::*")
     DownloadReport_VenueInputBox = (By.XPATH, "//div[@class='vrs-label'][text()='Select Venue']/following-sibling::*//child::input")
-    DownloadReport_Venue_GenpactITPark = (By.XPATH, "//div[text()='Genpact IT Park']")
-    DownloadReport_Venue_GenpactITPark_Expand_Arrow = (By.XPATH, "//div[text()='Genpact IT Park']/../../../../child::*[2]/child::*")
-    DownloadReport_Venue_BusinessTower = (By.XPATH, "//div[text()='Bussiness Tower']/../../../preceding-sibling::*[1]/child::*")
+    DownloadReport_Venue_GenpactITPark = (By.XPATH, f"//div[text()='{TestData.LOC_1}']")
+    DownloadReport_Venue_GenpactITPark_Expand_Arrow = (By.XPATH, f"//div[text()='{TestData.LOC_1}']/../../../../child::*[2]/child::*")
+    DownloadReport_Venue_BusinessTower = (By.XPATH, f"//div[text()='{TestData.LOC_2}']/../../../preceding-sibling::*[1]/child::*")
     ### Select Status
     DownloadReport_StatusDropdown = (By.XPATH, "//div[@class='vrs-label'][text()='Status ']/following-sibling::*")
     DownloadReport_Status_All = (By.XPATH, "//*[contains(text(), 'All')]")
