@@ -631,7 +631,7 @@ class RoomBookingsPage(BasePage):
     def MyBookings_EXTEND_booking(self, etime):
         try:
             MyBookings_PRE_MyBookings_EXTEND_TIME = self.get_element_text_by_xpath(
-                self.MyBookings_PRE_MyBookings_EXTEND_TIME)
+                self.MyBookings_PRE_EXTEND_TIME)
             print("MyBookings_PRE_MyBookings_EXTEND_TIME: ", MyBookings_PRE_MyBookings_EXTEND_TIME)
             self.do_click_by_xpath(self.MyBookings_CHECKIN_BOOKING)
             sleep(12)
@@ -644,7 +644,7 @@ class RoomBookingsPage(BasePage):
             print("text: ", tMyBookings_EXTEND_confirm)
             assert tMyBookings_EXTEND_confirm == "In Use, Booking Extended"
             post_MyBookings_EXTEND_time = self.get_element_text_by_xpath(
-                self.MyBookings_PRE_MyBookings_EXTEND_TIME)
+                self.MyBookings_PRE_EXTEND_TIME)
             print("post_MyBookings_EXTEND_time: ", post_MyBookings_EXTEND_time)
             assert MyBookings_PRE_MyBookings_EXTEND_TIME != post_MyBookings_EXTEND_time
         except Exception as e:
@@ -674,7 +674,7 @@ class RoomBookingsPage(BasePage):
             else:
                 self.select_floor()
             # Checking available resources
-            self.select_BookingStatusFilter_AVAILABLE_STATUS()
+            self.select_available_status()
             # Selecting resource type
             self.select_resource_type()
             # Clicking on list view

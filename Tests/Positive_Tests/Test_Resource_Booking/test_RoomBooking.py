@@ -132,7 +132,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             sleep(3)
@@ -217,7 +217,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_datetime_change_booking/{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
             # print("Booking should be created successfully: Passed")
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
 
             # Resource details page
             bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
@@ -301,7 +301,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
 
@@ -431,7 +431,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             sleep(3)
@@ -563,7 +563,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
 
@@ -657,7 +657,7 @@ class Test_RoomBooking(BaseTest):
             
             bookinpage.select_days_end()
 
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
 
             # Resource details page
             bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
@@ -741,7 +741,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             # bookinpage.driver_implicitly_wait(3)
@@ -881,7 +881,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             # bookinpage.driver_implicitly_wait(3)
@@ -1019,7 +1019,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             # bookinpage.driver_implicitly_wait(5)
@@ -1122,7 +1122,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.select_days_end()
 
             # Checking available resources
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             # bookinpage.driver_implicitly_wait(5)
 
             # Resource details page
@@ -1220,7 +1220,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             # bookinpage.driver_implicitly_wait(3)
@@ -1364,7 +1364,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             # bookinpage.driver_implicitly_wait(3)
@@ -1491,7 +1491,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             # print("Booking should be created successfully: Passed")
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
             # bookinpage.driver_implicitly_wait(2)
 
             # Resource details page
@@ -1625,7 +1625,7 @@ class Test_RoomBooking(BaseTest):
 
             bookinpage.select_days_end()
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
@@ -1756,7 +1756,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_future_cancelled_daily_recurring_booking/{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
             sleep(2)
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
 
             # Resource details page
             bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
@@ -1900,7 +1900,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_single_future_daily_recurring_booking_5_cancelled/{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
             sleep(2)
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
             # bookinpage.driver_implicitly_wait(3)
 
             # Resource details page
@@ -2041,7 +2041,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_daily_future_daily_recurring_booking_5_cancelled/{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
             sleep(2)
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
 
             # Resource details page
             bookinpage.do_click_by_xpath(RoomBookingsPage.ROOM_AFTER_BOOKING_TITLE)
@@ -2192,7 +2192,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_cancelling_first_recurring_booking/{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
             sleep(5)
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
             sleep(2)
 
             # Resource details page
@@ -2297,7 +2297,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.take_screenshot(f"RoomBooking/test_cancelling_last_recurring_booking/{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
             sleep(2)
 
-            bookinpage.select_all_status()
+            bookinpage.select_BookingStatusFilter_ALL_STATUS()
             sleep(2)
             
             # Resource details page
@@ -2399,7 +2399,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -2484,7 +2484,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -2572,7 +2572,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        # bookinpage.select_booked_status()
+        # bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         # bookinpage.resource_page_booking_check()
         sleep(3)
@@ -2627,7 +2627,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -2729,7 +2729,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        # bookinpage.select_booked_status()
+        # bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         # bookinpage.resource_page_booking_check()
         sleep(3)
@@ -2784,7 +2784,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -2886,7 +2886,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -2987,7 +2987,7 @@ class Test_RoomBooking(BaseTest):
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
             print("L2849:",count+1)
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("L2851:",count+1)
             # print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
@@ -3090,7 +3090,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             # bookinpage.driver_implicitly_wait(3)
@@ -3182,7 +3182,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
 
@@ -3276,7 +3276,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
 
@@ -3350,7 +3350,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
 
@@ -3437,7 +3437,7 @@ class Test_RoomBooking(BaseTest):
 
             # Checking Booking
             # At the find resource page, status of booking should be changed from available to booked
-            bookinpage.select_booked_status()
+            bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
             print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
             bookinpage.resource_page_booking_check()
             sleep(3)
@@ -3469,7 +3469,7 @@ class Test_RoomBooking(BaseTest):
         bookinpage.start_selection()
 
         # Checking available resources
-        bookinpage.select_all_status()
+        bookinpage.select_BookingStatusFilter_ALL_STATUS()
         sleep(5)
         # Selecting resource type
         bookinpage.do_click(RoomBookingsPage.ROOOMS_CLOSE)
@@ -3573,7 +3573,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -3692,7 +3692,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -3779,7 +3779,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)
@@ -3867,7 +3867,7 @@ class Test_RoomBooking(BaseTest):
 
         # Checking Booking
         # At the find resource page, status of booking should be changed from available to booked
-        bookinpage.select_booked_status()
+        bookinpage.select_BookingStatusFilter_BOOKED_STATUS()
         print("At the find resource page, status of booking should be changed from available to booked for the booked time frame: Passed")
         bookinpage.resource_page_booking_check()
         sleep(3)

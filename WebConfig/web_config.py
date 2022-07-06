@@ -148,7 +148,7 @@ class TestData:
 
     """--------------------------------------- Booking Logs ----------------------------"""
     BL_CAL_DATE = Config.repeat_till_date2(22)
-
+    BL_Venue1= "Genpact IT"
     '''Download Report'''
     DR_START_DATE = 1
     DR_END_DATE = 30

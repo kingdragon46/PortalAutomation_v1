@@ -77,6 +77,7 @@ class BookingLogsPage(RoomBookingsPage):
     
     # Download Report
     DownloadReport_BUTTON = (By.XPATH, "//div[@class='main-log-container-booking-logs']/div/div[2]/child::button")
+    DownloadReport_FREE_CLICK = (By.XPATH, "//div[text()='Request Report']")
     ### Date selectors
     DownloadReport_StartTime = (By.XPATH, "//div[@class='vrs-label'][text()='Start time ']/following-sibling::*/input")
     DownloadReport_StartTime_DateSelect = (By.XPATH, f"//div[@class='vrs-label'][text()='Start time ']/following-sibling::*//td[@class='rdtDay'][text()='{TestData.DR_START_DATE}']")
@@ -84,6 +85,8 @@ class BookingLogsPage(RoomBookingsPage):
     DownloadReport_EndTime_DateSelect = (By.XPATH, f"//div[@class='vrs-label'][text()='End time ']/following-sibling::*//td[@class='rdtDay'][text()='{TestData.DR_END_DATE}']")
     ### Select Venue
     DownloadReport_VenueDropdown = (By.XPATH, "//div[@class='vrs-label'][text()='Select Venue']/following-sibling::*")
+    DownloadReport_VenueInputBox = (By.XPATH, "//div[@class='vrs-label'][text()='Select Venue']/following-sibling::*//child::input")
+    DownloadReport_Venue_GenpactITPark = (By.XPATH, "//div[text()='Genpact IT Park']")
     DownloadReport_Venue_GenpactITPark_Expand_Arrow = (By.XPATH, "//div[text()='Genpact IT Park']/../../../../child::*[2]/child::*")
     DownloadReport_Venue_BusinessTower = (By.XPATH, "//div[text()='Bussiness Tower']/../../../preceding-sibling::*[1]/child::*")
     ### Select Status
@@ -98,7 +101,7 @@ class BookingLogsPage(RoomBookingsPage):
     DownloadReport_Template = (By.XPATH, "//div[@class='vrs-label'][text()='Template ']/following-sibling::*")
     DownloadReport_Template_BookingLogs = (By.XPATH, "//*[contains(text(), 'Booking Logs')]")
     # Submit button
-    DownloadReport_SubmitReportButton = (By.XPATH, "//div[@class='vrs-label vrs-btn-primary'][text()='Submit Request']")
+    DownloadReport_SubmitReportButton = (By.XPATH, "//div[@class='vms-v4-SubmitButton-W3vDW']//child::*[text()='Submit Request']")
     # <===================================== Functions =======================================>
 
     """constructor of the page class"""
@@ -112,8 +115,8 @@ class BookingLogsPage(RoomBookingsPage):
         sleep(5)
         self.action_chain_click(self.BookingLog_LOCATION_SELECTOR)
         self.action_chain_click(self.BookingLog_DATE_SELECTOR)
-        self.action_chain_click(self.BookingLog_BookingStatusFilter)
-        self.action_chain_click(self.BookingLog_RESOURCE_TYPE_SELECTOR)
+        # self.action_chain_click(self.BookingLog_BookingStatusFilter)
+        # self.action_chain_click(self.BookingLog_RESOURCE_TYPE_SELECTOR)
 
     def resource_selection(self,resource=None):
         sleep(2)
@@ -123,6 +126,8 @@ class BookingLogsPage(RoomBookingsPage):
             self.action_chain_click(self.BookingLog_DESKS)
         if resource == 2:
             self.action_chain_click(self.BookingLog_ROOMS)
+        print("BookingLog_Resource selection: Passed")
+        self.action_chain_click(self.FREE_CLICK)
 
     def guest_host_selection(self,gh=None, gh_name=None):
         sleep(2)
@@ -134,6 +139,7 @@ class BookingLogsPage(RoomBookingsPage):
             self.action_chain_click(self.BookingLog_GUEST_SELECT)
         if gh_name is not None:
             self.action_chain_sendkeys_1(self.BookingLog_GH_INPUT_BOX, gh_name)
+        print("BookingLog_Host selection: Passed")
 
     def verify_booking_status_filter(self,status=None):
         self.action_chain_click(self.BookingLog_BookingStatusFilter)
@@ -148,6 +154,7 @@ class BookingLogsPage(RoomBookingsPage):
             self.action_chain_click(self.BookingLog_BookingStatusFilter_Cancelled)
         if status == 5:
             self.action_chain_click(self.BookingLog_BookingStatusFilter_Expired)
+        print("BookingLog_booking status filter selection: Passed")
 
     def date_selection(self, dtype=None, dys=None):
         sleep(2)
@@ -159,6 +166,7 @@ class BookingLogsPage(RoomBookingsPage):
             self.action_chain_click(self.BookingLog_CONFIG_END_DATE)
         self.action_chain_click(self.FREE_CLICK)
         sleep(2)
+        print("BookingLog_date selection: Passed")
         
     def booking_details_data_verification(self, brule=None):
         # host details check
@@ -217,22 +225,27 @@ class BookingLogsPage(RoomBookingsPage):
         agenda = self.get_element_text(self.BookingLog_BookingDetailsPage_AGENDA)
         print('agenda: ', agenda)
         # assert host_email == TestData.DEFAULT_HOSTEMAIL
+        print("BookingLog_BookingDetailsPage data verification: Passed")
 
     def download_report_status_selection(self, stat=None):
         self.action_chain_click(self.DownloadReport_StatusDropdown)
         sleep(2)
-        if stat == 1:
-            self.action_chain_click(self.DownloadReport_Status_All)
-        if stat == 2:
-            self.action_chain_click(self.DownloadReport_Status_Scheduled)
-        if stat == 3:
-            self.action_chain_click(self.DownloadReport_Status_Cancelled)
-        if stat == 4:
-            self.action_chain_click(self.DownloadReport_Status_ApprovalPending)
-        if stat == 5:
-            self.action_chain_click(self.DownloadReport_Status_Assigned)
-        if stat == 6:
-            self.action_chain_click(self.DownloadReport_Status_Expired)
+        try:
+            if stat == 1:
+                self.action_chain_click(self.DownloadReport_Status_All)
+            if stat == 2:
+                self.action_chain_click(self.DownloadReport_Status_Scheduled)
+            if stat == 3:
+                self.action_chain_click(self.DownloadReport_Status_Cancelled)
+            if stat == 4:
+                self.action_chain_click(self.DownloadReport_Status_ApprovalPending)
+            if stat == 5:
+                self.action_chain_click(self.DownloadReport_Status_Assigned)
+            if stat == 6:
+                self.action_chain_click(self.DownloadReport_Status_Expired)
+        except Exception as e:
+            print(f"download_report_status_selection exception: {e} \n{traceback.format_exc()}")
+        print("BookingLog_DownloadReport_status selection: Passed")
 
     def download_report_select_dates(self, sdate=None, edate=None):
         # StartTime
@@ -243,13 +256,17 @@ class BookingLogsPage(RoomBookingsPage):
         if edate is not None:
             self.action_chain_click(self.DownloadReport_EndTime)
             self.action_chain_click(self.DownloadReport_EndTime_DateSelect)
+        sleep(2)
+        print("BookingLog_DownloadReport_date selection: Passed")
+        self.action_chain_click(self.DownloadReport_FREE_CLICK)
 
     def download_report_select_venue(self):
-        self.scroll_to_element(self.DownloadReport_VenueDropdown)
         self.action_chain_click(self.DownloadReport_VenueDropdown)
-        self.action_chain_click(self.DownloadReport_Venue_GenpactITPark_Expand_Arrow)
+        self.action_chain_sendkeys_1(self.DownloadReport_VenueInputBox, TestData.BL_Venue1)
+        # self.scroll_to_element_to_mid(self.DownloadReport_Venue_GenpactITPark)
+        # self.action_chain_click(self.DownloadReport_Venue_GenpactITPark_Expand_Arrow)
         self.action_chain_click(self.DownloadReport_Venue_BusinessTower)
-
+        print("BookingLog_DownloadReport_venue selection: Passed")
 
 
     def download_report(self):
@@ -258,6 +275,14 @@ class BookingLogsPage(RoomBookingsPage):
         self.download_report_select_venue()
         self.download_report_status_selection(1)
         self.action_chain_click(self.DownloadReport_Template)
+        # sleep(2)
         self.action_chain_click(self.DownloadReport_Template_BookingLogs)
-        self.action_chain_click(self.DownloadReport_SubmitReportButton)
+        # self.action_chain_click(self.DownloadReport_FREE_CLICK)
+        sleep(2)
+        try:
+            print("clivking on confirm")
+            self.action_chain_click(self.DownloadReport_SubmitReportButton)
+        except Exception as e:
+            print(f"download_report exception: {e} \n{traceback.format_exc()}")
         sleep(5)
+        print("BookingLog_DownloadReport selection: Passed")
