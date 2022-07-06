@@ -499,14 +499,14 @@ class RoomBookingsPage(BasePage):
 
     def daily_repeat(self):
         try:
-            self.action_chain_click(self.RecurringBookings_RecurringBookings_REPEAT_DROPDOWN)
+            self.action_chain_click(self.RecurringBookings_REPEAT_DROPDOWN)
             sleep(3)
             self.action_chain_click(self.RecurringBookings_REPEAT_DAILY)
             sleep(2)
             # self.date_selection_chain(self.RecurringBookings_REPEAT_FREQUENCY, TestData.RecurringBookings_REPEAT_FREQUENCY, 2)
             sleep(2)
             self.date_selection_chain(
-                self.RecurringBookings_REPEAT_TILL_DATE, TestData.RecurringBookings_REPEAT_TILL_DATE[:11], 2)
+                self.RecurringBookings_REPEAT_TILL_DATE, TestData.REPEAT_TILL_DATE[:11], 2)
         except Exception as e:
             print(f"daily_repeat: {e} \n{traceback.format_exc()}")
             self.take_screenshot(f"RoomBooking/daily_repeat/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
@@ -521,7 +521,7 @@ class RoomBookingsPage(BasePage):
             # self.date_selection_chain(self.RecurringBookings_REPEAT_FREQUENCY, TestData.RecurringBookings_REPEAT_FREQUENCY, 2)
             sleep(2)
             self.date_selection_chain(
-                self.RecurringBookings_REPEAT_TILL_DATE, TestData.RecurringBookings_REPEAT_TILL_DATE3, 2)
+                self.RecurringBookings_REPEAT_TILL_DATE, TestData.REPEAT_TILL_DATE3, 2)
         except Exception as e:
             print(f"daily_repeat2: {e} \n{traceback.format_exc()}")
             self.take_screenshot(f"RoomBooking/daily_repeat2/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")

@@ -117,6 +117,7 @@ class BookingLogsPage(RoomBookingsPage):
         self.action_chain_click(self.BookingLog_DATE_SELECTOR)
         # self.action_chain_click(self.BookingLog_BookingStatusFilter)
         # self.action_chain_click(self.BookingLog_RESOURCE_TYPE_SELECTOR)
+        sleep(2)
 
     def resource_selection(self,resource=None):
         sleep(2)

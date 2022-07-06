@@ -224,7 +224,7 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
 
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             sleep(3)
 
@@ -337,9 +337,9 @@ class Test_RoomBooking(BaseTest):
 
             # Selecting datetime
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
+                    RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
+                    RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
 
             # Clicking on booking button
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_booking/pre2_{TestData.CDATE[:10]}/{TestData.CDATE[11:]}.png")
@@ -581,7 +581,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             bookinpage.do_click_by_index(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
             print("Create a daily recurring booking for the desk by selecting a default date and time: Passed")
         except Exception as e:
@@ -664,7 +664,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
 
             # In My booking page, the created booking should be visible with two options i.e Check In and Cancel booking
@@ -677,7 +677,7 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
             bookinpage.do_click_by_index(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             print("Create a daily recurring booking for the desk by selecting a default date and time: Passed")
         except Exception as e:
             print(f"Exception test_datetime_change_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -783,9 +783,9 @@ class Test_RoomBooking(BaseTest):
 
             # Selecting datetime
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
+                    RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
+                    RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
 
             # Clicking on booking button
             bookinpage.take_screenshot(f"RoomBooking/test_overlapping_daily_recurring_booking/{TestData.CDATE[:10]}/pre1_{TestData.CDATE[11:]}.png")
@@ -944,7 +944,7 @@ class Test_RoomBooking(BaseTest):
             sleep(1)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_already_cancelled_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1041,7 +1041,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_simple_weekly_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1132,7 +1132,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(4)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_WSTART_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_WSTART_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -1146,7 +1146,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_datetime_change_weekly_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1262,9 +1262,9 @@ class Test_RoomBooking(BaseTest):
 
             # Selecting datetime
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
+                    RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
+                    RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
             # bookinpage.driver_implicitly_wait(2)
             # Clicking on booking button
             bookinpage.action_chain_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -1425,7 +1425,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.scroll_to_element_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_already_cancelled_weekly_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1499,7 +1499,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(8)
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -1533,9 +1533,9 @@ class Test_RoomBooking(BaseTest):
 
             # Selecting datetime
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
+                    RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
+                    RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
 
             # Clicking on booking button
             bookinpage.action_chain_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -1665,9 +1665,9 @@ class Test_RoomBooking(BaseTest):
 
             # Selecting datetime
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
+                    RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
+                    RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
 
             # Clicking on booking button
             bookinpage.action_chain_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -1689,7 +1689,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_daily_recurring_single_booking: {e}\n{traceback.format_exc()}")
@@ -1764,7 +1764,7 @@ class Test_RoomBooking(BaseTest):
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -1801,9 +1801,9 @@ class Test_RoomBooking(BaseTest):
 
             # Selecting datetime
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
+                    RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START, 2)
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
+                    RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END, 2)
 
             # Clicking on booking button
             bookinpage.action_chain_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -1820,7 +1820,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_future_cancelled_daily_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -1909,7 +1909,7 @@ class Test_RoomBooking(BaseTest):
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -1967,7 +1967,7 @@ class Test_RoomBooking(BaseTest):
             sleep(3)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_overlapping_single_future_daily_recurring_booking_5_cancelled: {e}\n{traceback.format_exc()}")
@@ -2048,7 +2048,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(8)
 
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -2112,7 +2112,7 @@ class Test_RoomBooking(BaseTest):
                     sleep(2)
                     bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
                     sleep(2)
-                    bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+                    bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
                     sleep(4)
                 else:
                     break
@@ -2201,7 +2201,7 @@ class Test_RoomBooking(BaseTest):
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -2220,7 +2220,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(2)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_cancelling_first_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -2306,7 +2306,7 @@ class Test_RoomBooking(BaseTest):
 
             # checklist = ['SCHEDULED', f'Name: {TestData.DEFAULT_HOSTNAME}', f'Email: {TestData.DEFAULT_HOSTEMAIL}',  'Cancel Booking']
             bookinpage.date_selection_chain(
-                    RoomBookingsPage.RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
+                    RoomBookingsPage.ResourceDetails_RD_CALENDER_INPUT, TestData.ROOM_START_DATE[:11], 2)
             bookinpage.resource_details_page_check()
             # bookinpage.driver_implicitly_wait(5)
 
@@ -2326,7 +2326,7 @@ class Test_RoomBooking(BaseTest):
             # bookinpage.driver_implicitly_wait(2)
             bookinpage.do_click_by_xpath(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_cancelling_last_recurring_booking: {e}\n{traceback.format_exc()}")
@@ -2560,7 +2560,7 @@ class Test_RoomBooking(BaseTest):
 
         # Selecting datetime
         bookinpage.date_selection_chain(
-                RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_2, 2)
+                RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_2, 2)
 
         # Clicking on booking button
         bookinpage.do_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -2614,9 +2614,9 @@ class Test_RoomBooking(BaseTest):
 
         # Selecting datetime
         bookinpage.date_selection_chain(
-                RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START_1, 2)
+                RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START_1, 2)
         bookinpage.date_selection_chain(
-                RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_1, 2)
+                RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_1, 2)
 
         # Clicking on booking button
         bookinpage.do_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -2717,7 +2717,7 @@ class Test_RoomBooking(BaseTest):
 
         # Selecting datetime
         bookinpage.date_selection_chain(
-                RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_2, 2)
+                RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_2, 2)
 
         # Clicking on booking button
         bookinpage.do_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -2771,9 +2771,9 @@ class Test_RoomBooking(BaseTest):
 
         # Selecting datetime
         bookinpage.date_selection_chain(
-                RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START_1, 2)
+                RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START_1, 2)
         bookinpage.date_selection_chain(
-                RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_1, 2)
+                RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_1, 2)
 
         # Clicking on booking button
         bookinpage.do_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -2872,9 +2872,9 @@ class Test_RoomBooking(BaseTest):
 
         # Selecting datetime
         bookinpage.date_selection_chain(
-                RoomBookingsPage.START_DATE, TestData.ROOM_OVERLAPPING_TIME_START_1, 2)
+                RoomBookingsPage.BookResource_Modal_START_DATE, TestData.ROOM_OVERLAPPING_TIME_START_1, 2)
         bookinpage.date_selection_chain(
-                RoomBookingsPage.END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_1, 2)
+                RoomBookingsPage.BookResource_Modal_END_DATE, TestData.ROOM_OVERLAPPING_TIME_END_1, 2)
 
         # Clicking on booking button
         bookinpage.do_click(RoomBookingsPage.BookResource_Modal_BOOKING_CONFIRM_BUTTON)
@@ -3020,7 +3020,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             bookinpage.do_click_by_index(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_simple_daily_recurring_cancel_single_booking: {e}\n{traceback.format_exc()}")
@@ -3113,7 +3113,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.do_click_by_index(RoomBookingsPage.RecurringBookings_ROOM_CHECK_RDIV, 0)
             bookinpage.do_click_by_index(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 0)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             print("Create a daily recurring booking for a month and delete all booking: Passed")
             sleep(2)
         except Exception as e:
@@ -3210,7 +3210,7 @@ class Test_RoomBooking(BaseTest):
             sleep(2)
             bookinpage.do_click_by_index(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             sleep(2)
         except Exception as e:
             print(f"Exception test_simple_weekly_recurring_cancel_single_booking: {e}\n{traceback.format_exc()}")
@@ -3293,7 +3293,7 @@ class Test_RoomBooking(BaseTest):
             bookinpage.scroll_to_element_by_index(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
             bookinpage.do_click_by_index(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS, 1)
             sleep(2)
-            bookinpage.do_click(RoomBookingsPage.ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
+            bookinpage.do_click(RoomBookingsPage.MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON)
             print("Create a daily recurring booking for a month and delete all booking: Passed")
             sleep(2)
         except Exception as e:
