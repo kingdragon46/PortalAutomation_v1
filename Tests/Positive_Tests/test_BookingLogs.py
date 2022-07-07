@@ -56,6 +56,7 @@ class Test_RoomBooking(BaseTest):
     """Room Booking"""
 
     @pytest.mark.pnr
+    # @pytest.mark.login
     @pytest.mark.selected
     def test_simple_booking_logs(self):
         try:
@@ -285,16 +286,16 @@ class Test_RoomBooking(BaseTest):
             bookinpage.driver_get_url(TestData.BOOKING_LOGS_URL)
             sleep(8)
 
-            bookinpage.test_selector_click()
-            print('Starting selection')
-            bookinpage.resource_selection(2)
+            # bookinpage.test_selector_click()
+            # print('Starting selection')
+            # bookinpage.resource_selection(2)
 
-            bookinpage.verify_booking_status_filter(3)
+            # bookinpage.verify_booking_status_filter(3)
 
-            print("BookingLog_Data Matrix verification: Passed")
+            # print("BookingLog_Data Matrix verification: Passed")
 
-            bookinpage.date_selection(2)
-            sleep(5)
+            # bookinpage.date_selection(2)
+            # sleep(5)
             bookinpage.download_report()
             sleep(10)
             # # Getting data-key

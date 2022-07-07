@@ -78,6 +78,7 @@ class BookingLogsPage(RoomBookingsPage):
     # Download Report
     DownloadReport_BUTTON = (By.XPATH, "//div[@class='main-log-container-booking-logs']/div/div[2]/child::button")
     DownloadReport_FREE_CLICK = (By.XPATH, "//div[text()='Request Report']")
+    DownloadReport_FREE_CLICK_2 = (By.XPATH, "//div[@class='vrs-label'][text()='Report Format ']")
     ### Date selectors
     DownloadReport_StartTime = (By.XPATH, "//div[@class='vrs-label'][text()='Start time ']/following-sibling::*/input")
     DownloadReport_StartTime_DateSelect = (By.XPATH, f"//div[@class='vrs-label'][text()='Start time ']/following-sibling::*//td[@class='rdtDay'][text()='{TestData.DR_START_DATE}']")
@@ -91,7 +92,9 @@ class BookingLogsPage(RoomBookingsPage):
     DownloadReport_Venue_BusinessTower = (By.XPATH, f"//div[text()='{TestData.LOC_2}']/../../../preceding-sibling::*[1]/child::*")
     ### Select Status
     DownloadReport_StatusDropdown = (By.XPATH, "//div[@class='vrs-label'][text()='Status ']/following-sibling::*")
-    DownloadReport_Status_All = (By.XPATH, "//*[contains(text(), 'All')]")
+    DownloadReport_Status_INPUT = (By.XPATH, "//input[@id='react-select-2-input']")
+    DownloadReport_Status_DIV = (By.XPATH, "//*[contains(class,'css-e6ky2s-menu')]")
+    DownloadReport_Status_All = (By.XPATH, "//*[contains(class,'css-e6ky2s-menu')]//*[contains(text(), 'All')]")
     DownloadReport_Status_Scheduled = (By.XPATH, "//*[contains(text(), 'Scheduled')]")
     DownloadReport_Status_Cancelled = (By.XPATH, "//*[contains(text(), 'Cancelled')]")
     DownloadReport_Status_ApprovalPending = (By.XPATH, "//*[contains(text(), 'Approval Pending')]")
@@ -99,9 +102,11 @@ class BookingLogsPage(RoomBookingsPage):
     DownloadReport_Status_Expired = (By.XPATH, "//*[contains(text(), 'Expired')]")
     ### Select Template
     DownloadReport_Template = (By.XPATH, "//div[@class='vrs-label'][text()='Template ']/following-sibling::*")
+    DownloadReport_Template_Input = (By.XPATH, "//input[@id='react-select-4-input']")
     DownloadReport_Template_BookingLogs = (By.XPATH, "//*[contains(text(), 'Booking Logs')]")
     # Submit button
     DownloadReport_SubmitReportButton = (By.XPATH, "//div[@class='vms-v4-SubmitButton-W3vDW']//child::*[text()='Submit Request']")
+    DownloadReport_SubmitReportButton_2 = (By.XPATH, "//div[@label='Submit Request']")
     # <===================================== Functions =======================================>
 
     """constructor of the page class"""
@@ -230,20 +235,20 @@ class BookingLogsPage(RoomBookingsPage):
 
     def download_report_status_selection(self, stat=None):
         self.action_chain_click(self.DownloadReport_StatusDropdown)
-        sleep(2)
+        # sleep(2)
         try:
             if stat == 1:
-                self.action_chain_click(self.DownloadReport_Status_All)
+                self.action_chain_sendkeys_1(self.DownloadReport_Status_INPUT, TestData.Status_All, Keys.ENTER)
             if stat == 2:
-                self.action_chain_click(self.DownloadReport_Status_Scheduled)
+                self.action_chain_sendkeys_1(self.DownloadReport_Status_Scheduled, TestData.Status_Scheduled, Keys.ENTER)
             if stat == 3:
-                self.action_chain_click(self.DownloadReport_Status_Cancelled)
+                self.action_chain_sendkeys_1(self.DownloadReport_Status_Cancelled, TestData.Status_Cancelled, Keys.ENTER)
             if stat == 4:
-                self.action_chain_click(self.DownloadReport_Status_ApprovalPending)
+                self.action_chain_sendkeys_1(self.DownloadReport_Status_ApprovalPending, TestData.Status_ApprovalPending, Keys.ENTER)
             if stat == 5:
-                self.action_chain_click(self.DownloadReport_Status_Assigned)
+                self.action_chain_sendkeys_1(self.DownloadReport_Status_Assigned, TestData.Status_Assigned, Keys.ENTER)
             if stat == 6:
-                self.action_chain_click(self.DownloadReport_Status_Expired)
+                self.action_chain_sendkeys_1(self.DownloadReport_Status_Expired, TestData.Status_Expired, Keys.ENTER)
         except Exception as e:
             print(f"download_report_status_selection exception: {e} \n{traceback.format_exc()}")
         print("BookingLog_DownloadReport_status selection: Passed")
@@ -269,20 +274,21 @@ class BookingLogsPage(RoomBookingsPage):
         self.action_chain_click(self.DownloadReport_Venue_BusinessTower)
         print("BookingLog_DownloadReport_venue selection: Passed")
 
-
     def download_report(self):
         self.action_chain_click(self.DownloadReport_BUTTON)
         self.download_report_select_dates(1, 1)
         self.download_report_select_venue()
-        self.download_report_status_selection(1)
-        self.action_chain_click(self.DownloadReport_Template)
+        self.download_report_status_selection(3)
         # sleep(2)
-        self.action_chain_click(self.DownloadReport_Template_BookingLogs)
-        # self.action_chain_click(self.DownloadReport_FREE_CLICK)
+        self.action_chain_click(self.DownloadReport_FREE_CLICK_2)
         sleep(2)
+        self.action_chain_click(self.DownloadReport_Template)
+        self.action_chain_sendkeys_1(self.DownloadReport_Template_Input, TestData.Template_Name, Keys.ENTER)
         try:
-            print("clivking on confirm")
-            self.action_chain_click(self.DownloadReport_SubmitReportButton)
+            # print("clicking on logs")
+            # self.do_click(self.DownloadReport_Template_BookingLogs)
+            print("clicking on confirm")
+            self.action_chain_click(self.DownloadReport_SubmitReportButton_2)
         except Exception as e:
             print(f"download_report exception: {e} \n{traceback.format_exc()}")
         sleep(5)

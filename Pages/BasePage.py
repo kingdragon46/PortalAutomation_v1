@@ -78,6 +78,18 @@ class BasePage:
             return bool(element)
         except Exception as e:
             print(f"is_invisible exception: {e}")
+    
+    def is_present(self, by_locator, multi=None):
+        try:
+            if multi is None:
+                element = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located(by_locator))
+            else:
+                element = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_all_elements_located(by_locator))
+            return bool(element)
+        except Exception as e:
+            print(f"is_present exception: {e}")
 
     def is_visible(self, by_locator):
         try:
@@ -203,7 +215,7 @@ class BasePage:
         actions.perform()
         sleep(1)
 
-    def action_chain_sendkeys_1(self, by_locator, elkeys):
+    def action_chain_sendkeys_1(self, by_locator, elkeys, elkeys2=None):
         element = WebDriverWait(self.driver, self.time_delay).until(
             EC.visibility_of_element_located(by_locator))
         print("Element: ", element)
@@ -211,6 +223,8 @@ class BasePage:
         actions.move_to_element(element)
         sleep(2)
         actions.send_keys(elkeys)
+        if elkeys2 is not None:
+            actions.send_keys(elkeys2)
         actions.perform()
         sleep(2)
 
@@ -377,6 +391,32 @@ class BasePage:
             self.driver.save_screenshot(os.path.join("screenshot", name))
         except Exception as e:
             print("Screenshot exception: ", e)
+
+    def hover_over_element(self, by_locator):
+        element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located(by_locator))
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element)
+        actions.perform()
+        sleep(2)
+    
+    def hover_click(self, by_locator2):
+        element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.presence_of_element_located(by_locator2))
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element)
+        actions.click(element)
+        actions.perform()
+        sleep(2)
+
+    def double_click_element(self, by_locator):
+        element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.visibility_of_element_located(by_locator))
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element)
+        actions.double_click()
+        actions.perform()
+        sleep(2)
 
     def current_url(self):
         return self.driver.current_url

@@ -45,12 +45,12 @@ class TestData:
 
 
     # VALUES ------------------------------------------------------------------------------------
-    BASE_URL = LIVE_BASE_URL
-    USER_NAME = LIVE_USER_NAME
-    PASSWORD = LIVE_PASSWORD
-    LOC_1 = LIVE_LOCATION_1
-    LOC_2 = LIVE_LOCATION_2
-    URL_DOMAIN = LIVE_URL_DOMAIN
+    BASE_URL = LOCAL_BASE_URL
+    USER_NAME = LOCAL_USER_NAME
+    PASSWORD = LOCAL_PASSWORD
+    LOC_1 = LOCAL_LOCATION_1
+    LOC_2 = LOCAL_LOCATION_2
+    URL_DOMAIN = LOCAL_URL_DOMAIN
 
     # URL FORMATING 
     LOGIN_PAGE_TITLE = "Veris | Powering Future Workplaces"
@@ -63,14 +63,16 @@ class TestData:
 
     BOOKING_LOGS_URL = f"https://{URL_DOMAIN}.veris.in/resource-manager/booking-logs"
 
+    Work_Status_URL = f"https://{URL_DOMAIN}.veris.in/work-status/user-status"
+
 
     '''-----------------------------POSITIVE TESTING-----------------------------'''
 
     '''Guests'''
-    CONTACT_1_IS_DRAFTED_FALSE = LIVE_CONTACT_1_IS_DRAFTED_FALSE
-    CONTACT_1_IS_MEMBER = LIVE_CONTACT_1_IS_MEMBER
-    CONTACT_2_IS_MEMBER = LIVE_CONTACT_2_IS_MEMBER
-    CONTACT_3_IS_MEMBER = LIVE_CONTACT_3_IS_MEMBER
+    CONTACT_1_IS_DRAFTED_FALSE = LOCAL_CONTACT_1_IS_DRAFTED_FALSE
+    CONTACT_1_IS_MEMBER = LOCAL_CONTACT_1_IS_MEMBER
+    CONTACT_2_IS_MEMBER = LOCAL_CONTACT_2_IS_MEMBER
+    CONTACT_3_IS_MEMBER = LOCAL_CONTACT_3_IS_MEMBER
 
     '''Desk Booking details'''
     DEFAULT_HOSTNAME = "Neeraj Dhiman"
@@ -150,8 +152,21 @@ class TestData:
     BL_CAL_DATE = Config.repeat_till_date2(22)
     BL_Venue1= "Genpact IT"
     '''Download Report'''
+    # Status
+    Status_All = "All"
+    Status_Scheduled = "Scheduled"
+    Status_Cancelled = "Cancelled"
+    Status_ApprovalPending = "Approval Pending"
+    Status_Assigned = "Assigned"
+    Status_Expired = "Expired"
+    # Template
+    Template_Name = "Booking Logs"
+    # Dates
     DR_START_DATE = 1
     DR_END_DATE = 30
 
+
+    """--------------------------------------- Work Status ----------------------------"""
+    TEAM_TO_BE_SELECTED = "MRM terminal"
 
 print(f"{TestData.ROOM_START_DATE} ---------- {TestData.ROOM_END_DATE, 18}")
