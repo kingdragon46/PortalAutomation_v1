@@ -34,16 +34,6 @@ class Test_RoomBooking(BaseTest):
         return response
 
     # Login
-    @pytest.mark.pnr
-    @pytest.mark.prsc
-    @pytest.mark.prs
-    @pytest.mark.pr
-    @pytest.mark.prw
-    @pytest.mark.pcnclb
-    @pytest.mark.extndb
-    @pytest.mark.misc
-    @pytest.mark.hostrltd
-    @pytest.mark.custom
     @pytest.mark.selected
     @pytest.mark.login
     def test_login_booking(self):

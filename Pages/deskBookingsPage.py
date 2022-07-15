@@ -156,27 +156,32 @@ class deskBookingsPage(BasePage):
         By.XPATH, "//span[contains(text(), 'Error')]")
 
     # Health Status
-    HEALTH_STATUS_MSG = 'You cannot book the desk since your health status is "Not Filled", Please fill your health status under "My Bookings"'
-    HEALTH_STATUS_PROMPT = (
+    HS_HEALTH_STATUS_MSG = 'You cannot book the desk since your health status is "Not Filled", Please fill your health status under "My Bookings"'
+    HS_HEALTH_STATUS_PROMPT = (
         By.XPATH, f"//*[contains(text(), 'Update Health Status')]")
-    UPDATE_HEALTH_STATUS_BUTTON = (
-        By.XPATH, f"//*[@id='meeting-room']/div[2]/div/div[4]/div[2]/div[1]/div/div[2]/div[2]/div/div[2]/button")
-    FULLY_VACCINATED = (
+    HS_UPDATE_HEALTH_STATUS_BUTTON = (
+        By.XPATH, f"//*[text()='Health status']/../following-sibling::*//button")
+    HS_FULLY_VACCINATED = (
         By.XPATH, f"//*[contains(text(), 'Fully Vaccinated')]/preceding-sibling::*/child::*")
-    HEALTH_CONDITION_NONE = (
+    HS_HEALTH_CONDITION_NONE = (
         By.XPATH, f"//*[contains(text(), 'None')]/preceding-sibling::*/child::*")
-    PROVIDING_CARE_NO = (
+    HS_PROVIDING_CARE_NO = (
         By.XPATH, f"//*[contains(text(), 'If you are providing care to a confirmed /suspect/probable case')]/parent::*/following-sibling::*/child::div[2]/child::div[2]/child::div/child::div/child::div/child::*")
-    CONTACT_14DAYS_NO = (
+    HS_CONTACT_14DAYS_NO = (
         By.XPATH, f"//*[contains(text(), 'If you have come in contact with any COVID-19 positive case in the last 14 days')]/parent::*/following-sibling::*/child::div[2]/child::div[2]/child::div/child::div/child::div/child::*")
-    OFFICE_TO_VISIT_DROPDOWN = (By.XPATH, f"//*[@id='other_5014']/div")
-    OFFICE_TO_VISIT_SELECT = (
+    HS_OFFICE_TO_VISIT_DROPDOWN = (By.XPATH, f"//*[@id='other_5014']/div")
+    HS_OFFICE_TO_VISIT_SELECT = (
         By.XPATH, f"//*[contains(text(), 'Digicred HQ-New York')]")
-    PARKING_DROPDOWN = (By.XPATH, f"//*[@id='other_5015']/div")
-    PARKING_SELECT = (By.XPATH, f"//*[contains(text(), '2 Wheeler')]")
-    CONFIRM_DECLARATION = (
+    HS_PARKING_DROPDOWN = (By.XPATH, f"//*[@id='other_5015']/div")
+    HS_PARKING_SELECT = (By.XPATH, f"//*[contains(text(), '2 Wheeler')]")
+    HS_CONFIRM_DECLARATION = (
         By.XPATH, f"//*[contains(text(), 'Confirm Declaration')]")
-
+    HS_Q1_OPTIONS = "(//*[@class='workflow-health']//*[@class='meeting-room-padding-cd0a98b0f8d88ac043f27d7a806873ed'][1]//*[@class='next_btn'])"
+    HS_Q2_OPTIONS = "(//*[@class='workflow-health']//*[@class='meeting-room-padding-cd0a98b0f8d88ac043f27d7a806873ed'][2]//*[@class='next_btn'])"
+    HS_Q3_OPTIONS = "(//*[@class='workflow-health']//*[@class='meeting-room-padding-cd0a98b0f8d88ac043f27d7a806873ed'][3]//*[@class='next_btn'])"
+    HS_Q4_OPTIONS = "(//*[@class='workflow-health']//*[@class='meeting-room-padding-cd0a98b0f8d88ac043f27d7a806873ed'][4]//*[@class='next_btn'])"
+    HS_ERROR_MSG = (By.XPATH, "//*[@class='ant-message-custom-content ant-message-error']//span[text()='Please fill all required data !']")
+    
     # Recurring booking
     RecurringBookings_DESK_CHECK_RDIV = "//p[text()='{}']/parent::*/following-sibling::*/div[2]/div/p/span[contains(text(),'every day')]"
     RecurringBookings_DESK_RDIV_CANCEL_BUTTON = "//p[text()='{}']/parent::*/following-sibling::*/div[2]/div/p/span[contains(text(),'every day')]/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/button[2]"
@@ -660,3 +665,5 @@ class deskBookingsPage(BasePage):
         except Exception as e:
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             self.take_screenshot(f"deskBooking/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
+
+

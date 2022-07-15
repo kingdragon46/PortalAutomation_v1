@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 class Test_Booking(BaseTest):
 
     @pytest.mark.custom
+    @pytest.mark.healthstat
     def test_login(self):
         self.loginPage = LoginPage(self.driver)
         bookinpage = self.loginPage.do_login(
@@ -160,7 +161,7 @@ class Test_Booking(BaseTest):
         assert is_visible == False
 
 
-     def test_simple_booking(self):
+    def test_simple_booking(self):
         try:
             bookinpage = deskBookingsPage(self.driver)
             # bookinpage = Test_Booking.test_login()

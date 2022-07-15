@@ -18,6 +18,8 @@ class TestData:
     LOCAL_PASSWORD = "Passw0rd@123"
     LOCAL_USER_NAME_2 = "shailendra.tiranga@veris.in"
     LOCAL_PASSWORD_2 = "Ttpl@12345"
+    LOCAL_USER_NAME_3 = "vivek.anand@veris.in"
+    LOCAL_PASSWORD_3 = "J^6txV!uM3x5"
     # LOCATION
     LOCAL_LOCATION_1 = "Genpact IT Park"
     LOCAL_LOCATION_2 = "Bussiness Tower"
@@ -45,12 +47,16 @@ class TestData:
 
 
     # VALUES ------------------------------------------------------------------------------------
-    BASE_URL = LOCAL_BASE_URL
-    USER_NAME = LOCAL_USER_NAME
-    PASSWORD = LOCAL_PASSWORD
+    BASE_URL = LIVE_BASE_URL
+    USER_NAME = LIVE_USER_NAME
+    PASSWORD = LIVE_PASSWORD
+    USER_NAME_2 = LOCAL_USER_NAME_2
+    PASSWORD_2 = LOCAL_PASSWORD_2
+    USER_NAME_3 = LOCAL_USER_NAME_3
+    PASSWORD_3 = LOCAL_PASSWORD_3
     LOC_1 = LOCAL_LOCATION_1
     LOC_2 = LOCAL_LOCATION_2
-    URL_DOMAIN = LOCAL_URL_DOMAIN
+    URL_DOMAIN = LIVE_URL_DOMAIN
 
     # URL FORMATING 
     LOGIN_PAGE_TITLE = "Veris | Powering Future Workplaces"
@@ -63,7 +69,11 @@ class TestData:
 
     BOOKING_LOGS_URL = f"https://{URL_DOMAIN}.veris.in/resource-manager/booking-logs"
 
-    Work_Status_URL = f"https://{URL_DOMAIN}.veris.in/work-status/user-status"
+    WORK_STATUS_USERSTATUS_URL = f"https://{URL_DOMAIN}.veris.in/work-status/user-status"
+
+    WORK_STATUS_TEAMS_URL = f"https://{URL_DOMAIN}.veris.in/work-status/teams"
+
+    WORK_STATUS_INSIGHTS_URL = f"https://{URL_DOMAIN}.veris.in/work-status/work-insights"
 
 
     '''-----------------------------POSITIVE TESTING-----------------------------'''
@@ -165,8 +175,16 @@ class TestData:
     DR_START_DATE = 1
     DR_END_DATE = 30
 
+    """--------------------------------------- Work Status ----------------------------"""
+    HS_Reassess = "Reassess"
+    HS_Error_msg = "Please fill all required data !"
+
 
     """--------------------------------------- Work Status ----------------------------"""
-    TEAM_TO_BE_SELECTED = "MRM terminal"
+    TEAM_TO_BE_SELECTED = "Bosch group"
+
+    '''TeamsPage'''
+    TeamsPage_Team = "Bosch group"
+    TeamsPage_Employee = "Himanshi"
 
 print(f"{TestData.ROOM_START_DATE} ---------- {TestData.ROOM_END_DATE, 18}")

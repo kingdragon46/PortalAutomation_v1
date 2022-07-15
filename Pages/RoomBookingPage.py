@@ -175,7 +175,7 @@ class RoomBookingsPage(BasePage):
 
     # Logout
     LOGOUT_DROPDOWN = (
-        By.XPATH, "//*[@id='navigation']/div/div/div/div[3]/div/div[2]/div/div[2]/div")
+        By.XPATH, "//*//*[@class='navigation-ProfileLink-l2Suz']")
     LOGOUT_BUTTON = (By.XPATH, "//*[text()='Logout']")
 
     # Tags
@@ -263,7 +263,6 @@ class RoomBookingsPage(BasePage):
                 if fl_visibilty == False:
                     self.action_chain_click(self.FLOOR_ARROW)
                 self.action_chain_click(self.FIRST_FLOOR)
-            
             sleep(1)
             assert "Floor selection done"
         except Exception as e:
