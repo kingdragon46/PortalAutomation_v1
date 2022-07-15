@@ -9,4 +9,4 @@ bvenv
 test1.py
 scratch2.py
 network_logs.py
-*.html
+# *.html
