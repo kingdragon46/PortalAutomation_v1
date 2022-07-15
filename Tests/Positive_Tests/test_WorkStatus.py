@@ -33,6 +33,7 @@ class Test_WorkStatus(BaseTest):
         return response
     
     # @pytest.mark.login
+    @pytest.mark.skip
     def test_teamsNavLink_not_visible_to_employee(self):
         self.loginPage = LoginPage(self.driver)
         login_page = self.loginPage.do_rlogin(
