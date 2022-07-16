@@ -108,10 +108,10 @@ class WorkStatusPage(BasePage):
         url = self.current_url()
         if 'ndl' in url:
             WorkStatusPage.InsightsPage_Office_FirstDate = WorkStatusPage.InsightsPage_Office_FirstDate.format(TestData.Insights_Team_LOCAL)
-            stat = self.get_element_text(WorkStatusPage.InsightsPage_Office_FirstDate)
+            stat = self.get_element_text((By.XPATH, WorkStatusPage.InsightsPage_Office_FirstDate))
         else:
             WorkStatusPage.InsightsPage_Office_FirstDate = WorkStatusPage.InsightsPage_Office_FirstDate.format(TestData.Insights_Team_LIVE)
-            stat = self.get_element_text(WorkStatusPage.InsightsPage_Office_FirstDate)
+            stat = self.get_element_text((By.XPATH, WorkStatusPage.InsightsPage_Office_FirstDate))
         return stat
 
     def teamspage_changeEmployeeStatus(self, by_locator=None):
