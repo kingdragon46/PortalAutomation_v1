@@ -59,7 +59,7 @@ class Test_WorkStatus(BaseTest):
         login_page = self.loginPage.do_rlogin(
                     TestData.USER_NAME, TestData.PASSWORD)
     
-    # @pytest.mark.login
+    @pytest.mark.login
     def test_change_self_status(self):
         workstatuspage = WorkStatusPage(self.driver)
         sleep(3)
@@ -107,7 +107,7 @@ class Test_WorkStatus(BaseTest):
 
         assert stat1!=stat2
 
-    @pytest.mark.login
+    # @pytest.mark.login
     def test_change_employee_status_visibility_in_userStatus(self):
         workstatuspage = WorkStatusPage(self.driver)
         sleep(3)

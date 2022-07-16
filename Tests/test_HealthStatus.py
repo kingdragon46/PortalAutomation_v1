@@ -23,7 +23,7 @@ class Test_HealthStatus(BaseTest):
         healthstatuspage = self.loginPage.do_login(
             TestData.USER_NAME, TestData.PASSWORD)
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     def test_health_status_case1(self):
         healthstatuspage = HealthStatusPage(self.driver)
@@ -38,7 +38,7 @@ class Test_HealthStatus(BaseTest):
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     def test_health_status_case2(self):
         healthstatuspage = HealthStatusPage(self.driver)
@@ -55,7 +55,7 @@ class Test_HealthStatus(BaseTest):
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     def test_health_status_case3(self):
         healthstatuspage = HealthStatusPage(self.driver)
@@ -72,7 +72,7 @@ class Test_HealthStatus(BaseTest):
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     def test_health_status_case4(self):
         healthstatuspage = HealthStatusPage(self.driver)
@@ -89,7 +89,7 @@ class Test_HealthStatus(BaseTest):
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     @pytest.mark.login
     def test_health_status_case5(self):
@@ -108,7 +108,7 @@ class Test_HealthStatus(BaseTest):
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
             # assert False
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     def test_health_status_case6(self):
         healthstatuspage = HealthStatusPage(self.driver)
@@ -123,7 +123,7 @@ class Test_HealthStatus(BaseTest):
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     def test_health_status_case7(self):
         healthstatuspage = HealthStatusPage(self.driver)
@@ -138,7 +138,7 @@ class Test_HealthStatus(BaseTest):
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     def test_health_status_case8(self):
         healthstatuspage = HealthStatusPage(self.driver)
@@ -153,7 +153,7 @@ class Test_HealthStatus(BaseTest):
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             healthstatuspage.take_screenshot(f"HealthStatusPage/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
-    @pytest.mark.xpass(reason="The test is expected to fail as stesting negative health status update cases")
+    @pytest.mark.xpass(reason="The test is expected to pass as stesting negative health status update cases")
     @pytest.mark.healthstat
     # @pytest.mark.login
     def test_health_status_case9(self):

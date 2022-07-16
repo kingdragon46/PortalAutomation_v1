@@ -71,7 +71,9 @@ class WorkStatusPage(BasePage):
 
     def workstatuspage_teams_filter(self):
         self.action_chain_click(self.WorkStatusPage_TeamsDropdown)
-        self.action_chain_click(self.WorkStatusPage_TeamsDropdown_Select)
+        url = self.current_url()
+        if 'ndl' in url:
+            self.action_chain_click(self.WorkStatusPage_TeamsDropdown_Select)
 
     def workstatuspage_date_range_filter(self):
         self.action_chain_click(self.WorkStatusPage_DateRange_StartDate)
@@ -98,7 +100,9 @@ class WorkStatusPage(BasePage):
     
     def teamspage_teams_filter(self):
         self.action_chain_click(self.TeamsPage_SelectTeamDropdown)
-        self.action_chain_click(self.TeamsPage_SelectTeam)
+        url = self.current_url()
+        if 'ndl' in url:
+            self.action_chain_click(self.TeamsPage_SelectTeam)
         print("verify teams page teams filter: Passed")
 
     def teamspage_changeEmployeeStatus(self, by_locator=None):
