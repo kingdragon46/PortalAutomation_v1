@@ -49,7 +49,7 @@ class WorkStatusPage(BasePage):
     TeamsPage_Employee_CurrentSecondStatus = (By.XPATH, f"//tr//td[text()='{TestData.TeamsPage_Employee}']/following-sibling::*[4]//*[@class='ant-select-selection-item']")
 
     ''' Work Insights Page '''
-    InsightsPage_Office_FirstDate = (By.XPATH, "//*[text()='Bosch group']/../following-sibling::*/div[1]")
+    InsightsPage_Office_FirstDate = "//*[text()='{}']/../following-sibling::*/div[1]"
     InsightsPage_Teams_DropdownSelector = (By.XPATH, "//label[text()='Employee Status']/following-sibling::*")
     InsightsPage_EmployeeStatus_Dropdown = (By.XPATH, "//*[text()='Employee Status']/following-sibling::*")
     InsightsPage_WFH = (By.XPATH, "//*[@class='ant-select-item-option-content'][contains(text(), 'Work from Home')]")
@@ -96,7 +96,6 @@ class WorkStatusPage(BasePage):
             print("verify workstatuspage hover_over_status_tile: Passed")
         except Exception as e:
             print(f"Exception: {e}\n{traceback.format_exc()}")
-
     
     def teamspage_teams_filter(self):
         self.action_chain_click(self.TeamsPage_SelectTeamDropdown)
@@ -104,6 +103,16 @@ class WorkStatusPage(BasePage):
         if 'ndl' in url:
             self.action_chain_click(self.TeamsPage_SelectTeam)
         print("verify teams page teams filter: Passed")
+    
+    def insightspage_teams_first_date_val(self):
+        url = self.current_url()
+        if 'ndl' in url:
+            WorkStatusPage.InsightsPage_Office_FirstDate = WorkStatusPage.InsightsPage_Office_FirstDate.format(TestData.Insights_Team_LOCAL)
+            stat = self.get_element_text(WorkStatusPage.InsightsPage_Office_FirstDate)
+        else:
+            WorkStatusPage.InsightsPage_Office_FirstDate = WorkStatusPage.InsightsPage_Office_FirstDate.format(TestData.Insights_Team_LIVE)
+            stat = self.get_element_text(WorkStatusPage.InsightsPage_Office_FirstDate)
+        return stat
 
     def teamspage_changeEmployeeStatus(self, by_locator=None):
         if by_locator == None:

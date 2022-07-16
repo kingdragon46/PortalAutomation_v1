@@ -88,7 +88,7 @@ class Test_WorkStatus(BaseTest):
         workstatuspage.driver_get_url(TestData.WORK_STATUS_INSIGHTS_URL)
         sleep(7)
         workstatuspage.insightspage_employeestatus_filter()
-        stat1 = workstatuspage.get_element_text(WorkStatusPage.InsightsPage_Office_FirstDate)
+        stat1 = workstatuspage.insightspage_teams_first_date_val()
         print('\nstat1: ', stat1)
         # Teams Page Start
         workstatuspage.driver_get_url(TestData.WORK_STATUS_TEAMS_URL)
@@ -101,7 +101,7 @@ class Test_WorkStatus(BaseTest):
         workstatuspage.driver_get_url(TestData.WORK_STATUS_INSIGHTS_URL)
         sleep(7)
         workstatuspage.insightspage_employeestatus_filter()
-        stat2 = workstatuspage.get_element_text(WorkStatusPage.InsightsPage_Office_FirstDate)
+        stat2 = workstatuspage.insightspage_teams_first_date_val()
         print('stat2: ', stat2)
         workstatuspage.insightspage_summary()
 

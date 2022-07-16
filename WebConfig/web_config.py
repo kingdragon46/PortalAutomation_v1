@@ -187,4 +187,8 @@ class TestData:
     TeamsPage_Team = "Bosch group"
     TeamsPage_Employee = "Himanshi"
 
+    '''Insights'''
+    Insights_Team_LOCAL = "Bosch group"
+    Insights_Team_LIVE = "MRM India admin group"
+
 print(f"{TestData.ROOM_START_DATE} ---------- {TestData.ROOM_END_DATE, 18}")
