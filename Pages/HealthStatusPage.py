@@ -158,3 +158,5 @@ class HealthStatusPage(BasePage):
         except Exception as e:
             print(f"update_health_status exception: {e}\n{traceback.format_exc()}")
             self.take_screenshot(f"deskBooking/update_health_status/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
+
+            

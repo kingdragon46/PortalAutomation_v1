@@ -8,9 +8,10 @@ from time import sleep
 class LoginPage(BasePage):
 
     '''By locators - OR'''
-    USERNAME = (By.CLASS_NAME,"login-email-phone-input")
-    PASSWORD = (By.CSS_SELECTOR,"input[type='password']")
-    LOGIN_BUTTON = (By.CLASS_NAME,"login-button-design")
+    USERNAME = (By.XPATH,"//*[@class='ant-input login-email-phone-input']")
+    PASSWORD = (By.XPATH,"//*[@type='password']")
+    LOGIN_BUTTON = (By.XPATH,"//button")
+    # LOGIN_BUTTON = (By.CLASS_NAME,"login-button-design")
     FORGOT_PASSWORD = (By.CLASS_NAME,"login-main-screen-ForgotPasswordLink")
 
     """constructor of the page class"""

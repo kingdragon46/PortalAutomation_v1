@@ -49,8 +49,9 @@ class BookingLogsPage(RoomBookingsPage):
     BookingLog_DATA_TABLE_ROW_1 = (By.XPATH, "//tbody[@class='ant-table-tbody']/tr[2]")
     BookingLog_BookingDetailsPage_TR_I_BUTTON = "//tr[@data-row-key='{}']/td[11]/div/span[@class='anticon anticon-info-circle info-icon-logs']"
     BookingLog_BookingDetailsPage_BOOKED_I_BUTTON = "//td[text()='{}']/following-sibling::td[text()='{}']/following-sibling::td/div/span[@class='anticon anticon-info-circle info-icon-logs']"
+    BookingLog_Tr_X_BUTTON = "//td[text()='{}']/following-sibling::td[text()='{}']/following-sibling::td/div/span[@class='anticon anticon-close-circle info-icon-logs']"
     BookingLog_BOOKED_TR_PLUS_ICON = "//td[text()='{}']/following-sibling::td[text()='{}']/../child::*/child::*[@class='anticon anticon-plus-square']"
-    # BookingLog_TR_PLUS_ICON = "//tr[@data-row-key='{}']/child::*/child::*[@class='anticon anticon-plus-square']"
+    BookingLog_Tr_TrX1_BUTTON = "//*[@class='ant-table-expanded-row ant-table-expanded-row-level-1']//tr[@data-row-key='{}'][1]"
 
     # Booking Details
     BookingLog_BookingDetailsPage_BODY = (By.CLASS_NAME, "resource-manager-Content-e74546c4b505e12a3d1819aef6105081 ")

@@ -125,7 +125,7 @@ class RoomBookingsPage(BasePage):
     MyBookings_ROOM_MEETING_OPTIONS_CANCEL_BUTTON = "(//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[2])"
     MyBookings_ROOM_MEETING_OPTIONS_CANCEL_BUTTON_LAST = "(//p[text()='{}']/parent::*/following-sibling::*[2]/div/div/button[2])[last()]"
     MyBookings_ROOM_MEETING_OPTIONS_FOLLOWING_CANCEL_BUTTON = "(//p[text()='{}']/parent::*/following-sibling::*[2]/div/button)"
-    MyBookings_MAIN_CARDS_CONATINER = (By.ID, "mainBookingCardsContainer")
+    MyBookings_MAIN_CARDS_CONTAINER = (By.ID, "mainBookingCardsContainer")
     MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_DOTS = "(//p[text()='{}']/parent::*/parent::*/preceding-sibling::*/child::*[2]/child::*/child::*/*[@class='MuiSvgIcon-root'])"
     MyBookings_ROOM_MEETING_OPTIONS_CANCEL_ALL_BUTTON = (
         By.XPATH, "//*[text()='Cancel All']")
@@ -133,7 +133,7 @@ class RoomBookingsPage(BasePage):
         By.XPATH, "//*[@id='meeting-room']/div[2]/div/div[4]/div[1]/div/div[1]/div/div/div[2]/div[1]/div/div[3]/input")
     FREE_CLICK_MB = (
         By.XPATH, "//p[text()='Status']")
-    MyBookings_MAIN_CARDS_CONATINER = (By.XPATH, "//*[@id='mainBookingCardsContainer']")
+    MyBookings_MAIN_CARDS_CONTAINER = (By.XPATH, "//*[@id='mainBookingCardsContainer']")
     MyBookings_REFRESH_BOOKINGS = (By.XPATH, "//*[@class='ant-tooltip-open']")
     MyBookings_FREE_CLICK_2 = (By.XPATH, "//*[@id='meeting-room']/div[2]")
     MyBookings_MY_SHORTCUTS_H3 = (By.XPATH, "//h3[text()='My Shortcut']")
@@ -232,8 +232,8 @@ class RoomBookingsPage(BasePage):
             sleep(2)
             self.action_chain_click(self.BUSINESS_TOWER)
             sleep(2)
-            self.action_chain_click(self.FREE_CLICK)
-            assert "Location selection passed"
+            # self.action_chain_click(self.FREE_CLICK)
+            print("Location selection passed")
         except Exception as e:
             print(f"Select_location_room {e} \n{traceback.format_exc()}")
             self.take_screenshot(f"RoomBooking/select_location/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
@@ -245,15 +245,16 @@ class RoomBookingsPage(BasePage):
             self.action_chain_click(self.RESOURCE_DROPDOWN)
             sleep(1)
             self.action_chain_click(self.RESOURCE_ROOM)
-            self.action_chain_click(self.FREE_CLICK)
+            # self.action_chain_click(self.FREE_CLICK)
             sleep(1)
+            print("resource selection done")
         except Exception as e:
             print(f"select_resource_type {e} \n{traceback.format_exc()}")
             self.take_screenshot(f"RoomBooking/select_resource_type/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
 
     def select_floor(self, fl=None):
         try:
-            if fl:
+            if fl is not None:
                 fl_visibilty = self.is_visible(self.SECOND_FLOOR)
                 if fl_visibilty == False:
                     self.action_chain_click(self.FLOOR_ARROW)
@@ -264,7 +265,7 @@ class RoomBookingsPage(BasePage):
                     self.action_chain_click(self.FLOOR_ARROW)
                 self.action_chain_click(self.FIRST_FLOOR)
             sleep(1)
-            assert "Floor selection done"
+            print("Floor selection done")
         except Exception as e:
             print(f"select_floor {e} \n{traceback.format_exc()}")
             self.take_screenshot(f"RoomBooking/select_floor/Ex_{TestData.CDATE[:10]}/{TestData.CDATE[1:]}.png")
@@ -662,20 +663,17 @@ class RoomBookingsPage(BasePage):
             # sys.exit(3)
 
     def start_selection(self, fl=None):
-        fl = None
         try:
             sleep(1)
-            print("Selecting Location")
             self.select_location()
-            print("Selecting Floor")
-            if fl:
+            self.select_resource_type()
+            if fl is not None:
                 self.select_floor(fl)
             else:
                 self.select_floor()
             # Checking available resources
             self.select_available_status()
             # Selecting resource type
-            self.select_resource_type()
             # Clicking on list view
             self.action_chain_click(self.LIST_VIEW_BUTTON)
             sleep(3)

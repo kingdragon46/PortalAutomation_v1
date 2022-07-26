@@ -429,7 +429,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report-live-workStatus.html</h1>
-    <p>Report generated on 16-Jul-2022 at 06:01:02 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <p>Report generated on 16-Jul-2022 at 07:08:30 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -445,8 +445,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.7.9</td></tr></table>
     <h2>Summary</h2>
-    <p>4 tests ran in 118.92 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">4 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>5 tests ran in 179.70 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">3 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -457,6 +457,62 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">Positive_Tests/test_WorkStatus.py::Test_WorkStatus::test_teamEmployee_status_change_visible_in_insights[chrome]</td>
+          <td class="col-duration">53.63</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;test_WorkStatus.Test_WorkStatus object at 0x00000258F02B96C8&gt;<br/><br/>    def test_teamEmployee_status_change_visible_in_insights(self):<br/>        workstatuspage = WorkStatusPage(self.driver)<br/>        sleep(3)<br/>        workstatuspage.driver_get_url(TestData.WORK_STATUS_INSIGHTS_URL)<br/>        sleep(7)<br/>        workstatuspage.insightspage_employeestatus_filter()<br/>        stat1 = workstatuspage.insightspage_teams_first_date_val()<br/>        print(&#x27;\nstat1: &#x27;, stat1)<br/>        # Teams Page Start<br/>        workstatuspage.driver_get_url(TestData.WORK_STATUS_TEAMS_URL)<br/>        sleep(7)<br/>        workstatuspage.teamspage_teams_filter()<br/>        sleep(2)<br/>        workstatuspage.teamspage_changeEmployeeStatus()<br/>        sleep(2)<br/>        # Teams Page End<br/>        workstatuspage.driver_get_url(TestData.WORK_STATUS_INSIGHTS_URL)<br/>        sleep(7)<br/>        workstatuspage.insightspage_employeestatus_filter()<br/>        stat2 = workstatuspage.insightspage_teams_first_date_val()<br/>        print(&#x27;stat2: &#x27;, stat2)<br/>        workstatuspage.insightspage_summary()<br/>    <br/>&gt;       assert stat1!=stat2<br/><span class="error">E       AssertionError: assert &#x27;0 %&#x27; != &#x27;0 %&#x27;</span><br/><br/>Tests\Positive_Tests\test_WorkStatus.py:108: AssertionError<br/> ------------------------------Captured stdout call------------------------------ <br/>Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;3be72642-5437-44b7-8d8e-ed6374fc10ad&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;05f56880-f754-4308-a17a-4baa23a7014f&quot;)&gt;
+verify insights page employee status filter: Passed
+
+stat1:  0 %
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;8ddf2ada-8429-4a69-8cef-9921f67a70c5&quot;)&gt;
+verify teams page teams filter: Passed
+title1:  Default Status
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;f08aa83c-d6c8-481e-9848-67fbee7817fa&quot;)&gt;
+click
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;fb00ccb9-feea-4f84-b268-547b3c0a6a39&quot;)&gt;
+verify every confirmation msg: Passed
+title2:  Default Status
+verify teams page employee status filter: Passed
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;016d9541-81df-49a2-bb04-14e6fa89024d&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;f31774c8-7a00-4692-995d-6a87fb9a81d1&quot;)&gt;
+verify insights page employee status filter: Passed
+stat2:  0 %
+Employee Count:  15
+summary_wfo_percent:  13%
+summary_wfh_percent:  6%
+summary_nw_percent:  13%
+<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">Positive_Tests/test_WorkStatus.py::Test_WorkStatus::test_change_employee_status_visibility_in_userStatus[chrome]</td>
+          <td class="col-duration">55.87</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">self = &lt;test_WorkStatus.Test_WorkStatus object at 0x00000258F0313688&gt;<br/><br/>    def test_change_employee_status_visibility_in_userStatus(self):<br/>        workstatuspage = WorkStatusPage(self.driver)<br/>        sleep(3)<br/>        workstatuspage.driver_get_url(TestData.WORK_STATUS_USERSTATUS_URL)<br/>        sleep(7)<br/>        workstatuspage.workstatuspage_teams_filter()<br/>        sleep(2)<br/>        employee_stat = workstatuspage.get_element_text(WorkStatusPage.WorkStatusPage_TeamMember_status)<br/>        print(&quot;previous status value: &quot;, employee_stat)<br/>        workstatuspage.driver_get_url(TestData.WORK_STATUS_TEAMS_URL)<br/>        sleep(7)<br/>        workstatuspage.teamspage_teams_filter()<br/>        sleep(2)<br/>        workstatuspage.teamspage_changeEmployeeStatus(WorkStatusPage.TeamsPage_Employee_SecondStatus)<br/>        sleep(2)<br/>        workstatuspage.driver_get_url(TestData.WORK_STATUS_USERSTATUS_URL)<br/>        sleep(7)<br/>        workstatuspage.workstatuspage_teams_filter()<br/>        sleep(2)<br/>        employee_stat2 = workstatuspage.get_element_text(WorkStatusPage.WorkStatusPage_TeamMember_status)<br/>        print(&quot;current status value: &quot;, employee_stat)<br/>&gt;       assert employee_stat != employee_stat2<br/><span class="error">E       AssertionError: assert &#x27;Not Scheduled&#x27; != &#x27;Not Scheduled&#x27;</span><br/><br/>Tests\Positive_Tests\test_WorkStatus.py:132: AssertionError<br/> ------------------------------Captured stdout call------------------------------ <br/>Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;ddbd83ec-1389-4036-b8d3-178f96fccfb2&quot;)&gt;
+previous status value:  Not Scheduled
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;a76f0500-6cb9-4792-a2b1-2ad39b1ce7fa&quot;)&gt;
+verify teams page teams filter: Passed
+title1:  Default Status
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;878f1711-da83-4907-abfa-a2c76cf630eb&quot;)&gt;
+click
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;77c0561c-b0ba-4200-99ae-825fc0326bad&quot;)&gt;
+verify every confirmation msg: Passed
+title1:  Default Status
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;878f1711-da83-4907-abfa-a2c76cf630eb&quot;)&gt;
+verify teams page employee status filter: Passed
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;f38b7e3a-deec-4af9-a6cc-f447830edbe2&quot;)&gt;
+current status value:  Not Scheduled
+<br/> ----------------------------Captured stdout teardown---------------------------- <br/>
+teardown
+<br/></div></td></tr></tbody>
       <tbody class="skipped results-table-row">
         <tr>
           <td class="col-result">Skipped</td>
@@ -470,7 +526,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">Positive_Tests/test_WorkStatus.py::Test_WorkStatus::test_login[chrome]</td>
-          <td class="col-duration">14.00</td>
+          <td class="col-duration">14.86</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -485,49 +541,40 @@ Driver [C:\Users\Vivek\.wdm\drivers\chromedriver\win32\103.0.5060.53\chromedrive
 INFO     WDM:logger.py:26 ====== WebDriver manager ======
 INFO     WDM:logger.py:26 Current google-chrome version is 103.0.5060
 INFO     WDM:logger.py:26 Get LATEST chromedriver version for 103.0.5060 google-chrome
-INFO     WDM:logger.py:26 Driver [C:\Users\Vivek\.wdm\drivers\chromedriver\win32\103.0.5060.53\chromedriver.exe] found in cache<br/> ------------------------------Captured stdout call------------------------------ <br/>Start time:  1657931343.488264
+INFO     WDM:logger.py:26 Driver [C:\Users\Vivek\.wdm\drivers\chromedriver\win32\103.0.5060.53\chromedriver.exe] found in cache<br/> ------------------------------Captured stdout call------------------------------ <br/>Start time:  1657935330.4458537
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">Positive_Tests/test_WorkStatus.py::Test_WorkStatus::test_change_self_status[chrome]</td>
-          <td class="col-duration">28.53</td>
+          <td class="col-duration">28.57</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;4ff55c218f87a3709eddc6c9d3c83894&quot;, element=&quot;fbab7e6b-ed7a-43e5-ba1b-962ee790ba67&quot;)&gt;
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;c64fd7c8-c335-4f13-abf5-aa9d0a2faa5a&quot;)&gt;
 
 visible:  True
 clicking
 clicking2
 visible2:  True
-Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;4ff55c218f87a3709eddc6c9d3c83894&quot;, element=&quot;cccfa599-ae7a-4aae-85a6-7f0fbef79887&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;3da122aa-7ab3-4dbe-a615-927b04e2b912&quot;)&gt;
 verify workstatuspage hover_over_status_tile: Passed
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">Positive_Tests/test_WorkStatus.py::Test_WorkStatus::test_change_teamEmployee_status[chrome]</td>
-          <td class="col-duration">26.87</td>
+          <td class="col-duration">26.60</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;4ff55c218f87a3709eddc6c9d3c83894&quot;, element=&quot;46c56bb6-d2e3-440f-8ce3-bb8e09bd6683&quot;)&gt;
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;ba03ccab-9b00-4429-a27e-02fb227b8584&quot;)&gt;
 verify teams page teams filter: Passed
 title1:  Default Status
-Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;4ff55c218f87a3709eddc6c9d3c83894&quot;, element=&quot;751dc0b1-3bcf-41a4-bbaa-a92d013274d1&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;3b0213fb-1300-431d-9e0b-6a197c3e17dd&quot;)&gt;
 click
-Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;4ff55c218f87a3709eddc6c9d3c83894&quot;, element=&quot;861f8746-a9c9-4995-be0a-4b034296c09b&quot;)&gt;
+Element:  &lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;90acc0017a67a6a172724fcac9f5e511&quot;, element=&quot;9328f9a0-7a87-4853-86a5-b3cb730772e9&quot;)&gt;
 verify every confirmation msg: Passed
 title2:  Default Status
 verify teams page employee status filter: Passed
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">Positive_Tests/test_WorkStatus.py::Test_WorkStatus::test_teamEmployee_status_change_visible_in_insights[chrome]</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody></table></body></html>
+<br/></div></td></tr></tbody></table></body></html>

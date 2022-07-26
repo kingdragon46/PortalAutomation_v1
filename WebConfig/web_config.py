@@ -47,16 +47,16 @@ class TestData:
 
 
     # VALUES ------------------------------------------------------------------------------------
-    BASE_URL = LIVE_BASE_URL
-    USER_NAME = LIVE_USER_NAME
-    PASSWORD = LIVE_PASSWORD
+    BASE_URL = LOCAL_BASE_URL
+    USER_NAME = LOCAL_USER_NAME
+    PASSWORD = LOCAL_PASSWORD
     USER_NAME_2 = LOCAL_USER_NAME_2
     PASSWORD_2 = LOCAL_PASSWORD_2
     USER_NAME_3 = LOCAL_USER_NAME_3
     PASSWORD_3 = LOCAL_PASSWORD_3
-    LOC_1 = LIVE_LOCATION_1
-    LOC_2 = LIVE_LOCATION_2
-    URL_DOMAIN = LIVE_URL_DOMAIN
+    LOC_1 = LOCAL_LOCATION_1
+    LOC_2 = LOCAL_LOCATION_2
+    URL_DOMAIN = LOCAL_URL_DOMAIN
 
     # URL FORMATING 
     LOGIN_PAGE_TITLE = "Veris | Powering Future Workplaces"
@@ -75,14 +75,18 @@ class TestData:
 
     WORK_STATUS_INSIGHTS_URL = f"https://{URL_DOMAIN}.veris.in/work-status/work-insights"
 
+    DOWNLOAD_REPORTS_URL = f"https://{URL_DOMAIN}.veris.in/download-center/reports"
+
+    INVITES_PAGE_URL = f"https://{URL_DOMAIN}.veris.in/vms-v4/invites"
+
 
     '''-----------------------------POSITIVE TESTING-----------------------------'''
 
     '''Guests'''
-    CONTACT_1_IS_DRAFTED_FALSE = LIVE_CONTACT_1_IS_DRAFTED_FALSE
-    CONTACT_1_IS_MEMBER = LIVE_CONTACT_1_IS_MEMBER
-    CONTACT_2_IS_MEMBER = LIVE_CONTACT_2_IS_MEMBER
-    CONTACT_3_IS_MEMBER = LIVE_CONTACT_3_IS_MEMBER
+    CONTACT_1_IS_DRAFTED_FALSE = LOCAL_CONTACT_1_IS_DRAFTED_FALSE
+    CONTACT_1_IS_MEMBER = LOCAL_CONTACT_1_IS_MEMBER
+    CONTACT_2_IS_MEMBER = LOCAL_CONTACT_2_IS_MEMBER
+    CONTACT_3_IS_MEMBER = LOCAL_CONTACT_3_IS_MEMBER
 
     '''Desk Booking details'''
     DEFAULT_HOSTNAME = "Neeraj Dhiman"
@@ -175,7 +179,7 @@ class TestData:
     DR_START_DATE = 1
     DR_END_DATE = 30
 
-    """--------------------------------------- Work Status ----------------------------"""
+    """--------------------------------------- Health Status ----------------------------"""
     HS_Reassess = "Reassess"
     HS_Error_msg = "Please fill all required data !"
 
@@ -191,4 +195,16 @@ class TestData:
     Insights_Team_LOCAL = "Bosch group"
     Insights_Team_LIVE = "MRM India admin group"
 
+
+    """--------------------------------------- Invites Page ----------------------------"""
+    
+    '''Single Invite'''
+    Single_invite_agenda = "Automation Testing Of Invites"
+    MandatoryFields_to_skip = 4
+    InvitesVenue = "Digicred Headquarters"
+    Invites_HostName = "QA Admin"
+    Invites_cstatus = "Scheduled"
+
+
+    
 print(f"{TestData.ROOM_START_DATE} ---------- {TestData.ROOM_END_DATE, 18}")

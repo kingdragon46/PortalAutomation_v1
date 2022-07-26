@@ -53,7 +53,7 @@ class BasePage:
 
     def get_element_text(self, by_locator):
         element = WebDriverWait(self.driver, self.time_delay).until(
-            EC.visibility_of_element_located(by_locator))
+            EC.presence_of_element_located(by_locator))
         return element.text
 
     def get_element_text_by_xpath(self, by_locator):
@@ -212,6 +212,17 @@ class BasePage:
         actions.move_to_element(element)
         sleep(1)
         actions.click(element)
+        actions.perform()
+        sleep(1)
+
+    def action_chain_doubleClick(self, by_locator):
+        element = WebDriverWait(self.driver, self.time_delay).until(
+            EC.visibility_of_element_located(by_locator))
+        print("Element: ", element)
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element)
+        sleep(1)
+        actions.double_click(element)
         actions.perform()
         sleep(1)
 

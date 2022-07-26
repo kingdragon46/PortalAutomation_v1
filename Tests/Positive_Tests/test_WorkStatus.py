@@ -59,7 +59,7 @@ class Test_WorkStatus(BaseTest):
         login_page = self.loginPage.do_rlogin(
                     TestData.USER_NAME, TestData.PASSWORD)
     
-    @pytest.mark.login
+    # @pytest.mark.login
     def test_change_self_status(self):
         workstatuspage = WorkStatusPage(self.driver)
         sleep(3)
@@ -69,6 +69,15 @@ class Test_WorkStatus(BaseTest):
         sleep(2)
         workstatuspage.workstatuspage_hover_over_status_tile()
         sleep(2)
+
+    @pytest.mark.login
+    def test_search_member_filter(self):
+        workstatuspage = WorkStatusPage(self.driver)
+        sleep(3)
+        workstatuspage.driver_get_url(TestData.WORK_STATUS_USERSTATUS_URL)
+        sleep(7)
+        workstatuspage.search_member()
+        sleep(5)
 
     # @pytest.mark.login
     def test_change_teamEmployee_status(self):

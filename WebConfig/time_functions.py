@@ -49,12 +49,12 @@ class WebConfigFunctions:
 
     def cal_date_format(future_time):
         bdate = datetime.strptime(future_time, '%d %b %Y').strftime("%Y-%m-%d")
-        print("repeat_till_date2: ", bdate)
+        print("cal_date_format: ", bdate)
         return bdate
 
     def tr_date_format(future_time):
         bdate = datetime.strptime(future_time, '%d %b %Y %H:%M').strftime("%b %d, %Y %H:%M")
-        print("repeat_till_date2: ", bdate)
+        print("tr_date_format: ", bdate)
         return bdate
 
     def till_next_day_date(dys=None):

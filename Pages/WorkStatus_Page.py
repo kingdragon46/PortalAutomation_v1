@@ -21,6 +21,8 @@ class WorkStatusPage(BasePage):
     WorkStatusPage_TeamsDropdown_Select = (By.XPATH, f"//*[@title='{TestData.TEAM_TO_BE_SELECTED}']")
 
     WorkStatusPage_TeamMember_status = (By.XPATH, "(//*[text()='Himanshi Sharma']/../..//*[@id='small-work-status-this-week-item']//*[@class='text-left']/p[2])[2]")
+    WorkStatusPage_SearchMember = (By.XPATH, "//*[text()='Search Member']/..//input")
+    WorkStatusPage_SearchMember_FirstResult = (By.XPATH, "(//*[@class='ant-row bg-white shadow w-full hide-work-status-scrollbar']//p)[1]")
 
     # Date Filter WorkStatus Page
     WorkStatusPage_DateRange_StartDate = (By.XPATH, "//*[@placeholder='Start date']")
@@ -38,6 +40,7 @@ class WorkStatusPage(BasePage):
 
     TeamsPage_UpdateStatus = (By.XPATH, "//button/*[text()='Update Status']")
     TeamsPage_UpdateStatus_SuccessMsg = (By.XPATH, "//*[text()='Status updated successfully!']")
+    TeamsPage_SearchMember = (By.XPATH, "//*[text()='Search Member']/..//input")
 
     # TeamsPage grid
     TeamsPage_Employee_FirstStatus = (By.XPATH, f"//tr//td[text()='{TestData.TeamsPage_Employee}']/following-sibling::*[3]")
@@ -78,6 +81,13 @@ class WorkStatusPage(BasePage):
     def workstatuspage_date_range_filter(self):
         self.action_chain_click(self.WorkStatusPage_DateRange_StartDate)
         print("verify workstatuspage hover_over_status_tile: Passed")
+    
+    def search_member(self):
+        self.action_chain_click(self.WorkStatusPage_SearchMember)
+        print('clicked')
+        self.action_chain_sendkeys_1(self.WorkStatusPage_SearchMember, TestData.TeamsPage_Employee)
+        r1 = self.get_element_text(self.WorkStatusPage_SearchMember_FirstResult)
+        print("Search result: ", r1)
 
     def workstatuspage_hover_over_status_tile(self):
         try:
