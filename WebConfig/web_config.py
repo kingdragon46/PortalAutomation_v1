@@ -203,8 +203,23 @@ class TestData:
     MandatoryFields_to_skip = 4
     InvitesVenue = "Digicred Headquarters"
     Invites_HostName = "QA Admin"
+    Invites_GuestName = "Manoj"
     Invites_cstatus = "Scheduled"
 
+    '''Bulk Invite'''
+    BulkInvite_Rows = 10
+    BulkInvite_idNo = "0"
+
+    """--------------------------------------- Activities Page ----------------------------"""
+
+    CreateActivity_activityType_CheckIn = "Check-In"
+    CreateActivity_activityType_CheckOut = "Check-out"
+    CreateActivity_contactInput = "shailendra.tiranga@veris.in"
+    CreateActivity_companyName = "Test Company"
+    CreateActivity_vehicleNumber = "HR26AB1234"
+    CreateActivity_visitorCategory = "Interview Candidate"
+    CreateActivity_Yes = "Yes"
+    CreateActivity_NotTrueEmail = "abc"
 
     
 print(f"{TestData.ROOM_START_DATE} ---------- {TestData.ROOM_END_DATE, 18}")

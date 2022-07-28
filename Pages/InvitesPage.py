@@ -89,6 +89,7 @@ class InvitesPage(BasePage):
     InvitesList_StartDate_Cal = (By.XPATH, "(//*[@id='vms-custom-date-time-invites']//input)[1]")
     InvitesList_EndDate_Cal = (By.XPATH, "(//*[@id='vms-custom-date-time-invites']//input)[2]")
 
+    InvitesList_DataTable_GuestName = "(//*[@id='vms-v4-invites-list']//td[1])"
     InvitesList_DataTable_HostName = "(//*[@id='vms-v4-invites-list']//td[6])"
     InvitesList_DataTable_numOfrows = "(//*[@id='vms-v4-invites-list']//tbody/tr)"
 
@@ -99,13 +100,19 @@ class InvitesPage(BasePage):
 
 
     '''------------Bulk Invite------------'''
-    BulkInvite_Table_FirstName = (By.XPATH, "(//*[@id='0_firstName'])")
-    BulkInvite_Table_LastName = (By.XPATH, "(//*[@id='0_lastName'])")
-    BulkInvite_Table_Contact = (By.XPATH, "(//*[@id='0_contact'])")
-    BulkInvite_Table_HostName = (By.XPATH, "(//*[@id='0_hostName'])")
-    BulkInvite_Table_StartsAt = (By.XPATH, "(//*[@id='0_startsAt'])")
-    BulkInvite_Table_EndsAt = (By.XPATH, "(//*[@id='0_endsAt'])")
-    BulkInvite_Table_Agenda = (By.XPATH, "(//*[@id='0_agenda'])")
+    BulkInvite_SelectCategory = (By.XPATH, "//*[@class='css-pqjb38']")
+
+    # Data Table
+    BulkInvite_TableDiv = (By.XPATH, "//*[@class='rdg-viewport']")
+    BulkInvite_Table_FirstName = "(//*[@id='{}_firstName'])"
+    BulkInvite_Table_LastName = "(//*[@id='{}_lastName'])"
+    BulkInvite_Table_Contact = "(//*[@id='{}_contact'])"
+    BulkInvite_Table_HostName = "(//*[@id='{}_hostName'])"
+    BulkInvite_Table_HostName_Input = (By.XPATH, "//*[@id='vms-v4-bulk-invites-editor']//*[@class='css-pqjb38']//input")
+    BulkInvite_Table_StartsAt = "(//*[@id='{}_startsAt'])"
+    BulkInvite_Table_EndsAt = "(//*[@id='{}_endsAt'])"
+    BulkInvite_Table_Agenda = "(//*[@id='{}_agenda'])"
+    BulkInvite_Table_Agenda_Heading = (By.XPATH, "(//*[@class='vms-v4-Container-YcrXb'])[7]")
     BulkInvite_Table_AddRow = (By.XPATH, "(//*[@class='vms-v4-AddRowButton-nAEql'])")
     BulkInvite_Table_AddRow_Input = (By.XPATH, "(//*[@class='vms-v4-rowAddText-KakMs'])/..//input")
 
@@ -180,7 +187,6 @@ class InvitesPage(BasePage):
         self.action_chain_sendkeys_1(self.SingleInvite_Contact, cmail)
 
     def singleInvite_visitorCategory(self):
-        vtype= "Visitor"
         self.action_chain_click(self.SingleInvite_VisitorCategory)
         vis = self.is_visible(self.SingleInvite_VisitorCategory_select_visitor)
         print("Visible: ", vis)
@@ -249,11 +255,17 @@ class InvitesPage(BasePage):
         # self.scroll_to_element(self.InvitesList_Venue_dropdown_select)
         self.action_chain_click(self.InvitesList_Venue_dropdown_select)
     
-    def invitesList_host_guest_dropdown(self):
+    def invitesList_select_host_dropdown(self):
         self.action_chain_click(self.InvitesList_GuestSelect_dropdown)
         self.action_chain_click(self.InvitesList_GuestSelect_selectHostName)
         self.action_chain_click(self.InvitesList_Guest_input)
         self.action_chain_sendkeys_1(self.InvitesList_Guest_input, TestData.Invites_HostName)
+    
+    def invitesList_select_guest_dropdown(self):
+        self.action_chain_click(self.InvitesList_GuestSelect_dropdown)
+        self.action_chain_click(self.InvitesList_GuestSelect_selectGuestName)
+        self.action_chain_click(self.InvitesList_Guest_input)
+        self.action_chain_sendkeys_1(self.InvitesList_Guest_input, TestData.Invites_GuestName)
 
     def invitesList_StartsAt(self, days:int=None):
         self.action_chain_click(self.InvitesList_StartDate_Cal)
@@ -277,17 +289,24 @@ class InvitesPage(BasePage):
             self.SingleInvite_EndsAt_select = self.SingleInvite_EndsAt_select.format(cdate_val)
             self.action_chain_click((By.XPATH, self.SingleInvite_EndsAt_select))
 
-    def invitesList_verify_TableData(self, hcheck=None):
+    def invitesList_verify_TableData(self, hcheck=None, guest=None):
         sleep(4)
         num_of_rows = len(self.get_elements((By.XPATH, self.InvitesList_DataTable_numOfrows)))
         print("num_of_rows: ", num_of_rows)
         if num_of_rows is not None:
             for i in range(1, num_of_rows):
-                # print(f"selector: {self.InvitesList_DataTable_HostName}[{i}]")
-                host_name = self.get_element_text((By.XPATH, f"{self.InvitesList_DataTable_HostName}[{i}]"))
-                print("Host Name: ", host_name)
-                if hcheck is not None:
-                    assert host_name == TestData.Invites_HostName
+                if guest is None:
+                    # print(f"selector: {self.InvitesList_DataTable_HostName}[{i}]")
+                    host_name = self.get_element_text((By.XPATH, f"{self.InvitesList_DataTable_HostName}[{i}]"))
+                    print("Host Name: ", host_name)
+                    if hcheck is not None:
+                        assert TestData.Invites_HostName in host_name
+                else:
+                    # print(f"selector: {self.InvitesList_DataTable_HostName}[{i}]")
+                    guest_name = self.get_element_text((By.XPATH, f"{self.InvitesList_DataTable_GuestName}[{i}]"))
+                    print("Guest Name: ", guest_name)
+                    if hcheck is not None:
+                        assert TestData.Invites_GuestName in guest_name
         sleep(2)
 
     def invitesList_currentStatus_selector(self):
@@ -298,18 +317,78 @@ class InvitesPage(BasePage):
     
 
     '''Bulk Invite Functions'''
+    def bulkInvite_visitor_category_select(self):
+        self.action_chain_click(self.BulkInvite_SelectCategory)
+        vis = self.is_visible(self.SingleInvite_VisitorCategory_select_visitor)
+        print("Visible: ", vis)
+        if vis == True:
+            self.action_chain_click(self.SingleInvite_VisitorCategory_select_visitor)
 
-    def bulkInvite_add_to_table(self, fname, lname, cmail):
+
+    def bulkInvite_add_data_to_table(self, fname, lname, cmail, sdate, edate, agenda, i=0):
+        print("bulk i: ", i)
+        BulkInvite_Table_FirstName = InvitesPage.BulkInvite_Table_FirstName.format(i)
+        BulkInvite_Table_LastName = InvitesPage.BulkInvite_Table_LastName.format(i)
+        BulkInvite_Table_Contact = InvitesPage.BulkInvite_Table_Contact.format(i)
+        BulkInvite_Table_HostName = InvitesPage.BulkInvite_Table_HostName.format(i)
+        BulkInvite_Table_StartsAt = InvitesPage.BulkInvite_Table_StartsAt.format(i)
+        BulkInvite_Table_EndsAt = InvitesPage.BulkInvite_Table_EndsAt.format(i)
+        BulkInvite_Table_Agenda = InvitesPage.BulkInvite_Table_Agenda.format(i)
+
+        print("First name xpath: ", BulkInvite_Table_FirstName)
+
         # first name
-        self.action_chain_doubleClick(self.BulkInvite_Table_FirstName)
-        self.action_chain_doubleClick(self.BulkInvite_Table_FirstName)
-        self.action_chain_sendkeys_1(self.BulkInvite_Table_FirstName, fname)
+        self.scroll_to_element_to_mid((By.XPATH, BulkInvite_Table_FirstName))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_FirstName))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_FirstName))
+        self.action_chain_sendkeys_1(
+            (By.XPATH, BulkInvite_Table_FirstName), fname)
         # last name
-        self.action_chain_doubleClick(self.BulkInvite_Table_LastName)
-        self.action_chain_doubleClick(self.BulkInvite_Table_LastName)
-        self.action_chain_sendkeys_1(self.BulkInvite_Table_LastName, lname)
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_LastName))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_LastName))
+        self.action_chain_sendkeys_1(
+            (By.XPATH, BulkInvite_Table_LastName), lname)
         # contact email
-        self.action_chain_doubleClick(self.BulkInvite_Table_Contact)
-        self.action_chain_doubleClick(self.BulkInvite_Table_Contact)
-        self.action_chain_sendkeys_1(self.BulkInvite_Table_Contact, cmail)
-        
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_Contact))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_Contact))
+        self.action_chain_sendkeys_1(
+            (By.XPATH, BulkInvite_Table_Contact), cmail)
+        # host
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_HostName))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_HostName))
+        self.action_chain_sendkeys_1(
+            InvitesPage.BulkInvite_Table_HostName_Input, TestData.HOST1_NAME)
+        sleep(3)
+        self.action_chain_click(InvitesPage.SingleInvite_HostName)
+        # date starts at
+        self.scroll_to_element((By.XPATH, BulkInvite_Table_StartsAt))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_StartsAt))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_StartsAt))
+        self.action_chain_sendkeys_1(
+            (By.XPATH, BulkInvite_Table_StartsAt), sdate, Keys.ENTER)
+        # date ends at
+        self.scroll_to_element((By.XPATH, BulkInvite_Table_EndsAt))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_EndsAt))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_EndsAt))
+        self.action_chain_sendkeys_1(
+            (By.XPATH, BulkInvite_Table_EndsAt), edate, Keys.ENTER)
+        # agenda
+        self.scroll_to_element((By.XPATH, BulkInvite_Table_Agenda))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_Agenda))
+        self.action_chain_doubleClick((By.XPATH, BulkInvite_Table_Agenda))
+        self.action_chain_sendkeys_1(
+            (By.XPATH, BulkInvite_Table_Agenda), agenda)
+
+        # Scrolling to left
+        self.action_chain_click(InvitesPage.BulkInvite_Table_Agenda_Heading)
+        self.scroll_horizontally_left((By.XPATH, BulkInvite_Table_Contact))
+        self.scroll_horizontally_left((By.XPATH, BulkInvite_Table_LastName))
+        self.scroll_horizontally_left((By.XPATH, BulkInvite_Table_FirstName))
+        sleep(2)
+    
+    def bulkInvite_add_rows(self, rows):
+        # rows
+        self.scroll_to_element_to_mid(self.BulkInvite_Table_AddRow_Input)
+        self.action_chain_click(self.BulkInvite_Table_AddRow_Input)
+        self.action_chain_sendkeys_1(self.BulkInvite_Table_AddRow_Input, Keys.BACKSPACE, rows)
+        self.action_chain_click(self.BulkInvite_Table_AddRow)

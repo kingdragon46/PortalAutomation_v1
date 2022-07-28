@@ -226,7 +226,7 @@ class BasePage:
         actions.perform()
         sleep(1)
 
-    def action_chain_sendkeys_1(self, by_locator, elkeys, elkeys2=None):
+    def action_chain_sendkeys_1(self, by_locator, elkeys, elkeys2=None, elkeys3=None):
         element = WebDriverWait(self.driver, self.time_delay).until(
             EC.visibility_of_element_located(by_locator))
         print("Element: ", element)
@@ -236,6 +236,8 @@ class BasePage:
         actions.send_keys(elkeys)
         if elkeys2 is not None:
             actions.send_keys(elkeys2)
+        if elkeys3 is not None:
+            actions.send_keys(elkeys3)
         actions.perform()
         sleep(2)
 
@@ -308,6 +310,14 @@ class BasePage:
             except:
                 print("2nd failed")
 
+    def scroll_horizontally_left(self, by_locator):
+        try:
+            element = WebDriverWait(self.driver, self.time_delay).until(
+                EC.presence_of_element_located(by_locator))
+            self.driver.execute_script("arguments[0].scrollIntoView();", element)
+            pass
+        except:
+            print("2nd failed")
     def scroll_to_element_to_mid_by_xpath(self, by_locator):
         a = None
         try:

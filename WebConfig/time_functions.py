@@ -1,8 +1,11 @@
 from datetime import datetime, timedelta
 from pytz import timezone
 from random_name_generator import ran_name
+from random import randint
+import re
 
 class WebConfigFunctions:
+    
     def time_select(m):
         now = datetime.now()
         future_time = now + timedelta(minutes=m)
@@ -64,37 +67,62 @@ class WebConfigFunctions:
             bdate = future_time.strftime("%d %b %y")
         else:
             bdate = now.strftime("%d %b %y")
-        print("booking_date: ", bdate)
+        print("till_next_day_date: ", bdate)
+        return bdate
+
+    def bulk_invite_dateFormat(dys=None, min=None):
+        now = datetime.now()
+        if dys is not None:
+            future_time = now + timedelta(days=dys)
+            bdate = future_time.strftime("%d/%m/%Y %H:%M %p")
+        if min is not None:
+            future_time = now + timedelta(minutes=min)
+            bdate = future_time.strftime("%d/%m/%Y %H:%M %p")
+        else:
+            bdate = now.strftime("%d/%m/%Y %H:%M %p")
+        print("bulk_invite_dateFormat: ", bdate)
         return bdate
 
     def room_datetime(d,m):
         now = datetime.now()
         future_time = now + timedelta(days=d, minutes=m)
         rsdate = future_time.strftime("%d %b %Y %H:%M")
-        print("rsdate: ", rsdate)
+        print("room_datetime: ", rsdate)
         return rsdate
 
     def current_datetime():
         now = datetime.utcnow()
         loc_time = now.strftime("%Y_%m_%dT%H.%M.%S")
-        print("loc_time: ", loc_time)
+        print("current_datetime: ", loc_time)
         return loc_time
 
     def room_start_overlapping_datetime():
         now = datetime.now()
         future_time = now + timedelta(minutes=20)
         rsodate = future_time.strftime("%d %b %Y %H:%M")
-        print("rsdate: ", rsodate)
+        print("room_start_overlapping_datetime: ", rsodate)
         return rsodate
 
     def room_end_overlapping_datetime():
         now = datetime.now()
         future_time = now + timedelta(minutes=40)
         reodate = future_time.strftime("%d %b %Y %H:%M")
-        print("redate: ", reodate)
+        print("room_end_overlapping_datetime: ", reodate)
         return reodate
 
     def name_to_mail(a):
         b = a.replace(" ", ".").lower()
         c = f'{b}@example.com'
         return c
+
+
+    def random_phn():
+        b = randint(10000000, 99999999)
+        return f"+919{b}"
+        
+    
+    def validate_email(email):
+        EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
+        if not EMAIL_REGEX.match(email):
+            return False
+        return True
