@@ -216,6 +216,7 @@ class Test_InvitesPage(BaseTest):
     '''Bulk Invites'''
 
     @pytest.mark.bulkInvite
+    @pytest.mark.skip
     def test_bulkInvite_add_member(self):
         invitepage = InvitesPage(self.driver)
         sleep(3)

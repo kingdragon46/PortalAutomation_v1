@@ -37,7 +37,7 @@ class Test_WorkStatus(BaseTest):
         except Exception as e:
             print("download login error: ", e)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_status_all_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -55,7 +55,7 @@ class Test_WorkStatus(BaseTest):
             print("Table was empty. No results to show")
         sleep(2)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_status_processing_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -75,7 +75,7 @@ class Test_WorkStatus(BaseTest):
             print("Table was empty. No results to show")
         sleep(2)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_status_completed_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -95,7 +95,7 @@ class Test_WorkStatus(BaseTest):
             print("Table was empty. No results to show")
         sleep(2)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_status_failed_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -135,7 +135,7 @@ class Test_WorkStatus(BaseTest):
             print("Table was empty. No results to show")
         sleep(2)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_module_all_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -147,7 +147,7 @@ class Test_WorkStatus(BaseTest):
         results_num = len(downloadreport.get_elements((By.XPATH, DownloadReportsPage.Table_tr_name_value)))
         print("results: ", results_num)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_module_vms_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -171,7 +171,7 @@ class Test_WorkStatus(BaseTest):
             print("Table was empty. No results to show")
         sleep(2)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_module_members_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -195,7 +195,7 @@ class Test_WorkStatus(BaseTest):
             print("Table was empty. No results to show")
         sleep(2)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_module_bookings_selector(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -219,7 +219,7 @@ class Test_WorkStatus(BaseTest):
             print("Table was empty. No results to show")
         sleep(2)
     
-    # @pytest.mark.selected
+    @pytest.mark.selected
     def test_date_select_filters(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)
@@ -232,7 +232,7 @@ class Test_WorkStatus(BaseTest):
 
         sleep(5)
 
-    @pytest.mark.selected
+    # @pytest.mark.selected
     def test_status_module_date_combo(self):
         downloadreport = DownloadReportsPage(self.driver)
         sleep(3)

@@ -15,7 +15,7 @@ class HealthStatusPage(BasePage):
     HS_UPDATE_HEALTH_STATUS_BUTTON = (
         By.XPATH, "//*[text()='Health status']/../following-sibling::*//button")
     HS_WS_UPDATE_HEALTH_STATUS_BUTTON = (
-        By.XPATH, "//*[@class='ant-col ant-col-5']/button")
+        By.XPATH, "//*[contains(@class,'work-status-health-declaration')]//button")
     HS_FULLY_VACCINATED = (
         By.XPATH, "//*[contains(text(), 'Fully Vaccinated')]/preceding-sibling::*/child::*")
     HS_HEALTH_CONDITION_NONE = (
@@ -139,20 +139,6 @@ class HealthStatusPage(BasePage):
                 sleep(2)
                 self.action_chain_click(self.HS_CONFIRM_DECLARATION)
                 sleep(2)
-                # if test_type in [1,2,3,4,5]:
-                #     self.action_chain_click(self.HS_Refresh_Div)
-                #     sleep(5)
-                #     button_txt = self.get_element_text(self.HS_UPDATE_HEALTH_STATUS_BUTTON)
-                #     assert button_txt == TestData.HS_Reassess
-                # if test_type == 5:
-                #     self.action_chain_click(self.HS_Refresh_Div)
-                #     sleep(5)
-                #     button_txt = self.get_element_text(self.HS_UPDATE_HEALTH_STATUS_BUTTON)
-                #     assert button_txt != TestData.HS_Reassess
-                # if test_type in [6,7,8,9]:
-                #     error_msg = self.get_element_text(self.HS_ERROR_MSG)
-                #     assert TestData.HS_Error_msg in error_msg
-                    
             else:
                 pass
         except Exception as e:

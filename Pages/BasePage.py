@@ -481,6 +481,9 @@ class BasePage:
             except exceptions.WebDriverException:
                 print('response.body is null')
 
+    def driver_navigate_backward(self):
+        self.driver.back()
+
 
 def write_to_file(logs):
     with open("logs.json", "a", encoding="utf-8") as f:
